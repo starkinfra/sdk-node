@@ -21,11 +21,12 @@ This SDK version is compatible with the Stark Infra API v2.
 - [Resource listing and manual pagination](#resource-listing-and-manual-pagination)
 - [Testing in Sandbox](#testing-in-sandbox)
 - [Usage](#usage)
-  - [PixRequests](#create-pix-requests): PIX receivables
-  - [PixReversals](#create-pix-reversals): Reverse PIX transactions
+  - [PixRequests](#create-pix-requests): Pix receivables
+  - [PixReversals](#create-pix-reversals): Reverse Pix transactions
   - [PixBalance](#get-pix-balance): Account balance
   - [PixStatement](#create-pix-statement): Account statement entry
   - [WebhookEvents](#process-webhook-events): Manage webhook events
+  - [CreditNote](#create-credit-notes): Manage credit notes
 - [Handling errors](#handling-errors)
 - [Help and Feedback](#help-and-feedback)
 
@@ -646,6 +647,158 @@ app.post('/', async (req, res) => {
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 ```
 
+## Create credit notes
+You can create a Credit Note to generate a CCB contract:
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let requests = await starkinfra.creditNote.create([
+        {
+            templateId: '5745297539989504',
+            name: 'Jamie Lannister',
+            taxId: '012.345.678-90',
+            nominalAmount: 100000,
+            scheduled: '2022-04-28',
+            invoices: [
+                {
+                    due: '2023-06-25',
+                    amount: 120000,
+                    fine: 10,
+                    interest: 2
+                }
+            ],
+            transfer: {
+                bankCode: '00000000',
+                branchCode: '1234',
+                accountNumber: '129340-1',
+                name: 'Jamie Lannister',
+                taxId: '012.345.678-90'
+            },
+            signers:[
+                {
+                    name: 'Jamie Lannister',
+                    contact: 'jamie.lannister@gmail.com'
+                }
+            ]
+        },
+        {
+            templateId: '5745297539989504',
+            name: 'Jamie Lannister',
+            taxId: '012.345.678-90',
+            nominalAmount: 240000,
+            scheduled: '2022-04-28',
+            invoices: [
+                {
+                    due: '2023-06-25',
+                    amount: 100000,
+                    fine: 10,
+                    interest: 2
+                },
+                {
+                    due: '2023-07-25',
+                    amount: 100000,
+                    fine: 11,
+                    interest: 2.1
+                },
+                {
+                    due: '2023-08-25',
+                    amount: 100000,
+                    fine: 12.5,
+                    interest: 2.2
+                }
+            ],
+            tags: ['test', 'testing'],
+            transfer: {
+                bankCode: '00000000',
+                branchCode: '1234',
+                accountNumber: '129340-1',
+                name: 'Jamie Lannister',
+                taxId: '012.345.678-90'
+            },
+            signers:[
+                {
+                    name: 'Jamie Lannister',
+                    contact: 'jamie.lannister@gmail.com'
+                }
+            ]
+        }
+    ])
+
+    for (let request of requests) {
+        console.log(request);
+    }
+})();
+```
+
+**Note**: Instead of using Credit Note objects, you can also pass each transaction element in dictionary format
+
+## Query credit notes
+
+You can query multiple credit notes according to filters.
+
+```javascript
+(async() => {
+    let requests = await starkinfra.creditNote.query({
+        after: '2020-01-01',
+        before: '2020-03-01',
+        status: 'success',
+        tags: ['iron', 'suit']
+    });
+
+    for await (let request of requests) {
+        console.log(request);
+    }
+})();
+```
+
+## Get a credit note
+
+After its creation, information on a credit note may be retrieved by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let request = await starkinfra.creditNote.get('5155165527080960');
+    console.log(request);
+})();
+```
+
+## Query credit note logs
+
+You can query credit note logs to better understand credit note life cycles.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let logs = await starkinfra.creditNote.log.query({
+        limit: 50,
+        after: '2022-01-01',
+        before: '2022-01-20'
+    });
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+## Get a credit note log
+
+You can also get a specific log by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.creditNote.log.get('5155165527080960');
+    console.log(log);
+})();
+```
+
 # Handling errors
 
 The SDK may raise one of four types of errors: __InputErrors__, __InternalServerError__, __UnknownError__, __InvalidSignatureError__
@@ -697,4 +850,4 @@ If you have any questions about our SDK, just send us an email.
 We will respond you quickly, pinky promise. We are here to help you integrate with us ASAP.
 We also love feedback, so don't be shy about sharing your thoughts with us.
 
-Email: developers@starkbank.com
+Email: help@starkbank.com

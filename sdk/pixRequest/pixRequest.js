@@ -38,7 +38,7 @@ class PixRequest extends Resource {
      * @param cashierBankCode [string, default null]: Cashier's bank code. ex: "00000000"
      * @param cashierType [string, default null]: Cashier's type. ex: [merchant, other, participant]
      * @param tags [array of strings, default null]: list of strings for reference when searching for PixRequests. ex: ["employees", "monthly"]
-     * @param method [string, default null]: execution  method for thr creation of the PIX. ex: "manual", "payerQrcode", "dynamicQrcode".
+     * @param method [string, default null]: execution  method for thr creation of the Pix. ex: "manual", "payerQrcode", "dynamicQrcode".
      *
      * Attributes (return-only):
      * @param id [string, default null]: unique id returned when the PixRequest is created. ex: "5656565656565656"
