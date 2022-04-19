@@ -654,7 +654,7 @@ You can create a Credit Note to generate a CCB contract:
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let requests = await starkinfra.creditNote.create([
+    let notes = await starkinfra.creditNote.create([
         {
             templateId: '5745297539989504',
             name: 'Jamie Lannister',
@@ -720,14 +720,15 @@ const starkinfra = require('starkinfra');
             signers:[
                 {
                     name: 'Jamie Lannister',
-                    contact: 'jamie.lannister@gmail.com'
+                    contact: 'jamie.lannister@gmail.com',
+                    method: 'link'
                 }
             ]
         }
     ])
 
-    for (let request of requests) {
-        console.log(request);
+    for (let note of notes) {
+        console.log(note);
     }
 })();
 ```
@@ -740,15 +741,15 @@ You can query multiple credit notes according to filters.
 
 ```javascript
 (async() => {
-    let requests = await starkinfra.creditNote.query({
+    let notes = await starkinfra.creditNote.query({
         after: '2020-01-01',
         before: '2020-03-01',
         status: 'success',
         tags: ['iron', 'suit']
     });
 
-    for await (let request of requests) {
-        console.log(request);
+    for await (let note of notes) {
+        console.log(note);
     }
 })();
 ```
@@ -761,8 +762,8 @@ After its creation, information on a credit note may be retrieved by its id.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let request = await starkinfra.creditNote.get('5155165527080960');
-    console.log(request);
+    let note = await starkinfra.creditNote.get('5155165527080960');
+    console.log(note);
 })();
 ```
 

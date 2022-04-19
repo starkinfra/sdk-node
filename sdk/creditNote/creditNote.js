@@ -21,7 +21,7 @@ class CreditNote extends Resource {
      * @param scheduled [datetime.date, datetime.datetime or string, default now]: date of transfer execution. ex: scheduled=datetime(2020, 3, 10)
      * @param invoices [list of Invoice objects]: list of Invoice objects to be created and sent to the credit receiver. ex: invoices=[Invoice(), Invoice()]
      * @param transfer [Transfer object]: Transfer object to be created and sent to the credit receiver. ex: transfer=Transfer()
-     * @param signers [list of contacts]: name and e-mail of signers that sign the contract. ex: signers=[{"name": "Tony Stark", "contact": "tony@starkindustries.com"}]
+     * @param signers [list of contacts]: name and e-mail of signers that sign the contract. ex: signers=[{"name": "Tony Stark", "contact": "tony@starkindustries.com", "method": "link"}]
      *
      * Parameters (optional):
      * @param rebateAmount [integer, default None]: credit analysis fee deducted from lent amount. ex: rebateAmount=11234 (= R$ 112.34)
