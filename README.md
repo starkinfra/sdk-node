@@ -679,7 +679,8 @@ const starkinfra = require('starkinfra');
             signers:[
                 {
                     name: 'Jamie Lannister',
-                    contact: 'jamie.lannister@gmail.com'
+                    contact: 'jamie.lannister@gmail.com',
+                    method: 'link'
                 }
             ]
         },
