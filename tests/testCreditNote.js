@@ -141,7 +141,7 @@ let exampleCreditNote = {
     signers: [
         {
             name: "Jamie Lannister",
-            contact: "jamie.lannister@gmail.com",
+            contact: "jamie.lannister.01330e4c-bf92-4a54-8349-a540b90aa24e@invaliddomain.com",
             method: "link"
         }
     ],
