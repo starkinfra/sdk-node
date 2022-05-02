@@ -16,7 +16,7 @@ class Log extends Resource {
      * @param id [string]: unique id returned when the log is created. ex: '5656565656565656'
      * @param created [string]: creation datetime for the log. ex: '2020-03-10 10:30:00.000'
      * @param type [string]: type of the PixRequest event which triggered the log creation. ex: 'processing' or 'success'
-     * @param errors [list of strings]: list of errors linked to this BoletoPayment event.
+     * @param errors [list of strings]: list of errors linked to this PixRequest event.
      * @param request [PixRequest]: PixRequest entity to which the log refers to.
      *
      */
@@ -100,7 +100,7 @@ exports.page = async function ({ cursor, limit, after, before, types, requestIds
      * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns list of PixRequest Log objects with updated attributes and cursor to retrieve the next page of Boleto objects
+     * @returns list of PixRequest Log objects with updated attributes and cursor to retrieve the next page of PixRequest objects
      *
      */
     let query = {

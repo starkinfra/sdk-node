@@ -90,7 +90,6 @@ describe('TestPixReversalQueryParams', function(){
     this.timeout(10000);
     it('test_success', async () => {
         const reversals = await starkinfra.pixReversal.query({
-            fields: ['amount', 'id'],
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',
@@ -110,7 +109,6 @@ describe('TestPixReversalQueryParams', function(){
         let cursor = null;
         let reversals = null;
         [reversals, cursor] = await starkinfra.pixReversal.page({
-            fields: ['amount', 'id'],
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',

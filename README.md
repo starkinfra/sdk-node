@@ -21,12 +21,23 @@ This SDK version is compatible with the Stark Infra API v2.
 - [Resource listing and manual pagination](#resource-listing-and-manual-pagination)
 - [Testing in Sandbox](#testing-in-sandbox)
 - [Usage](#usage)
-  - [PixRequests](#create-pix-requests): Pix receivables
-  - [PixReversals](#create-pix-reversals): Reverse Pix transactions
-  - [PixBalance](#get-pix-balance): Account balance
-  - [PixStatement](#create-pix-statement): Account statement entry
-  - [WebhookEvents](#process-webhook-events): Manage webhook events
-  - [CreditNote](#create-credit-notes): Manage credit notes
+  - [Issuing](#issuing)
+    - [BINs](#query-issuingbins): View available sub-issuer BINs (a.k.a. card number ranges)
+    - [Holders](#create-issuingholders): Manage cardholders
+    - [Cards](#create-issuingcards): Create virtual and/or physical cards
+    - [Purchases](#process-purchase-authorizations): Authorize and view your past purchases
+    - [Invoices](#create-issuinginvoices): Add money to your issuing balance
+    - [Withdrawals](#create-issuingwithdrawals): Send money back to your Workspace from your issuing balance
+    - [Balance](#get-your-issuingbalance): View your issuing balance
+    - [Transactions](#query-issuingtransactions): View the transactions that have affected your issuing balance
+  - [Pix](#pix)
+    - [PixRequests](#create-pixrequests): Create Pix transactions
+    - [PixReversals](#create-pixreversals): Reverse Pix transactions
+    - [PixBalance](#get-your-pixbalance): View your account balance
+    - [PixStatement](#create-a-pixstatement): Request your account statement
+  - [Credit Note](#credit-note)
+    - [CreditNote](#create-creditnotes): Create credit notes
+  - [WebhookEvents](#process-webhook-events): Manage Webhook events
 - [Handling errors](#handling-errors)
 - [Help and Feedback](#help-and-feedback)
 
@@ -300,10 +311,491 @@ for the value to be credited to your account.
 
 Here are a few examples on how to use the SDK. If you have any doubts, use the built-in
 `help()` function to get more info on the desired functionality
-(for example: `help(starkinfra.boleto.create)`)
+(for example: `help(starkinfra.balance.get)`)
 
-## Create pix requests
-You can create a Pix request to charge a user:
+## Issuing
+
+### Query IssuingBINs
+
+To take a look at the sub-issuer BINs available to you, just run the following:
+
+```javascript
+await (async() => {
+    let bins = await starkinfra.issuingBin.query();
+
+    for await (let bin of bins) {
+        console.log(bin);
+    }
+})();
+```
+
+This will tell which card products and card number prefixes you have at your disposal.
+
+### Create IssuingHolders
+
+You can create cardholders to which your cards will be bound.
+They support spending rules that will apply to all underlying cards.
+
+```javascript
+await (async() => {
+    let holders = await starkinfra.issuingHolder.create([
+        new starkinfra.IssuingHolder({
+            'name': 'Iron Bank S.A.',
+            'taxId': '012.345.678-90',
+            'externalId': "1234",
+            'tags': ['Traveler Employee'],
+            'rules': [
+                new starkinfra.IssuingRule({
+                    'name': 'General USD',
+                    'interval': 'day',
+                    'amount': 100000,
+                    'currencyCode': 'USD',
+                })
+            ]
+        })
+    ]);
+
+    for await (let holder of holders) {
+        console.log(holder);
+    }
+})();
+```
+
+**Note**: Instead of using IssuingHolder objects, you can also pass each element in dictionary format
+
+### Query IssuingHolders
+
+You can query multiple holders according to filters.
+
+```javascript
+await (async() => {
+    let holders = await starkinfra.issuingHolder.query();
+  
+    for await (let holder of holders) {
+        console.log(holder);
+    }
+})();
+```
+
+### Delete an IssuingHolder
+
+To cancel a single Issuing Holder by its id, run:
+
+```javascript
+await (async() => {
+    let holder = await starkinfra.issuingHolder.delete('5155165527080960');
+  
+    console.log(holder);
+})();
+```
+
+### Get an IssuingHolder
+
+To get a single Issuing Holder by its id, run:
+
+```javascript
+await (async() => {
+    let holder = await starkinfra.issuingHolder.get('5155165527080960');
+  
+    console.log(holder);
+})();
+```
+
+### Query IssuingHolder logs
+
+You can query holder logs to better understand holder life cycles.
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.issuingHolder.log.query({'limit': 50});
+
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get an IssuingHolder log
+
+You can also get a specific log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.issuingHolder.log.get('5155165527080960');
+  
+    console.log(log);
+})();
+```
+
+### Create IssuingCards
+
+You can issue cards with specific spending rules.
+
+```javascript
+await (async() => {
+    let cards = await starkinfra.issuingCard.create([
+        new starkinfra.issuingCard({
+            'holderName': 'Developers',
+            'holderTaxId': '012.345.678-90',
+            'holderExternalId': "1234",
+            'rules': [
+                new starkinfra.IssuingRule({
+                    'name': 'general',
+                    'interval': 'week',
+                    'amount': 50000,
+                    'currencyCode': 'USD',
+                })
+            ]
+        })
+    ]);
+  
+    for await (let card of cards) {
+        console.log(card);
+    }
+})();
+```
+
+### Query IssuingCards
+
+You can get a list of created cards given some filters.
+
+```javascript
+await (async() => {
+    let cards = await starkinfra.issuingCard.query({
+        'after': '2022-01-01',
+        'before': '2022-03-01'
+    });
+  
+    for await (let card of cards) {
+        console.log(card);
+    }
+})();
+```
+
+### Get an IssuingCard
+
+After its creation, information on a card may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let card = await starkinfra.issuingCard.get('5155165527080960');
+  
+    console.log(card);
+})();
+```
+
+### Update an IssuingCard
+
+You can update a specific IssuingCard by its id.
+
+```javascript
+await (async() => {
+   let card = await starkinfra.issuingCard.update('5155165527080960', {'status': 'blocked'});
+  
+    console.log(card);
+})();
+```
+
+### Delete an IssuingCard
+
+You can also cancel a card by its id.
+
+```javascript
+await (async() => {
+    let card = await starkinfra.issuingCard.delete('5155165527080960');
+  
+    console.log(card);
+})();
+```
+
+### Query IssuingCard logs
+
+Logs are pretty important to understand the life cycle of a card.
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.issuingCard.log.query({'limit': 150});
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get an IssuingCard log
+
+You can get a single log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.issuingCard.log.get('5155165527080960');
+  
+    console.log(log);
+})();
+```
+
+### Process Purchase authorizations
+
+It's easy to process purchase authorizations delivered to your endpoint.
+If you do not approve or decline the authorization within 2 seconds, the authorization will be denied.
+
+```javascript
+const starkinfra = require('starkinfra');
+const express = require('express')
+const app = express()
+
+app.use(express.raw({type: "*/*"}));
+
+const port = 3000
+app.post('/', async (req, res) => {
+    try {
+        let authorization = await starkinfra.issuingAuthorization.parse({
+            content: req.body.toString(),
+            signature: req.headers['digital-signature']
+        });
+        res.send(
+            starkinfra.issuingAuthorization.response( // this optional method just helps you build the response JSON
+                status="accepted",
+                amount=authorization.amount,
+                tags=["my-purchase-id/123"]
+            )
+        );
+
+        // or
+
+        res.send(
+            starkinfra.issuingAuthorization.response(
+                status="denied",
+                reason="other",
+                tags=["other-id/456"]
+            )
+        );
+    }
+    catch (err) {
+        console.log(err)
+        res.status(400).end()
+    }
+})
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+```
+
+### Query IssuingPurchases
+
+You can get a list of created purchases given some filters.
+
+```javascript
+await (async() => {
+    let purchases = await starkinfra.issuingPurchase.query({
+        'after': '2022-01-01',
+        'before': '2022-03-01'
+    });
+  
+    for await (let purchase of purchases) {
+        console.log(purchase);
+    }
+})();
+```
+
+### Get an IssuingPurchase
+
+After its creation, information on a purchase may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let purchase = await starkinfra.issuingPurchase.get('5155165527080960');
+  
+    console.log(purchase);
+})();
+```
+
+### Query IssuingPurchase logs
+
+Logs are pretty important to understand the life cycle of a purchase.
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.issuingPurchase.log.query({'limit': 150});
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get an IssuingPurchase log
+
+You can get a single log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.issuingPurchase.log.get('5155165527080960');
+  
+    console.log(log);
+})();
+```
+
+### Create IssuingInvoices
+
+You can create Pix invoices to transfer money from accounts you have in any bank to your Issuing balance,
+allowing you to run your issuing operation.
+
+```javascript
+await (async() => {
+    let invoice = await starkinfra.issuingInvoice.create({
+        'amount': 1000,
+        'name': 'Tony Stark',
+        'taxId': '012.345.678-90',
+        'tags': ['iron', 'suit']
+    });
+  
+    console.log(invoice);
+})();
+```
+
+**Note**: Instead of using Invoice objects, you can also pass each element in dictionary format
+
+### Get an IssuingInvoice
+
+After its creation, information on an invoice may be retrieved by its id.
+Its status indicates whether it's been paid.
+
+```javascript
+await (async() => {
+    let invoice = await starkinfra.issuingInvoice.get('5155165527080960');
+  
+    console.log(invoice);
+})();
+```
+
+### Query IssuingInvoices
+
+You can get a list of created invoices given some filters.
+
+```javascript
+await (async() => {
+    let invoices = await starkinfra.issuingInvoice.query({
+        'after': '2022-01-01',
+        'before': '2022-03-01'
+    });
+  
+    for await (let invoice of invoices) {
+        console.log(invoice);
+    }
+})();
+```
+
+### Query IssuingInvoice logs
+
+Logs are pretty important to understand the life cycle of an invoice.
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.issuingInvoice.log.query({'limit': 50});
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Create IssuingWithdrawals
+
+You can create withdrawals to send cash back from your Issuing balance to your Banking balance
+by using the Withdrawal resource.
+
+```javascript
+await (async() => {
+    let withdrawal = await starkinfra.issuingWithdrawal.create({
+        'amount': 1000,
+        'externalId': '123',
+        'description': 'Sending back',
+    });
+  
+    console.log(withdrawal);
+})();
+```
+
+**Note**: Instead of using Withdrawal objects, you can also pass each element in dictionary format
+
+### Get an IssuingWithdrawal
+
+After its creation, information on a withdrawal may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let withdrawal = await starkinfra.issuingWithdrawal.get('5155165527080960');
+  
+    console.log(withdrawal);
+})();
+```
+
+### Query IssuingWithdrawals
+
+You can get a list of created invoices given some filters.
+
+```javascript
+await (async() => {
+    let withdrawals = await starkinfra.issuingWithdrawal.query({
+        'after': '2022-01-01',
+        'before': '2022-03-01'
+    });
+  
+    for await (let withdrawal of withdrawals) {
+        console.log(withdrawal);
+    }
+})();
+```
+
+**Note**: the Organization user can only update a workspace with the Workspace ID set.
+
+### Get your IssuingBalance
+
+To know how much money you have in your workspace, run:
+
+```javascript
+await (async() => {
+    let balance = await starkinfra.issuingBalance.get();
+  
+    console.log(balance);
+})();
+```
+
+### Query IssuingTransactions
+
+To understand your balance changes (issuing statement), you can query
+transactions. Note that our system creates transactions for you when
+you make purchases, withdrawals, receive issuing invoice payments, for example.
+
+```javascript
+await (async() => {
+    let transactions = await starkinfra.issuingTransaction.query({
+        after: '2020-01-01',
+        before: '2020-03-01'
+    });
+
+    for await (let transaction of transactions) {
+        console.log(transaction);
+    }
+})();
+```
+
+### Get an IssuingTransaction
+
+You can get a specific transaction by its id:
+
+```javascript
+await (async() => {
+    let transaction = await starkinfra.issuingTransaction.get('5155165527080960');
+    
+    console.log(transaction);
+})();
+```
+
+## Pix
+
+### Create PixRequests
+
+You can create a Pix request to transfer money from one of your users to anyone else:
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -334,10 +826,9 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-
 **Note**: Instead of using PixRequest objects, you can also pass each element in dictionary format
 
-## Query pix requests
+### Query PixRequests
 
 You can query multiple pix requests according to filters.
 
@@ -354,7 +845,7 @@ You can query multiple pix requests according to filters.
 })();
 ```
 
-## Get a pix request
+### Get a PixRequest
 
 After its creation, information on a pix request may be retrieved by its id. Its status indicates whether it has been paid.
 
@@ -367,11 +858,11 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Process pix request authorization requests
+### Process inbound PixRequest authorizations
 
-It's easy to process authorization reversals that arrived in your handler. Remember to pass the
-signature header so the SDK can make sure it's StarkInfra that sent you the authorization
-request.
+It's easy to process authorization requests that arrived at your endpoint.
+Remember to pass the signature header so the SDK can make sure it's StarkInfra that sent you the event.
+If you do not approve or decline the authorization within 1 second, the authorization will be denied.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -385,7 +876,7 @@ app.post('/', async (req, res) => {
     try {
         let reversal = await starkinfra.pixRequest.parse({
             content: req.body.toString(),
-            signature: req.headers['digital-signature']
+            signature: req.headers['Digital-Signature']
         });
         res.end()
     }
@@ -397,7 +888,7 @@ app.post('/', async (req, res) => {
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 ```
 
-## Query pix request logs
+### Query PixRequest logs
 
 You can query pix request logs to better understand pix request life cycles.
 
@@ -413,7 +904,7 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Get a pix request log
+### Get a PixRequest log
 
 You can also get a specific log by its id.
 
@@ -426,9 +917,9 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Create pix reversals
+### Create PixReversals
 
-You can reverse a pix request by whole or by a fraction of its amount using a pix reversal.
+You can reverse a PixRequest either partially or totally using a PixReversal.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -449,9 +940,9 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Query pix reversals
+### Query PixReversals
 
-You can query multiple pix reversals according to filters.
+You can query multiple Pix reversals according to filters.
 
 ```javascript
 (async() => {
@@ -466,9 +957,10 @@ You can query multiple pix reversals according to filters.
 })();
 ```
 
-## Get a pix reversal
+### Get a PixReversal
 
-After its creation, information on a pix reversal may be retrieved by its id. Its status indicates whether it has been paid.
+After its creation, information on a Pix reversal may be retrieved by its id.
+Its status indicates whether it has been successfully processed.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -479,11 +971,11 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Process pix reversal authorization reversals
+### Process inbound PixReversal authorizations
 
-It's easy to process authorization reversals that arrived in your handler. Remember to pass the
-signature header so the SDK can make sure it's StarkInfra that sent you the authorization 
-request.
+It's easy to process authorization requests that arrived at your endpoint.
+Remember to pass the signature header so the SDK can make sure it's StarkInfra that sent you the event.
+If you do not approve or decline the authorization within 1 second, the authorization will be denied.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -497,7 +989,7 @@ app.post('/', async (req, res) => {
     try {
         let reversal = await starkinfra.pixReversal.parse({
             content: req.body.toString(),
-            signature: req.headers['digital-signature']
+            signature: req.headers['Digital-Signature']
         });
         res.end()
     }
@@ -509,9 +1001,9 @@ app.post('/', async (req, res) => {
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 ```
 
-## Query pix reversal logs
+### Query PixReversal logs
 
-You can query pix reversal logs to better understand pix reversal life cycles.
+You can query Pix reversal logs to better understand their life cycles.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -525,7 +1017,7 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Get a pix reversal log
+### Get a PixReversal log
 
 You can also get a specific log by its id.
 
@@ -538,9 +1030,9 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Get pix balance
+### Get your PixBalance
 
-To know how much money you have in your workspace, run:
+To see how much money you have in your account, run:
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -551,9 +1043,10 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Create pix statement
+### Create a PixStatement
 
-Statements are only available for direct participants. To create a statement of all the transactions that happened on your workspace during a specific day, run:
+Statements are generated directly by the Central Bank and are only available for direct participants.
+To create a statement of all the transactions that happened on your account during a specific day, run:
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -561,17 +1054,17 @@ const starkinfra = require('starkinfra');
 (async() => {
     let statement = await starkinfra.pixStatement.create(
         {
-            after: '2022-01-01',
-            before: '2022-01-01',
-            type: 'transaction'
+            after: '2022-01-01', // This is the date that you want to create a statement.
+            before: '2022-01-01', // After and before must be the same date.
+            type: 'transaction' // Options are "interchange", "interchangeTotal", "transaction".
         }
     )
     console.log(statement)
 });
 ```
-## Query pix statements
+### Query PixStatements
 
-You can query multiple pix statements according to filters.
+You can query multiple Pix statements according to filters.
 
 ```javascript
 (async() => {
@@ -585,9 +1078,9 @@ You can query multiple pix statements according to filters.
 })();
 ```
 
-## Get a pix statement
+### Get a PixStatement
 
-Statements are only available for direct participants. To get a pix statement by its id:
+Statements are only available for direct participants. To get a Pix statement by its id:
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -598,9 +1091,9 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Get a pix statement .csv file
+### Get a PixStatement .csv file
 
-To get a .csv file of a pix statement using its id, run:
+To get the .csv file corresponding to a Pix statement using its id, run:
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -612,42 +1105,9 @@ const fs = require('fs').promises;
 })();
 ```
 
-## Process webhook events
+## Credit Note
 
-It's easy to process events delivered to your Webhook endpoint. Remember to pass the
-signature header so the SDK can make sure it was really StarkInfra that sent you
-the event.
-
-```javascript
-const starkinfra = require('starkinfra');
-const express = require('express')
-const app = express()
-
-app.use(express.raw({type: "*/*"}));
-
-const port = 3000
-app.post('/', async (req, res) => {
-    try {
-        let event = await starkinfra.event.parse({
-            content: req.body.toString(),
-            signature: req.headers['digital-signature']
-        });
-        if (event.subscription.includes("pix-request")) {
-            console.log(event.log.request);
-        } else if (event.subscription.includes("pix-reversal")) {
-            console.log(event.log.reversal);
-        }
-        res.end()
-    }
-    catch (err) {
-        console.log(err)
-        res.status(400).end()
-    }
-})
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
-```
-
-## Create credit notes
+### Create CreditNotes
 You can create a Credit Note to generate a CCB contract:
 
 ```javascript
@@ -736,7 +1196,7 @@ const starkinfra = require('starkinfra');
 
 **Note**: Instead of using CreditNote objects, you can also pass each element in dictionary format
 
-## Query credit notes
+### Query CreditNotes
 
 You can query multiple credit notes according to filters.
 
@@ -755,7 +1215,7 @@ You can query multiple credit notes according to filters.
 })();
 ```
 
-## Get a credit note
+### Get a CreditNote
 
 After its creation, information on a credit note may be retrieved by its id.
 
@@ -768,7 +1228,7 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Query credit note logs
+### Query CreditNote logs
 
 You can query credit note logs to better understand credit note life cycles.
 
@@ -788,7 +1248,7 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Get a credit note log
+### Get a CreditNote log
 
 You can also get a specific log by its id.
 
@@ -799,6 +1259,48 @@ const starkinfra = require('starkinfra');
     let log = await starkinfra.creditNote.log.get('5155165527080960');
     console.log(log);
 })();
+```
+
+## Process Webhook events
+
+It's easy to process events delivered to your Webhook endpoint. Remember to pass the
+signature header so the SDK can make sure it was really StarkInfra that sent you
+the event.
+
+```javascript
+const starkinfra = require('starkinfra');
+const express = require('express')
+const app = express()
+
+app.use(express.raw({type: "*/*"}));
+
+const port = 3000
+app.post('/', async (req, res) => {
+    try {
+        let event = await starkinfra.event.parse({
+            content: req.body.toString(),
+            signature: req.headers['digital-signature']
+        });
+        if (event.subscription.includes("pix-request")) {
+            console.log(event.log.request);
+        } else if (event.subscription.includes("pix-reversal")) {
+            console.log(event.log.reversal);
+        } else if (event.subscription.includes("issuing-card")) {
+            console.log(event.log.reversal);
+        } else if (event.subscription.includes("issuing-invoice")) {
+            console.log(event.log.reversal);
+        } else if (event.subscription.includes("issuing-embossing")) {
+            console.log(event.log.reversal);
+        } else if (event.subscription.includes("issuing-purchase")) {
+            console.log(event.log.reversal);
+        res.end()
+    }
+    catch (err) {
+        console.log(err)
+        res.status(400).end()
+    }
+})
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 ```
 
 # Handling errors

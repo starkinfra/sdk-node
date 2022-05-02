@@ -99,7 +99,7 @@ exports.get = async function (id, {user} = {}) {
     return rest.getId(resource, id, user);
 };
 
-exports.query = async function ({ fields, limit, after, before, status, tags, ids, user} = {}) {
+exports.query = async function ({ limit, after, before, status, tags, ids, user} = {}) {
     /**
      *
      * Retrieve CreditNotes
@@ -107,7 +107,6 @@ exports.query = async function ({ fields, limit, after, before, status, tags, id
      * @description Receive a generator of CreditNote objects previously created in the Stark Infra API
      *
      * Parameters (optional):
-     * @param fields [array of strings, default null]:  parameters to be retrieved from CreditNote objects. ex: ["amount", "id"]
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null]: date filter for objects created or updated only after specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created or updated only before specified date. ex: '2020-03-10'
@@ -121,7 +120,6 @@ exports.query = async function ({ fields, limit, after, before, status, tags, id
      *
      */
     let query = {
-        fields: fields,
         limit: limit,
         after: after,
         before: before,
@@ -132,7 +130,7 @@ exports.query = async function ({ fields, limit, after, before, status, tags, id
     return rest.getList(resource, query, user);
 };
 
-exports.page = async function ({ cursor, fields, limit, after, before, status, tags, ids, user} = {}) {
+exports.page = async function ({ cursor, limit, after, before, status, tags, ids, user} = {}) {
     /**
      *
      * Retrieve paged CreditNotes
@@ -142,7 +140,6 @@ exports.page = async function ({ cursor, fields, limit, after, before, status, t
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param fields [array of strings, default null]:  parameters to be retrieved from CreditNote objects. ex: ["amount", "id"]
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null]: date filter for objects created or updated only after specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created or updated only before specified date. ex: '2020-03-10'
@@ -157,7 +154,6 @@ exports.page = async function ({ cursor, fields, limit, after, before, status, t
      */
     let query = {
         cursor: cursor,
-        fields: fields,
         limit: limit,
         after: after,
         before: before,

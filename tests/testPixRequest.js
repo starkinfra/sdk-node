@@ -88,7 +88,6 @@ describe('TestPixRequestQueryParams', function(){
     this.timeout(10000);
     it('test_success', async () => {
         const requests = await starkinfra.pixRequest.query({
-            fields: ['amount', 'id'],
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',
@@ -108,7 +107,6 @@ describe('TestPixRequestQueryParams', function(){
         let cursor = null;
         let requests = null;
         [requests, cursor] = await starkinfra.pixRequest.page({
-            fields: ['amount', 'id'],
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',
