@@ -127,7 +127,7 @@ exports.page = async function ({ cursor, limit, ids, user} = {}) {
         cursor: cursor,
         limit: limit,
         ids: ids,
-     };
+    };
     return rest.getPage(resource, query, user);
 };
 

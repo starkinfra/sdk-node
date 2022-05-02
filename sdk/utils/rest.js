@@ -38,7 +38,7 @@ exports.getList = async function* (resource, query, user = null) {
     } while (cursor && (limit === null || limit > 0));
 };
 
-exports.post = async function (resource, entities, user = null) {
+exports.post = async function (resource, entities, user = null, { ...query } = {}) {
     let names = api.lastPlural(resource['name']);
     let endpoint = `${api.endpoint(resource['name'])}`;
     for (let entity of entities) {
@@ -46,7 +46,7 @@ exports.post = async function (resource, entities, user = null) {
     }
     let payload = {};
     payload[names] = entities;
-    let response = await fetch(`/${endpoint}`, 'POST', payload, null, user);
+    let response = await fetch(`/${endpoint}`, 'POST', payload, query, user);
     let json = response.json();
     let list = json[api.lastName(names)];
     let newList = [];
@@ -75,10 +75,10 @@ exports.getQrcode = async function (resource, id, options = {}, user = null) {
     return response.content;
 };
 
-exports.getId = async function (resource, id, user = null, callback) {
+exports.getId = async function (resource, id, user = null, { ...query } = {}) {
     let name = resource['name'];
     let endpoint = `${api.endpoint(resource['name'])}/${id}`;
-    let response = await fetch(`/${endpoint}`, 'GET', null, null, user);
+    let response = await fetch(`/${endpoint}`, 'GET', null, query, user);
     let json = response.json();
     let returnEntity = json[api.lastName(name)];
     return Object.assign(new resource['class'](returnEntity), returnEntity);
