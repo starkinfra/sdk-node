@@ -46,8 +46,8 @@ class PixRequest extends Resource {
      * @param status [string, default null]: current PixRequest status. ex: "registered" or "paid"
      * @param flow [string, default null]: direction of money flow. ex: "in" or "out"
      * @param senderBankCode [string, default null]: sender's bank institution code in Brazil. If an ISPB (8 digits) is informed. ex: "20018183" or "341"
-     * @param created [string, default null]: creation datetime for the PixRequest. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
-     * @param updated [string, default null]: latest update datetime for the PixRequest. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+     * @param created [string, default null]: creation datetime for the PixRequest. ex: "2020-03-10 10:30:00.000"
+     * @param updated [string, default null]: latest update datetime for the PixRequest. ex: "2020-03-10 10:30:00.000"
      *
      */
     constructor({
@@ -104,7 +104,7 @@ exports.create = async function (requests, {user} = {}) {
      * @param requests [list of PixRequest objects]: list of PixRequest objects to be created in the API
      *
      * Parameters (optional):
-     * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of PixRequest objects with updated attributes
@@ -124,7 +124,7 @@ exports.get = async function (id, {user} = {}) {
      * @param id [string]: object unique id. ex: '5656565656565656'
      *
      * Parameters (optional):
-     * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns PixRequest object with updated attributes
@@ -133,7 +133,7 @@ exports.get = async function (id, {user} = {}) {
     return rest.getId(resource, id, user);
 };
 
-exports.query = async function ({ fields, limit, after, before, status, tags, ids, endToEndIds, externalIds, user} = {}) {
+exports.query = async function ({ limit, after, before, status, tags, ids, endToEndIds, externalIds, user} = {}) {
     /**
      *
      * Retrieve PixRequests
@@ -141,7 +141,6 @@ exports.query = async function ({ fields, limit, after, before, status, tags, id
      * @description Receive a generator of PixRequest objects previously created in the Stark Infra API
      *
      * Parameters (optional):
-     * @param fields [array of strings, default null]:  parameters to be retrieved from PixRequest objects. ex: ["amount", "id"]
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null]: date filter for objects created or updated only after specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created or updated only before specified date. ex: '2020-03-10'
@@ -150,14 +149,13 @@ exports.query = async function ({ fields, limit, after, before, status, tags, id
      * @param ids [array of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param endToEndIds [array of strings, default null]: central bank's unique transaction IDs. ex: ["E79457883202101262140HHX553UPqeq", "E79457883202101262140HHX553UPxzx"]
      * @param externalIds [array of strings, default null]: url safe strings that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: ["my-internal-id-123456", "my-internal-id-654321"]
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of PixRequest objects with updated attributes
      *
      */
     let query = {
-        fields: fields,
         limit: limit,
         after: after,
         before: before,
@@ -170,7 +168,7 @@ exports.query = async function ({ fields, limit, after, before, status, tags, id
     return rest.getList(resource, query, user);
 };
 
-exports.page = async function ({ cursor, fields, limit, after, before, status, tags, ids, endToEndIds, externalIds, user} = {}) {
+exports.page = async function ({ cursor, limit, after, before, status, tags, ids, endToEndIds, externalIds, user} = {}) {
     /**
      *
      * Retrieve paged PixRequests
@@ -180,7 +178,6 @@ exports.page = async function ({ cursor, fields, limit, after, before, status, t
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param fields [array of strings, default null]:  parameters to be retrieved from PixRequest objects. ex: ["amount", "id"]
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null]: date filter for objects created or updated only after specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created or updated only before specified date. ex: '2020-03-10'
@@ -189,7 +186,7 @@ exports.page = async function ({ cursor, fields, limit, after, before, status, t
      * @param ids [array of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param endToEndIds [array of strings, default null]: central bank's unique transaction IDs. ex: ["E79457883202101262140HHX553UPqeq", "E79457883202101262140HHX553UPxzx"]
      * @param externalIds [array of strings, default null]: url safe strings that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: ["my-internal-id-123456", "my-internal-id-654321"]
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of PixRequest objects with updated attributes and cursor to retrieve the next page of PixRequest objects
@@ -197,7 +194,6 @@ exports.page = async function ({ cursor, fields, limit, after, before, status, t
      */
     let query = {
         cursor: cursor,
-        fields: fields,
         limit: limit,
         after: after,
         before: before,
@@ -224,7 +220,7 @@ exports.parse = async function ({content, signature, user} = {}) {
      * @param signature [string]: base-64 digital signature received at response header "Digital-Signature"
      *
      * Parameters (optional):
-     * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns Parsed PixRequest object

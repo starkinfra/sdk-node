@@ -13,16 +13,16 @@ class PixStatement extends Resource {
      * accessed by the user. This feature is only available for direct participants.
      *
      * Parameters (required):
-     * @param before [string]: transactions that happened at this date are stored in the PixStatement, must be the same as before. ex: (2022-01-01)
-     * @param after [string]: transactions that happened at this date are stored in the PixStatement, must be the same as after. ex: (2022-01-01)
+     * @param before [string]: transactions that happened at this date are stored in the PixStatement, must be the same as before. ex: '2020-03-10'
+     * @param after [string]: transactions that happened at this date are stored in the PixStatement, must be the same as after. ex: '2020-03-10'
      * @param type [string]: types of entities to include in statement. Options: ["interchange", "interchangeTotal", "transaction"]
      *
      * Attributes (return-only):
-     * @param id [string, default null]: unique id returned when the PixStatement is created. ex: "5656565656565656"
-     * @param status [string, default null]: current PixStatement status. ex: "success" or "failed"
-     * @param transactionCount [string, default null]: PixStatement status. ex: "success" or "failed"t None]: number of transactions that happened during the day that the PixStatement was requested. ex 11
-     * @param created [string, default null]: creation datetime for the PixStatement. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
-     * @param updated [string, default null]: latest update datetime for the PixStatement. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+     * @param id [string]: unique id returned when the PixStatement is created. ex: "5656565656565656"
+     * @param status [string]: current PixStatement status. ex: "success" or "failed"
+     * @param transactionCount [integer]: number of transactions that happened during the day that the PixStatement was requested. ex 11
+     * @param created [string]: creation datetime for the PixStatement. ex: "2020-03-10 10:30:00.000"
+     * @param updated [string]: latest update datetime for the PixStatement. ex: "2020-03-10 10:30:00.000"
      *
      */
     constructor({
@@ -53,7 +53,7 @@ exports.create = async function (statement, {user} = {}) {
      * @param statement [PixStatement object]: list of PixStatement objects to be created in the API
      *
      * Parameters (optional):
-     * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns PixStatement object with updated attributes
@@ -73,7 +73,7 @@ exports.get = async function (id, {user} = {}) {
      * @param id [string]: object unique id. ex: '5656565656565656'
      *
      * Parameters (optional):
-     * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns PixStatement object with updated attributes
@@ -92,7 +92,7 @@ exports.query = async function ({ limit, ids, user} = {}) {
      * Parameters (optional):
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of PixStatement objects with updated attributes
@@ -117,7 +117,7 @@ exports.page = async function ({ cursor, limit, ids, user} = {}) {
      * @param cursor [string, default null]: cursor returned on the previous page function call
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of PixStatement objects with updated attributes and cursor to retrieve the next page of PixStatement objects

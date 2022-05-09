@@ -43,7 +43,7 @@ exports.query = async function ({ limit, user} = {}) {
      *
      * Parameters (optional):
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of IssuingBin objects with updated attributes
@@ -66,7 +66,7 @@ exports.page = async function ({ cursor, limit, user} = {}) {
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of IssuingBin objects with updated attributes and cursor to retrieve the next page of IssuingBin objects
