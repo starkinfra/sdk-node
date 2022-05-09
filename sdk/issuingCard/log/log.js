@@ -16,15 +16,13 @@ class Log extends Resource {
      * @param id [string]: unique id returned when the log is created. ex: '5656565656565656'
      * @param created [string]: creation datetime for the log. ex: '2020-03-10 10:30:00.000'
      * @param type [string]: type of the IssuingCard event which triggered the log creation. ex: 'processing' or 'success'
-     * @param errors [list of strings]: list of errors linked to this IssuingCard event.
      * @param card [IssuingCard]: IssuingCard entity to which the log refers to.
      *
      */
-    constructor({ id, created, type, errors, card }) {
+    constructor({ id, created, type, card }) {
         super(id);
         this.created = check.datetime(created);
         this.type = type;
-        this.errors = errors;
         this.card = card;
     }
 }
@@ -67,7 +65,7 @@ exports.query = async function ({ ids, limit, after, before, types, cardIds, use
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
      * @param types [list of strings, default null]: filter retrieved objects by types. ex: ["registered", "paid"]
      * @param cardIds [list of strings, default []]: list of IssuingCard ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of IssuingCard Log objects with updated attributes
@@ -100,7 +98,7 @@ exports.page = async function ({ cursor, ids, limit, after, before, types, cardI
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
      * @param types [list of strings, default null]: filter retrieved objects by types. ex: ["registered", "paid"]
      * @param cardIds [list of strings, default []]: list of IssuingCard ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of IssuingCard Log objects with updated attributes and cursor to retrieve the next page of IssuingCard Log objects

@@ -1,7 +1,5 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const uniqueId = require('./utils/uniqueId.js')
-const endToEndId = require('./utils/endToEndId.js')
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -10,7 +8,6 @@ describe('TestPixReversalPost', function(){
     this.timeout(10000);
     it('test_success', async () => {
         let reversals = [];
-        const x = await getExample()
         reversals.push(new starkinfra.PixReversal(await getExample()));
         reversals = await starkinfra.pixReversal.create(reversals);
         for (let reversal of reversals) {
@@ -167,14 +164,3 @@ describe('TestAuthorizationParse', function(){
         }
     });
 });
-
-getExample = async function() {
-    const id = await endToEndId.get()
-    return {
-        amount: 1,
-        externalId: uniqueId.create(),
-        endToEndId: id,
-        reason: 'fraud',
-        tags: ['lannister', 'chargeback']
-    }
-}

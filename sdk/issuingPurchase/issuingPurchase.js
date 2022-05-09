@@ -114,7 +114,7 @@ exports.query = async function ({ ids, cardIds, holderIds, endToEndIds, limit, t
      * @param ids [list of strings, default [], default null]: purchase IDs
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of IssuingPurchase objects with updated attributes
@@ -153,7 +153,7 @@ exports.page = async function ({ cursor, ids, cardIds, holderIds, endToEndIds, l
      * @param ids [list of strings, default [], default null]: purchase IDs
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of IssuingPurchase objects with updated attributes and cursor to retrieve the next page of IssuingPurchase objects

@@ -16,7 +16,7 @@ class Log extends Resource {
      * @param id [string]: unique id returned when the log is created. ex: '5656565656565656'
      * @param created [string]: creation datetime for the log. ex: '2020-03-10 10:30:00.000'
      * @param type [string]: type of the CreditNote event which triggered the log creation. ex: 'processing' or 'success'
-     * @param errors [list of strings]: list of errors linked to this BoletoPayment event.
+     * @param errors [list of strings]: list of errors linked to this CreditNote event.
      * @param request [CreditNote]: CreditNote entity to which the log refers to.
      *
      */
@@ -44,7 +44,7 @@ exports.get = async function (id, {user} = {}) {
      * @param id [string]: object unique id. ex: '5656565656565656'
      *
      * Parameters (optional):
-     * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns CreditNote Log object with updated attributes
@@ -66,7 +66,7 @@ exports.query = async function ({limit, after, before, types, noteIds, user} = {
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
      * @param types [list of strings, default null]: filter retrieved objects by types. ex: ['registered', 'paid']
      * @param noteIds [list of strings, default null]: list of CreditNote ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of CreditNote Log objects with updated attributes
@@ -97,10 +97,10 @@ exports.page = async function ({ cursor, limit, after, before, types, noteIds, u
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
      * @param types [list of strings, default null]: filter retrieved objects by types. ex: ['registered', 'paid']
      * @param noteIds [list of strings, default null]: list of CreditNote ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns list of CreditNote Log objects with updated attributes and cursor to retrieve the next page of Boleto objects
+     * @returns list of CreditNote Log objects with updated attributes and cursor to retrieve the next page of CreditNote objects
      *
      */
     let query = {

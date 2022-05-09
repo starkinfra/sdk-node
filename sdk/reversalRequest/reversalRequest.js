@@ -1,0 +1,218 @@
+const rest = require('../utils/rest.js');
+const check = require('../utils/check.js');
+const Resource = require('../utils/resource.js').Resource
+
+
+class ReversalRequest extends Resource {
+    /**
+     *
+     * ReversalRequest object
+     *
+     * @description A reversal request can be created when fraud is detected on a transaction or a system malfunction
+     * results in an erroneous transaction.
+     * It notifies another participant of your request to reverse the payment they have received.
+     * When you initialize a ReversalRequest, the entity will not be automatically
+     * created in the Stark Infra API. The 'create' function sends the objects
+     * to the Stark Infra API and returns the created object.
+     *
+     * Parameters (required):
+     * @param amount [integer]: amount in cents to be reversed. ex: 11234 (= R$ 112.34)
+     * @param referenceId [string]: endToEndId or returnId of the transaction to be reversed. ex: "E20018183202201201450u34sDGd19lz"
+     * @param reason [string]: reason why the reversal was requested. Options: "fraud", "flaw", "reversalChargeback"
+     *
+     * Parameters (optional):
+     * @param description [string, default null]: description for the ReversalRequest.
+     *
+     * Attributes (return-only):
+     * @param analysis [string]: analysis that led to the result.
+     * @param bacenId [string]: central bank's unique UUID that identifies the ReversalRequest.
+     * @param senderBankCode [string]: bankCode of the Pix participant that created the ReversalRequest. ex: "20018183"
+     * @param receiverBankCode [string]: bankCode of the Pix participant that received the ReversalRequest. ex: "20018183"
+     * @param rejectionReason [string]: reason for the rejection of the reversal request. Options: "noBalance", "accountClosed", "unableToReverse"
+     * @param reversalReferenceId [string]: return id of the reversal transaction. ex: "D20018183202202030109X3OoBHG74wo".
+     * @param id [string]: unique id returned when the ReversalRequest is created. ex: "5656565656565656"
+     * @param result [string]: result after the analysis of the ReversalRequest by the receiving party. Options: "rejected", "accepted", "partiallyAccepted"
+     * @param status [string]: current ReversalRequest status. Options: "created", "failed", "delivered", "closed", "canceled".
+     * @param created [string]: creation datetime for the ReversalRequest. ex: "2022-01-01T12:00:00:00".
+     * @param updated [string]: latest update datetime for the ReversalRequest. ex: "2022-01-01T12:00:00:00".
+     *
+     */
+    constructor({
+                    amount, referenceId, reason, description = null, analysis = null, bacenId = null,
+                    senderBankCode = null, receiverBankCode = null, rejectionReason = null,
+                    reversalReferenceId = null, id = null, result = null, status = null,
+                    created = null, updated = null
+                }) {
+        super(id);
+
+        this.amount = amount;
+        this.referenceId = referenceId;
+        this.reason = reason;
+        this.description = description;
+        this.analysis = analysis;
+        this.bacenId = bacenId;
+        this.senderBankCode = senderBankCode;
+        this.receiverBankCode = receiverBankCode;
+        this.rejectionReason = rejectionReason;
+        this.reversalReferenceId = reversalReferenceId;
+        this.result = result;
+        this.status = status;
+        this.created = check.datetime(created);
+        this.updated = check.datetime(updated);
+    }
+}
+
+exports.ReversalRequest = ReversalRequest;
+let resource = {'class': exports.ReversalRequest, 'name': 'ReversalRequest'};
+
+exports.create = async function (report, {user} = {}) {
+    /**
+     *
+     * Create a ReversalRequest object
+     *
+     * @description Create a ReversalRequest in the Stark Infra API
+     *
+     * Parameters (required):
+     * @param request [ReversalRequest object]: ReversalRequest object to be created in the API.
+     *
+     * Parameters (optional):
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns ReversalRequest object with updated attributes.
+     *
+     */
+    return rest.postSingle(resource, report, user);
+};
+
+exports.get = async function (id, { user } = {}) {
+    /**
+     *
+     * Retrieve a ReversalRequest object
+     *
+     * @description Retrieve the ReversalRequest object linked to your Workspace in the Stark Infra API using its id.
+     *
+     * Parameters (required):
+     * @param id [string]: ReversalRequest object unique id. ex: '5656565656565656'
+     *
+     * Parameters (optional):
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns ReversalRequest object that corresponds to the given id.
+     *
+     */
+    return rest.getId(resource, id, user);
+};
+
+exports.query = async function ({ limit, after, before, status, ids, user } = {}) {
+    /**
+     *
+     * Retrieve ReversalRequests
+     *
+     * @description Receive a generator of ReversalRequests objects previously created in the Stark Infra API
+     *
+     * Parameters (optional):
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
+     * @param after [string, default null]: date filter for objects created after a specified date. ex: '2020-03-10'
+     * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: "created", "failed", "delivered", "closed", "canceled".
+     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns generator of ReversalRequest objects with updated attributes
+     *
+     */
+    let query = {
+        limit: limit,
+        after: check.date(after),
+        before: check.date(before),
+        status: status,
+        ids: ids,
+    };
+    return rest.getList(resource, query, user);
+};
+
+exports.page = async function ({ cursor, limit, after, before, status, ids, user } = {}) {
+    /**
+     *
+     * Retrieve paged ReversalRequests
+     *
+     * @description Receive a list of up to 100 ReversalRequest objects previously created in the Stark Infra API and the cursor to the next page.
+     * Use this function instead of query if you want to manually page your requests.
+     *
+     * Parameters (optional):
+     * @param cursor [string, default null]: cursor returned on the previous page function call
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
+     * @param after [string, default null]: date filter for objects created after a specified date. ex: '2020-03-10'
+     * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: "created", "failed", "delivered", "closed", "canceled".
+     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns list of ReversalRequest objects with updated attributes and cursor to retrieve the next page of ReversalRequest objects
+     *
+     */
+    let query = {
+        cursor: cursor,
+        limit: limit,
+        after: check.date(after),
+        before: check.date(before),
+        status: status,
+        ids: ids,
+    };
+    return rest.getPage(resource, query, user);
+};
+
+exports.update = async function ( id, result, { rejectionReason, reversalReferenceId, analysis, user } = {}) {
+    /**
+     *
+     * Update ReversalRequest entity
+     *
+     * @description Respond to a received ReversalRequest.
+     *
+     * Parameters (required):
+     * @param id [string]: ReversalRequest id. ex: '5656565656565656'
+     * @param result [string]: result after the analysis of the ReversalRequest. Options: "rejected", "accepted", "partiallyAccepted".
+     *
+     * Parameters (conditionally required):
+     * @param rejectionReason [string, default null]: if the ReversalRequest is rejected a reason is required. Options: "noBalance", "accountClosed", "unableToReverse",
+     * @param reversalReferenceId [string, default null]: returnId of the reversal transaction. ex: "D20018183202201201450u34sDGd19lz"
+     *
+     * Parameters (optional):
+     * @param analysis [string, default null]: description of the analysis that led to the result.
+     *
+     * Return:
+     * @returns ReversalRequest with updated attributes.
+     *
+     */
+    let payload = {
+        "result": result,
+        "rejectionReason": rejectionReason,
+        "reversalReferenceId": reversalReferenceId,
+        "analysis": analysis
+    };
+    return rest.patchId(resource, id, payload, user);
+};
+
+exports.delete = async function (id, { user } = {}) {
+    /**
+     *
+     * Delete a ReversalRequest entity
+     *
+     * @description Delete a ReversalRequest entity previously created in the Stark Infra API.
+     *
+     * Parameters (required):
+     * @param id [string]: object unique id. ex: '5656565656565656'
+     *
+     * Parameters (optional):
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns deleted ReversalRequest object
+     *
+     */
+    return rest.deleteId(resource, id, user);
+};

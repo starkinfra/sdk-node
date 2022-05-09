@@ -1,7 +1,7 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const endToEndId = require('../sdk/utils/endToEndId.js');
 const uniqueId = require('./utils/uniqueId.js')
+const endToEndId = require('../sdk/utils/endToEndId.js');
 
 starkinfra.user = require('./utils/user').exampleProject;
 

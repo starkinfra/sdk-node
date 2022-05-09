@@ -16,15 +16,13 @@ class Log extends Resource {
      * @param id [string]: unique id returned when the log is created. ex: '5656565656565656'
      * @param created [string]: creation datetime for the log. ex: '2020-03-10 10:30:00.000'
      * @param type [string]: type of the IssuingHolder event which triggered the log creation. ex: 'processing' or 'success'
-     * @param errors [list of strings]: list of errors linked to this IssuingHolder event.
      * @param holder [IssuingHolder]: IssuingHolder entity to which the log refers to.
      *
      */
-    constructor({ id, created, type, errors, holder }) {
+    constructor({ id, created, type, holder }) {
         super(id);
         this.created = check.datetime(created);
         this.type = type;
-        this.errors = errors;
         this.holder = holder;
     }
 }
@@ -67,7 +65,7 @@ exports.query = async function ({ ids, limit, after, before, types, holderIds, u
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
      * @param types [list of strings, default null]: filter retrieved objects by types. ex: ["created", "blocked"]
      * @param holderIds [list of strings, default null]: list of IssuingHolder ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of IssuingHolder Log objects with updated attributes
@@ -100,7 +98,7 @@ exports.page = async function ({ cursor, ids, limit, after, before, types, holde
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
      * @param types [list of strings, default null]: filter retrieved objects by types. ex: ["created", "blocked"]
      * @param holderIds [list of strings, default null]: list of IssuingHolder ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of IssuingHolder Log objects with updated attributes and cursor to retrieve the next page of IssuingHolder objects

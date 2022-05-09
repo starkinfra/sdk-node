@@ -26,16 +26,16 @@ exports.lastPlural = function (resource) {
     lastName = exports.lastName(resource, true);
     if (lastName.endsWith("s")) {
         return lastName;
-    };
+    }
     if (lastName.endsWith("y") && !lastName.endsWith("ey")) {
         return `${lastName.slice(0, -1)}ies`;
-    };
+    }
     return `${lastName}s`;
 };
 
 exports.removeNullKeys = function(dict) {
    Object.entries(dict).forEach(([key, value]) => {
-        if (value == null)
+        if (value === undefined || value === null)
             delete dict[key];
         else if (value.constructor == Object || value instanceof Resource)
             exports.removeNullKeys(value);

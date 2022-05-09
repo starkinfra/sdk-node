@@ -35,9 +35,17 @@ This SDK version is compatible with the Stark Infra API v2.
     - [PixReversals](#create-pixreversals): Reverse Pix transactions
     - [PixBalance](#get-your-pixbalance): View your account balance
     - [PixStatement](#create-a-pixstatement): Request your account statement
+    - [PixKey](#create-a-pixkey): Create a Pix Key
+    - [PixClaim](#create-a-pixclaim): Claim a Pix Key
+    - [PixDirector](#create-a-pixdirector): Create a Pix Director
+    - [InfractionReport](#create-an-infractionreport): Create a Pix Key
+    - [ReversalRequest](#create-a-reversalrequest): Claim a Pix Key
+    - [BrcodeCertificate](#query-brcodecertificates): View Pix QR Code domain certificates registered with the Central Bank
   - [Credit Note](#credit-note)
     - [CreditNote](#create-creditnotes): Create credit notes
-  - [WebhookEvents](#process-webhook-events): Manage Webhook events
+  - [Webhook Events](#webhook-events):
+    - [WebhookEvents](#process-webhook-events): Manage Webhook events
+    - [WebhookEventAttempts](#query-failed-webhook-event-delivery-attempts-information): Query failed webhook event deliveries
 - [Handling errors](#handling-errors)
 - [Help and Feedback](#help-and-feedback)
 
@@ -272,7 +280,7 @@ const starkinfra = require('starkinfra');
 
 - The `page` function gives you full control over the API pagination. With each function call, you receive up to
   100 results and the cursor to retrieve the next batch of elements. This allows you to stop your queries and
-  pick up from where you left off whenever it is convenient. When there are no more elements to be retrieved, the returned cursor will be `None`.
+  pick up from where you left off whenever it is convenient. When there are no more elements to be retrieved, the returned cursor will be `null`.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -311,7 +319,7 @@ for the value to be credited to your account.
 
 Here are a few examples on how to use the SDK. If you have any doubts, use the built-in
 `help()` function to get more info on the desired functionality
-(for example: `help(starkinfra.balance.get)`)
+(for example: `help(starkinfra.issuinginvoice.create)`)
 
 ## Issuing
 
@@ -695,6 +703,18 @@ await (async() => {
     for await (let log of logs) {
         console.log(log);
     }
+})();
+```
+
+### Get an IssuingInvoice log
+
+You can also get a specific log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.issuingInvoice.log.get('5155165527080960');
+  
+    console.log(log);
 })();
 ```
 
@@ -1105,6 +1125,506 @@ const fs = require('fs').promises;
 })();
 ```
 
+### Create a PixKey
+
+You can create a Pix Key to link a bank account information to a key id:
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let key = await starkinfra.pixKey.create({
+        accountCreated: "2022-02-01T00:00:00.00",
+        accountNumber: "00000",
+        accountType: "savings",
+        branchCode: "0000",
+        name: "Jamie Lannister",
+        taxId: "012.345.678-90",
+        id: "+5511989898989",
+    });
+    console.log(key);
+})();
+```
+
+### Query PixKeys
+
+You can query multiple Pix keys you own according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let keys = await starkinfra.pixKey.query({
+        'limit': 1,
+        'after': "2022-01-01",
+        'before': "2022-01-12",
+        'status': "registered",
+        'tags': ["iron", "bank"],
+        'ids': ["+5511989898989"],
+        'type': "phone"
+    });
+    for await (let key of keys) {
+        console.log(key);
+    }
+})();
+```
+
+### Get a PixKey
+
+Information on a Pix key may be retrieved by its id and the tax ID of the consulting agent.
+An endToEndId must be informed so you can link any resulting purchases to this query,
+avoiding sweep blocks by the Central Bank.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let key = await starkinfra.pixKey.get("5155165527080960", '012.345.678-90', { endToEndId: starkinfra.endToEndId.create(bankCode) });
+    console.log(key);
+})();
+```
+
+### Patch a PixKey
+
+Update the account information linked to a Pix Key.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let key = await starkinfra.pixKey.update("+5511989898989", 'branchTransfer', { name: 'Jamie Lannister' });
+    console.log(key);
+})();
+```
+
+### Delete a PixKey
+
+Cancel a specific Pix Key using its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let key = await starkinfra.pixKey.delete("5155165527080960");
+    console.log(key);
+})();
+```
+
+### Query PixKey logs
+
+You can query pix key logs to better understand a Pix key life cycle.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    const logs = await starkinfra.pixKey.log.query({
+        limit: 50,
+        ids: ['5729405850615808'],
+        after: '2020-04-01',
+        before: '2021-04-30',
+        types: ['created'],
+        keyIds: ['+5511989898989'],
+    });
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a PixKey log
+
+You can also get a specific log by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.pixKey.log.get("5155165527080960");
+    console.log(log);
+})();
+```
+
+### Create a PixClaim
+
+You can create a Pix claim to request the transfer of a Pix key from another bank to one of your accounts:
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let claim = await starkinfra.pixClaim.create({
+        accountCreated: '2022-02-01T00:00:00.00',
+        accountNumber: '5692908409716736',
+        accountType: 'checking',
+        branchCode: '0000',
+        name: 'testKey',
+        taxId: '012.345.678-90',
+        keyId: '+5511989898989'
+    });
+    
+    console.log(claim);
+})();
+```
+
+### Query PixClaims
+
+You can query multiple Pix claims according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let claims = await starkinfra.pixClaim.query({
+        limit: 1,
+        after: '2022-01-01',
+        before: '2022-01-12',
+        status: 'registered',
+        ids: ['5729405850615808'],
+        type: 'ownership',
+        agent: 'claimed',
+        keyType: 'phone',
+        keyId: '+5511989898989'
+    });
+    
+    for await (let claim of claims) {
+        console.log(claim);
+    }
+})();
+```
+
+### Get a PixClaim
+
+After its creation, information on a pix claim may be retrieved by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let claim = await starkinfra.pixClaim.get("5155165527080960");
+    console.log(claim);
+})();
+```
+
+### Patch a PixClaim
+
+A Pix Claim can be confirmed or canceled by patching its status.
+A received Pix Claim must be confirmed by the donor to be completed.
+Ownership Pix Claims can only be canceled by the donor if the reason is "fraud".
+A sent Pix Claim can also be canceled.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let claim = await starkinfra.pixClaim.update('5155165527080960', 'confirmed');
+    console.log(claim);
+})();
+```
+
+### Query PixClaim logs
+
+You can query Pix claim logs to better understand Pix claim life cycles.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    const logs = await starkinfra.pixClaim.log.query({
+        limit: 50,
+        ids: ["5729405850615808"],
+        after: "2022-01-01",
+        before: "2022-01-20",
+        types: ["registered"],
+        claimIds: ["5719405850615809"]
+    });
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a PixClaim log
+
+You can also get a specific log by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.pixClaim.log.get("5155165527080960");
+    console.log(log);
+})();
+```
+
+### Create a PixDirector
+
+To register the Pix director contact information at the Central Bank, run the following:
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let director = await starkinfra.pixDirector.create({
+        name: 'Edward Stark',
+        taxId: '03.300.300/0001-00',
+        phone: '+55-11999999999',
+        email: 'ned.stark@company.com',
+        password: '12345678',
+        teamEmail: 'pix.team@company.com',
+        teamPhones: ['+55-11988889999', '+55-11988889998']
+    });
+    
+    console.log(director);
+})();
+```
+
+### Create an InfractionReport
+
+Infraction reports are used to report transactions that raise fraud suspicion, to request a refund or to
+reverse a refund. Infraction reports can be created by either participant of a transaction.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let report = await starkinfra.infractionReport.create({
+        referenceId: "E20018183202201201450u34sDGd19lz",
+        type: "fraud",
+    });
+    
+    console.log(report);
+})();
+```
+
+### Query InfractionReports
+
+You can query multiple infraction reports according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let reports = await starkinfra.infractionReport.query({
+        limit: 1,
+        after: '2022-01-01',
+        before: '2022-01-12',
+        status: 'registered',
+        ids: ['5729405850615808']
+    });
+    
+    for await (let report of reports) {
+        console.log(report);
+    }
+})();
+```
+
+### Get an InfractionReport
+
+After its creation, information on an Infraction Report may be retrieved by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let report = await starkinfra.infractionReport.get("5155165527080960");
+    console.log(report);
+})();
+```
+
+### Patch an InfractionReport
+
+A received Infraction Report can be confirmed or declined by patching its status.
+After an Infraction Report is patched, its status changes to closed.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let report = await starkinfra.infractionReport.update('5155165527080960', 'agreed');
+    console.log(report);
+})();
+```
+
+### Delete an InfractionReport
+
+Cancel a specific Infraction Report using its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+  let report = await starkinfra.infractionReport.delete("5155165527080960");
+  console.log(report);
+})();
+```
+
+### Query InfractionReport logs
+
+You can query infraction report logs to better understand their life cycles.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    const logs = await starkinfra.infractionReport.log.query({
+        limit: 50,
+        ids: ["5729405850615808"],
+        after: "2022-01-01",
+        before: "2022-01-20",
+        types: ["registered"],
+        reportIds: ["5719405850615809"]
+    });
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get an InfractionReport log
+
+You can also get a specific log by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.infractionReport.log.get("5155165527080960");
+    console.log(log);
+})();
+```
+
+### Create a ReversalRequest
+
+A reversal request can be created when fraud is detected on a transaction or a system malfunction
+results in an erroneous transaction.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let request = await starkinfra.reversalRequest.create({
+        amount: 100,
+        referenceId: "E20018183202201201450u34sDGd19lz",
+        reason: "fraud",
+    });
+    
+    console.log(request);
+})();
+```
+
+### Query ReversalRequests
+
+You can query multiple reversal requests according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let requests = await starkinfra.reversalRequest.query({
+        limit: 1,
+        after: '2022-01-01',
+        before: '2022-01-12',
+        status: 'registered',
+        ids: ['5729405850615808']
+    });
+    
+    for await (let request of requests) {
+        console.log(request);
+    }
+})();
+```
+
+### Get a ReversalRequest
+
+After its creation, information on a Reversal Request may be retrieved by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let request = await starkinfra.reversalRequest.get("5155165527080960");
+    console.log(request);
+})();
+```
+
+### Patch a ReversalRequest
+
+A received Reversal Request can be accepted or rejected by patching its status.
+After a Reversal Request is patched, its status changes to closed.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let request = await starkinfra.reversalRequest.update('5155165527080960', 'accepted', { reversalReferenceId: starkinfra.returnId.create('20018183') });
+    console.log(request);
+})();
+```
+
+### Delete a ReversalRequest
+
+Cancel a specific Reversal Request using its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let request = await starkinfra.reversalRequest.delete("5155165527080960");
+    console.log(request);
+})();
+```
+
+### Query ReversalRequest logs
+
+You can query reversal request logs to better understand reversal request life cycles.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    const logs = await starkinfra.reversalRequest.log.query({
+        limit: 50,
+        ids: ["5729405850615808"],
+        after: "2022-01-01",
+        before: "2022-01-20",
+        types: ["created"],
+        requestIds: ["5155165527080960"]
+    });
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a ReversalRequest log
+
+You can also get a specific log by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.reversalRequest.log.get("5155165527080960");
+    console.log(log);
+})();
+```
+
+### Query BrcodeCertificates
+
+You can query for the Pix QR Code domain certificates registered with the Central Bank.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let brcodeCertificates = await starkinfra.brcodeCertificate.query();
+    for await (let certificate of brcodeCertificates) {
+        console.log(certificate);
+    }
+})();
+```
+
 ## Credit Note
 
 ### Create CreditNotes
@@ -1261,7 +1781,9 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-## Process Webhook events
+## Webhook Events
+
+### Process Webhook events
 
 It's easy to process events delivered to your Webhook endpoint. Remember to pass the
 signature header so the SDK can make sure it was really StarkInfra that sent you
@@ -1294,6 +1816,7 @@ app.post('/', async (req, res) => {
         } else if (event.subscription.includes("issuing-purchase")) {
             console.log(event.log.reversal);
         res.end()
+      }
     }
     catch (err) {
         console.log(err)
@@ -1301,6 +1824,96 @@ app.post('/', async (req, res) => {
     }
 })
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+```
+
+### Query webhook events
+
+To search for webhooks events, run:
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    const events = await starkinfra.event.query({
+        after: "2020-03-20",
+        isDelivered: false
+    });
+    for await (let event of events) {
+        console.log(event);
+    }
+})();
+```
+
+### Get a webhook event
+
+You can get a specific webhook event by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let event = await starkinfra.event.get("10827361982368179");
+    console.log(event);
+})();
+```
+
+### Delete a webhook event
+
+You can also delete a specific webhook event by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let event = await starkinfra.event.delete("10827361982368179");
+    console.log(event);
+})();
+```
+
+### Set webhook events as delivered
+
+This can be used in case you've lost events.
+With this function, you can manually set events retrieved from the API as
+"delivered" to help future event queries with `isDelivered=False`.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let event = await starkinfra.event.update('129837198237192', { isDelivered: true });
+    console.log(event);
+})();
+```
+
+### Query failed webhook event delivery attempts information
+
+You can also get information on failed webhook event delivery attempts.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    const attempts = await starkinfra.event.attempt.query({
+        after: "2020-03-20",
+    });
+    for await (let attempt of attempts) {
+        console.log(attempt.code);
+        console.log(attempt.message);
+    }
+})();
+```
+
+### Get a failed webhook event delivery attempt information
+
+To retrieve information on a single attempt, use the following function:
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+  let attempt = await starkinfra.event.attempt.get('5155165527080960');
+  console.log(attempt);
+})();
 ```
 
 # Handling errors

@@ -102,7 +102,7 @@ exports.query = async function ({ status, after, before, tags, limit, user } = {
      * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: "2020-04-03"
      * @param status [string, default null]: filter for status of retrieved objects. ex: "created", "paid", "canceled" or "overdue"
      * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of IssuingInvoices objects with updated attributes
@@ -133,7 +133,7 @@ exports.page = async function ({ cursor, status, after, before, tags, limit, use
      * @param before [string, default null] date filter for objects created only before specified date. ex: "2020-04-03"
      * @param status [string, default null]: filter for status of retrieved objects. ex: "created", "paid", "canceled" or "overdue"
      * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of IssuingInvoice objects with updated attributes and cursor to retrieve the next page of IssuingInvoice objects

@@ -13,3 +13,15 @@ describe('TestIssuingInvoiceLogQuery', function() {
         }
     });
 });
+
+describe('TestIssuingInvoiceLogGet', function() {
+    this.timeout(10000);
+    it('test_success', async () => {
+        let logs = await starkinfra.issuingInvoice.log.query({'limit': 1});
+        for await (let log of logs) {
+            assert(typeof log.id == 'string');
+            log = await starkinfra.issuingInvoice.log.get(log.id);
+            assert(typeof log.id == 'string');
+        }
+    });
+});

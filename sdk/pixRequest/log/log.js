@@ -44,7 +44,7 @@ exports.get = async function (id, {user} = {}) {
      * @param id [string]: object unique id. ex: '5656565656565656'
      *
      * Parameters (optional):
-     * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns PixRequest Log object with updated attributes
@@ -66,7 +66,7 @@ exports.query = async function ({limit, after, before, types, requestIds, user} 
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
      * @param types [list of strings, default null]: filter retrieved objects by types. ex: 'success' or 'failed'
      * @param requestIds [list of strings, default null]: list of PixRequest ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of PixRequest Log objects with updated attributes
@@ -97,7 +97,7 @@ exports.page = async function ({ cursor, limit, after, before, types, requestIds
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
      * @param types [list of strings, default null]: filter retrieved objects by types. ex: 'success' or 'failed'
      * @param requestIds [list of strings, default null]: list of PixRequest ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of PixRequest Log objects with updated attributes and cursor to retrieve the next page of PixRequest objects

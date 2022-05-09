@@ -16,7 +16,7 @@ class PixBalance extends Resource {
      * @param id [string, default null]: unique id returned when PixBalance is created. ex: '5656565656565656'
      * @param amount [integer, default null]: current balance amount of the workspace in cents. ex: 200 (= R$ 2.00)
      * @param currency [string, default null]: currency of the current workspace. Expect others to be added eventually. ex: 'BRL'
-     * @param updated [string, default null]: datetime for the PixBalance. ex: '2020-03-10 10:30:00.000'u
+     * @param updated [string, default null]: datetime for the PixBalance. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor(id, amount, currency, updated) {
@@ -39,7 +39,7 @@ exports.get = async function ({user} = {}) {
      * @description Receive the Balance object linked to your workspace in the Stark Infra API
      *
      * Parameters (optional):
-     * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      * 
      * Return:
      * @returns PixBalance object with updated attributes
