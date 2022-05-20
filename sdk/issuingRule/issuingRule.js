@@ -25,7 +25,7 @@ class IssuingRule extends Resource {
      * @param currencyName [string]: currency name. ex: "Brazilian Real"
      *
      * Attributes (return-only):
-     * @param id [string, default null]: unique id returned when Rule is created. ex: "5656565656565656"
+     * @param id [string]: unique id returned when Rule is created. ex: "5656565656565656"
      * 
      */
     constructor({ id, name, interval, amount, currencyCode, counterAmount, currencyName, currencySymbol, categories, countries, methods }) {

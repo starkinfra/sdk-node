@@ -9,11 +9,11 @@ class Webhook extends Resource {
          * Webhook subscription object
          *
          * @description A Webhook is used to subscribe to notification events on a user-selected endpoint.
-         * Currently available services for subscription are contract, credit-note, signer, issuing-card, issuing-invoice, issuing-purchase, pix-request.in, pix-request.out, pix-reversal.in, pix-reversal.out.
+         * Currently available services for subscription are contract, credit-note, signer, issuing-card, issuing-invoice, issuing-purchase, pix-request.in, pix-request.out, pix-reversal.in, pix-reversal.out, pix-claim, pix-key, pix-chargeback, pix-infraction.
          *
          * Parameters (required):
          * @param url [string]: Url that will be notified when an event occurs.
-         * @param subscriptions [list of strings]: list of any non-empty combination of the available services. ex: ['contract', 'credit-note', 'signer', 'issuing-card', 'issuing-invoice', 'issuing-purchase', 'pix-request.in', 'pix-request.out', 'pix-reversal.in', 'pix-reversal.out']
+         * @param subscriptions [list of strings]: list of any non-empty combination of the available services. ex: ['contract', 'credit-note', 'signer', 'issuing-card', 'issuing-invoice', 'issuing-purchase', 'pix-request.in', 'pix-request.out', 'pix-reversal.in', 'pix-reversal.out', 'pix-claim', 'pix-key', 'pix-chargeback', 'pix-infraction']
          *
          * Attributes:
          * @param id [string, default null]: unique id returned when the webhook is created. ex: '5656565656565656'

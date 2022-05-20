@@ -40,13 +40,21 @@ class CreditNote extends Resource {
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the CreditNote is created. ex: '5656565656565656'
+     * @param amount [integer]: CreditNote value in cents. ex: 1234 (= R$ 12.34)
+     * @param expiration [integer]: time interval in seconds between due date and expiration date. ex 123456789
+     * @param documentId [string]: ID of the signed document to execute this CreditNote. ex: "4545454545454545"
+     * @param status [string]: current status of the CreditNote. ex: "canceled", "created", "expired", "failed", "processing", "signed", "success"
+     * @param transactionIds [list of strings]: ledger transaction ids linked to this CreditNote. ex: ["19827356981273"]
+     * @param workspaceId [string]: ID of the Workspace that generated this CreditNote. ex: "4545454545454545"
+     * @param taxAmount [integer]: tax amount included in the CreditNote. ex: 100
      * @param interest [float]: yearly effective interest rate of the credit note, in percentage. ex: 12.5
      * @param created [string]: creation datetime for the CreditNote. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the CreditNote. ex: '2020-03-10 10:30:00.000'
      */
     constructor({
                     templateId, name, taxId, nominalAmount, scheduled, invoices, payment, paymentType, signers,
-                    externalId, interest, rebateAmount, tags, created, updated, id
+                    externalId, rebateAmount, tags, interest, expiration, amount, documentId, status, transactionIds,
+                    workspaceId, taxAmount, created, updated, id
                 }) {
         super(id);
         this.templateId = templateId;
@@ -57,9 +65,16 @@ class CreditNote extends Resource {
         this.invoices = parseInvoices(invoices);
         this.signers = parseSigners(signers);
         this.externalId = externalId;
-        this.interest = interest;
         this.rebateAmount = rebateAmount;
         this.tags = tags;
+        this.amount = amount;
+        this.expiration = expiration;
+        this.documentId = documentId;
+        this.status = status;
+        this.transactionIds = transactionIds;
+        this.workspaceId = workspaceId;
+        this.taxAmount = taxAmount;
+        this.interest = interest;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
 

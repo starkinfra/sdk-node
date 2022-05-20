@@ -23,7 +23,7 @@ class PixInfraction extends Resource {
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the PixInfraction is created. ex: "5656565656565656"
-     * @param creditedBankCode [string, default null]: bankCode of the credited Pix participant in the reported transaction. ex: "20018183"
+     * @param creditedBankCode [string]: bankCode of the credited Pix participant in the reported transaction. ex: "20018183"
      * @param debitedBankCode [string]: bankCode of the debited Pix participant in the reported transaction. ex: "20018183"
      * @param agent [string]: Options: "reporter" if you created the PixInfraction, "reported" if you received the PixInfraction.
      * @param analysis [string]: analysis that led to the result.

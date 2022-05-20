@@ -34,9 +34,9 @@ class IssuingCard extends Resource {
      * @param status [string]: current IssuingCard status. ex: "canceled" or "active"
      * @param number [string]: [EXPANDABLE] masked card number. ex: "1234 5678 1234 5678"
      * @param securityCode [string]: [EXPANDABLE] masked card verification value (cvv). Expand to unmask the value. ex: "123".
-     * @param expiration [string]: [EXPANDABLE] masked card expiration datetime. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
-     * @param created [string]: creation datetime for the IssuingCard. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
-     * @param updated [string]: latest update datetime for the IssuingCard. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+     * @param expiration [string]: [EXPANDABLE] masked card expiration datetime. ex: '2020-03-10 10:30:00.000'
+     * @param created [string]: creation datetime for the IssuingCard. ex: '2020-03-10 10:30:00.000'
+     * @param updated [string]: latest update datetime for the IssuingCard. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({

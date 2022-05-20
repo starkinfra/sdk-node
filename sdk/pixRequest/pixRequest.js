@@ -41,13 +41,13 @@ class PixRequest extends Resource {
      * @param method [string, default null]: execution  method for thr creation of the Pix. ex: "manual", "payerQrcode", "dynamicQrcode".
      *
      * Attributes (return-only):
-     * @param id [string, default null]: unique id returned when the PixRequest is created. ex: "5656565656565656"
-     * @param fee [integer, default null]: fee charged when PixRequest is paid. ex: 200 (= R$ 2.00)
-     * @param status [string, default null]: current PixRequest status. ex: "registered" or "paid"
-     * @param flow [string, default null]: direction of money flow. ex: "in" or "out"
-     * @param senderBankCode [string, default null]: sender's bank institution code in Brazil. If an ISPB (8 digits) is informed. ex: "20018183" or "341"
-     * @param created [string, default null]: creation datetime for the PixRequest. ex: "2020-03-10 10:30:00.000"
-     * @param updated [string, default null]: latest update datetime for the PixRequest. ex: "2020-03-10 10:30:00.000"
+     * @param id [string]: unique id returned when the PixRequest is created. ex: "5656565656565656"
+     * @param fee [integer]: fee charged when PixRequest is paid. ex: 200 (= R$ 2.00)
+     * @param status [string]: current PixRequest status. ex: "registered" or "paid"
+     * @param flow [string]: direction of money flow. ex: "in" or "out"
+     * @param senderBankCode [string]: sender's bank institution code in Brazil. If an ISPB (8 digits) is informed. ex: "20018183" or "341"
+     * @param created [string]: creation datetime for the PixRequest. ex: "2020-03-10 10:30:00.000"
+     * @param updated [string]: latest update datetime for the PixRequest. ex: "2020-03-10 10:30:00.000"
      *
      */
     constructor({
