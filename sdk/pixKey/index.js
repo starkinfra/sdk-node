@@ -6,5 +6,5 @@ exports.get = pixKey.get;
 exports.query = pixKey.query;
 exports.page = pixKey.page;
 exports.update = pixKey.update;
-exports.delete = pixKey.delete;
+exports.cancel = pixKey.cancel;
 exports.PixKey = pixKey.PixKey;

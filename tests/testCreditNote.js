@@ -1,17 +1,19 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const uniqueId = require('./utils/uniqueId.js')
+const {templateId} = require('./utils/user');
+const {bacenId} = require("../index");
 
 starkinfra.user = require('./utils/user').exampleProject;
 
 describe('TestCreditNotePost', function(){
     this.timeout(10000);
     it('test_success', async () => {
-        let requests = [];
-        requests.push(new starkinfra.CreditNote(exampleCreditNote));
-        requests = await starkinfra.creditNote.create(requests);
-        for (let request of requests) {
-            assert(typeof request.id == 'string');
+        let notes = [];
+        notes.push(new starkinfra.CreditNote(exampleCreditNote));
+        notes = await starkinfra.creditNote.create(notes);
+        for (let note of notes) {
+            console.log(note)
+            assert(typeof note.id == 'string');
         }
     });
 });
@@ -20,9 +22,9 @@ describe('TestCreditNoteGet', function(){
     this.timeout(10000);
     it('test_success', async () => {
         let i = 0;
-        const requests = await starkinfra.creditNote.query({limit: 2});
-        for await (let request of requests) {
-            assert(typeof request.id == 'string');
+        const notes = await starkinfra.creditNote.query({limit: 2});
+        for await (let note of notes) {
+            assert(typeof note.id == 'string');
             i += 1;
         }
         assert(i === 2);
@@ -32,32 +34,32 @@ describe('TestCreditNoteGet', function(){
 describe('TestCreditNoteInfoGet', function(){
     this.timeout(10000);
     it('test_success', async () => {
-        let requests = await starkinfra.creditNote.query({limit: 3});
-        for await (let request of requests) {
-            assert(typeof request.id == 'string');
-            request = await starkinfra.creditNote.get(request.id);
-            assert(typeof request.id == 'string');
+        let notes = await starkinfra.creditNote.query({limit: 3});
+        for await (let note of notes) {
+            assert(typeof note.id == 'string');
+            note = await starkinfra.creditNote.get(note.id);
+            assert(typeof note.id == 'string');
         }
     });
 
     it('test_success_ids', async () => {
-        let requests = await starkinfra.creditNote.query({limit: 10});
-        let requestsIdsExpected = [];
-        for await (let request of requests) {
-            requestsIdsExpected.push(request.id);
+        let notes = await starkinfra.creditNote.query({limit: 10});
+        let notesIdsExpected = [];
+        for await (let note of notes) {
+            notesIdsExpected.push(note.id);
         }
 
-        let requestsResult = await starkinfra.creditNote.query({ids: requestsIdsExpected});
-        let requestsIdsResult = [];
-        for await (let request of requestsResult){
-            requestsIdsResult.push(request.id);
+        let notesResult = await starkinfra.creditNote.query({ids: notesIdsExpected});
+        let notesIdsResult = [];
+        for await (let note of notesResult){
+            notesIdsResult.push(note.id);
         }
 
-        requestsIdsExpected.sort();
-        requestsIdsResult.sort();
-        assert(requestsIdsExpected.length === requestsIdsResult.length);
-        for (let i=0; i<requestsIdsExpected.length; i++){
-            assert(requestsIdsExpected[i] === requestsIdsResult[i]);
+        notesIdsExpected.sort();
+        notesIdsResult.sort();
+        assert(notesIdsExpected.length === notesIdsResult.length);
+        for (let i=0; i<notesIdsExpected.length; i++){
+            assert(notesIdsExpected[i] === notesIdsResult[i]);
         }
     });
 });
@@ -85,7 +87,7 @@ describe('TestCreditNoteGetPage', function () {
 describe('TestCreditNoteQueryParams', function(){
     this.timeout(10000);
     it('test_success', async () => {
-        const requests = await starkinfra.creditNote.query({
+        const notes = await starkinfra.creditNote.query({
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',
@@ -93,7 +95,7 @@ describe('TestCreditNoteQueryParams', function(){
             tags: ['test'],
             ids: ['1','2']
         });
-        assert(requests.length===undefined)
+        assert(notes.length===undefined)
     });
 });
 
@@ -101,8 +103,8 @@ describe('TestCreditNoteQueryParams', function(){
     this.timeout(10000);
     it('test_success', async () => {
         let cursor = null;
-        let requests = null;
-        [requests, cursor] = await starkinfra.creditNote.page({
+        let notes = null;
+        [notes, cursor] = await starkinfra.creditNote.page({
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',
@@ -110,37 +112,52 @@ describe('TestCreditNoteQueryParams', function(){
             tags: ['test'],
             ids: ['1','2']
         });
-        assert(requests.length===0)
+        assert(notes.length===0)
+    });
+});
+
+describe('TestCreditNotePostAndCancel', function(){
+    this.timeout(10000);
+    it('test_success', async () => {
+        let notes = [];
+        notes.push(new starkinfra.CreditNote(exampleCreditNote));
+        notes = await starkinfra.creditNote.create(notes);
+        for (let note of notes) {
+            canceledNote = await starkinfra.creditNote.cancel(note.id);
+            assert(canceledNote.status === 'canceled')
+        }
     });
 });
 
 let exampleCreditNote = {
-    templateId: "5745297539989504",
-    name: "Jamie Lannister",
-    taxId: "012.345.678-90",
+    templateId: templateId,
+    name: 'Jamie Lannister',
+    taxId: '012.345.678-90',
     nominalAmount: 100000,
-    scheduled: "2022-04-28",
+    scheduled: '2022-05-28',
     invoices: [
-        {
-            due: "2023-06-25",
+        new starkinfra.creditNote.Invoice({
+            due: '2023-06-25',
             amount: 120000,
             fine: 10,
             interest: 2
-        }
+        })
     ],
-    tags: ["test", "testing"],
-    transfer: {
-        bankCode: "00000000",
-        branchCode: "1234",
-        accountNumber: "129340-1",
-        name: "Jamie Lannister",
-        taxId: "012.345.678-90"
+    tags: ['test', 'testing'],
+    payment: {
+        bankCode: '00000000',
+        branchCode: '1234',
+        accountNumber: '129340-1',
+        name: 'Jamie Lannister',
+        taxId: '012.345.678-90'
     },
+    paymentType: 'transfer',
     signers: [
         {
-            name: "Jamie Lannister",
-            contact: "jamie.lannister.01330e4c-bf92-4a54-8349-a540b90aa24e@invaliddomain.com",
-            method: "link"
+            name: 'Jamie Lannister',
+            contact: 'jamie.lannister.01330e4c-bf92-4a54-8349-a540b90aa24e@invaliddomain.com',
+            method: 'link'
         }
     ],
+    externalId: bacenId.create("12345678")
 }

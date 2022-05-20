@@ -6,5 +6,5 @@ exports.get = issuingHolder.get;
 exports.query = issuingHolder.query;
 exports.page = issuingHolder.page;
 exports.update = issuingHolder.update;
-exports.delete = issuingHolder.delete;
+exports.cancel = issuingHolder.cancel;
 exports.IssuingHolder = issuingHolder.IssuingHolder;

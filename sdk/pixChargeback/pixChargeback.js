@@ -3,15 +3,15 @@ const check = require('../utils/check.js');
 const Resource = require('../utils/resource.js').Resource
 
 
-class ReversalRequest extends Resource {
+class PixChargeback extends Resource {
     /**
      *
-     * ReversalRequest object
+     * PixChargeback object
      *
-     * @description A reversal request can be created when fraud is detected on a transaction or a system malfunction
+     * @description A pix chargeback can be created when fraud is detected on a transaction or a system malfunction
      * results in an erroneous transaction.
      * It notifies another participant of your request to reverse the payment they have received.
-     * When you initialize a ReversalRequest, the entity will not be automatically
+     * When you initialize a PixChargeback, the entity will not be automatically
      * created in the Stark Infra API. The 'create' function sends the objects
      * to the Stark Infra API and returns the created object.
      *
@@ -21,20 +21,20 @@ class ReversalRequest extends Resource {
      * @param reason [string]: reason why the reversal was requested. Options: "fraud", "flaw", "reversalChargeback"
      *
      * Parameters (optional):
-     * @param description [string, default null]: description for the ReversalRequest.
+     * @param description [string, default null]: description for the PixChargeback.
      *
      * Attributes (return-only):
      * @param analysis [string]: analysis that led to the result.
-     * @param bacenId [string]: central bank's unique UUID that identifies the ReversalRequest.
-     * @param senderBankCode [string]: bankCode of the Pix participant that created the ReversalRequest. ex: "20018183"
-     * @param receiverBankCode [string]: bankCode of the Pix participant that received the ReversalRequest. ex: "20018183"
-     * @param rejectionReason [string]: reason for the rejection of the reversal request. Options: "noBalance", "accountClosed", "unableToReverse"
+     * @param bacenId [string]: central bank's unique UUID that identifies the PixChargeback.
+     * @param senderBankCode [string]: bankCode of the Pix participant that created the PixChargeback. ex: "20018183"
+     * @param receiverBankCode [string]: bankCode of the Pix participant that received the PixChargeback. ex: "20018183"
+     * @param rejectionReason [string]: reason for the rejection of the pix chargeback. Options: "noBalance", "accountClosed", "unableToReverse"
      * @param reversalReferenceId [string]: return id of the reversal transaction. ex: "D20018183202202030109X3OoBHG74wo".
-     * @param id [string]: unique id returned when the ReversalRequest is created. ex: "5656565656565656"
-     * @param result [string]: result after the analysis of the ReversalRequest by the receiving party. Options: "rejected", "accepted", "partiallyAccepted"
-     * @param status [string]: current ReversalRequest status. Options: "created", "failed", "delivered", "closed", "canceled".
-     * @param created [string]: creation datetime for the ReversalRequest. ex: "2022-01-01T12:00:00:00".
-     * @param updated [string]: latest update datetime for the ReversalRequest. ex: "2022-01-01T12:00:00:00".
+     * @param id [string]: unique id returned when the PixChargeback is created. ex: "5656565656565656"
+     * @param result [string]: result after the analysis of the PixChargeback by the receiving party. Options: "rejected", "accepted", "partiallyAccepted"
+     * @param status [string]: current PixChargeback status. Options: "created", "failed", "delivered", "closed", "canceled".
+     * @param created [string]: creation datetime for the PixChargeback. ex: "2022-01-01T12:00:00:00".
+     * @param updated [string]: latest update datetime for the PixChargeback. ex: "2022-01-01T12:00:00:00".
      *
      */
     constructor({
@@ -62,44 +62,44 @@ class ReversalRequest extends Resource {
     }
 }
 
-exports.ReversalRequest = ReversalRequest;
-let resource = {'class': exports.ReversalRequest, 'name': 'ReversalRequest'};
+exports.PixChargeback = PixChargeback;
+let resource = {'class': exports.PixChargeback, 'name': 'PixChargeback'};
 
-exports.create = async function (report, {user} = {}) {
+exports.create = async function (chargebacks, {user} = {}) {
     /**
      *
-     * Create a ReversalRequest object
+     * Create PixChargeback objects
      *
-     * @description Create a ReversalRequest in the Stark Infra API
+     * @description Create PixChargebacks in the Stark Infra API
      *
      * Parameters (required):
-     * @param request [ReversalRequest object]: ReversalRequest object to be created in the API.
+     * @param chargebacks [list of PixChargebacks]: list of PixChargeback objects to be created in the API.
      *
      * Parameters (optional):
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns ReversalRequest object with updated attributes.
+     * @returns list of PixChargeback objects with updated attributes.
      *
      */
-    return rest.postSingle(resource, report, user);
+    return rest.post(resource, chargebacks, user);
 };
 
 exports.get = async function (id, { user } = {}) {
     /**
      *
-     * Retrieve a ReversalRequest object
+     * Retrieve a PixChargeback object
      *
-     * @description Retrieve the ReversalRequest object linked to your Workspace in the Stark Infra API using its id.
+     * @description Retrieve the PixChargeback object linked to your Workspace in the Stark Infra API using its id.
      *
      * Parameters (required):
-     * @param id [string]: ReversalRequest object unique id. ex: '5656565656565656'
+     * @param id [string]: PixChargeback object unique id. ex: '5656565656565656'
      *
      * Parameters (optional):
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns ReversalRequest object that corresponds to the given id.
+     * @returns PixChargeback object that corresponds to the given id.
      *
      */
     return rest.getId(resource, id, user);
@@ -108,9 +108,9 @@ exports.get = async function (id, { user } = {}) {
 exports.query = async function ({ limit, after, before, status, ids, user } = {}) {
     /**
      *
-     * Retrieve ReversalRequests
+     * Retrieve PixChargebacks
      *
-     * @description Receive a generator of ReversalRequests objects previously created in the Stark Infra API
+     * @description Receive a generator of PixChargebacks objects previously created in the Stark Infra API
      *
      * Parameters (optional):
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
@@ -121,7 +121,7 @@ exports.query = async function ({ limit, after, before, status, ids, user } = {}
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns generator of ReversalRequest objects with updated attributes
+     * @returns generator of PixChargeback objects with updated attributes
      *
      */
     let query = {
@@ -137,9 +137,9 @@ exports.query = async function ({ limit, after, before, status, ids, user } = {}
 exports.page = async function ({ cursor, limit, after, before, status, ids, user } = {}) {
     /**
      *
-     * Retrieve paged ReversalRequests
+     * Retrieve paged PixChargebacks
      *
-     * @description Receive a list of up to 100 ReversalRequest objects previously created in the Stark Infra API and the cursor to the next page.
+     * @description Receive a list of up to 100 PixChargeback objects previously created in the Stark Infra API and the cursor to the next page.
      * Use this function instead of query if you want to manually page your requests.
      *
      * Parameters (optional):
@@ -152,7 +152,7 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, user
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns list of ReversalRequest objects with updated attributes and cursor to retrieve the next page of ReversalRequest objects
+     * @returns list of PixChargeback objects with updated attributes and cursor to retrieve the next page of PixChargeback objects
      *
      */
     let query = {
@@ -169,23 +169,23 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, user
 exports.update = async function ( id, result, { rejectionReason, reversalReferenceId, analysis, user } = {}) {
     /**
      *
-     * Update ReversalRequest entity
+     * Update PixChargeback entity
      *
-     * @description Respond to a received ReversalRequest.
+     * @description Respond to a received PixChargeback.
      *
      * Parameters (required):
-     * @param id [string]: ReversalRequest id. ex: '5656565656565656'
-     * @param result [string]: result after the analysis of the ReversalRequest. Options: "rejected", "accepted", "partiallyAccepted".
+     * @param id [string]: PixChargeback id. ex: '5656565656565656'
+     * @param result [string]: result after the analysis of the PixChargeback. Options: "rejected", "accepted", "partiallyAccepted".
      *
      * Parameters (conditionally required):
-     * @param rejectionReason [string, default null]: if the ReversalRequest is rejected a reason is required. Options: "noBalance", "accountClosed", "unableToReverse",
+     * @param rejectionReason [string, default null]: if the PixChargeback is rejected a reason is required. Options: "noBalance", "accountClosed", "unableToReverse",
      * @param reversalReferenceId [string, default null]: returnId of the reversal transaction. ex: "D20018183202201201450u34sDGd19lz"
      *
      * Parameters (optional):
      * @param analysis [string, default null]: description of the analysis that led to the result.
      *
      * Return:
-     * @returns ReversalRequest with updated attributes.
+     * @returns PixChargeback with updated attributes.
      *
      */
     let payload = {
@@ -197,12 +197,12 @@ exports.update = async function ( id, result, { rejectionReason, reversalReferen
     return rest.patchId(resource, id, payload, user);
 };
 
-exports.delete = async function (id, { user } = {}) {
+exports.cancel = async function (id, { user } = {}) {
     /**
      *
-     * Delete a ReversalRequest entity
+     * Cancel a PixChargeback entity
      *
-     * @description Delete a ReversalRequest entity previously created in the Stark Infra API.
+     * @description Cancel a PixChargeback entity previously created in the Stark Infra API.
      *
      * Parameters (required):
      * @param id [string]: object unique id. ex: '5656565656565656'
@@ -211,7 +211,7 @@ exports.delete = async function (id, { user } = {}) {
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns deleted ReversalRequest object
+     * @returns canceled PixChargeback object
      *
      */
     return rest.deleteId(resource, id, user);

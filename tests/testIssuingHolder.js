@@ -54,7 +54,7 @@ describe('TestIssuingHolderPostAndDelete', function() {
             let holderId = holder.id;
             holder = await starkinfra.issuingHolder.update(holderId, {'name': 'Updated Name'})
             assert(holder.name === 'Updated Name');
-            holder = await starkinfra.issuingHolder.delete(holderId);
+            holder = await starkinfra.issuingHolder.cancel(holderId);
             assert(holder.status === "canceled");
         }
     });

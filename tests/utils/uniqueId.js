@@ -1,4 +1,4 @@
-exports.create = function (k) {
+exports.create = function () {
   var count = 16;
   var _sym = 'abcdefghijklmnopqrstuvwxyz1234567890';
   var str = '';

@@ -38,11 +38,13 @@ This SDK version is compatible with the Stark Infra API v2.
     - [PixKey](#create-a-pixkey): Create a Pix Key
     - [PixClaim](#create-a-pixclaim): Claim a Pix Key
     - [PixDirector](#create-a-pixdirector): Create a Pix Director
-    - [InfractionReport](#create-an-infractionreport): Create a Pix Key
-    - [ReversalRequest](#create-a-reversalrequest): Claim a Pix Key
-    - [BrcodeCertificate](#query-brcodecertificates): View Pix QR Code domain certificates registered with the Central Bank
+    - [PixInfraction](#create-pixinfractions): Create Pix Infraction reports
+    - [PixChargeback](#create-pixchargebacks): Create Pix Chargeback requests
+    - [PixDomain](#query-pixdomains): View registered SPI participants certificates
   - [Credit Note](#credit-note)
     - [CreditNote](#create-creditnotes): Create credit notes
+  - [Webhook](#webhook):
+    - [Webhook](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
   - [Webhook Events](#webhook-events):
     - [WebhookEvents](#process-webhook-events): Manage Webhook events
     - [WebhookEventAttempts](#query-failed-webhook-event-delivery-attempts-information): Query failed webhook event deliveries
@@ -385,15 +387,15 @@ await (async() => {
 })();
 ```
 
-### Delete an IssuingHolder
+### Cancel an IssuingHolder
 
 To cancel a single Issuing Holder by its id, run:
 
 ```javascript
-await (async() => {
-    let holder = await starkinfra.issuingHolder.delete('5155165527080960');
-  
-    console.log(holder);
+await (async () => {
+  let holder = await starkinfra.issuingHolder.cancel('5155165527080960');
+
+  console.log(holder);
 })();
 ```
 
@@ -504,15 +506,15 @@ await (async() => {
 })();
 ```
 
-### Delete an IssuingCard
+### Cancel an IssuingCard
 
 You can also cancel a card by its id.
 
 ```javascript
-await (async() => {
-    let card = await starkinfra.issuingCard.delete('5155165527080960');
-  
-    console.log(card);
+await (async () => {
+  let card = await starkinfra.issuingCard.cancel('5155165527080960');
+
+  console.log(card);
 })();
 ```
 
@@ -850,7 +852,7 @@ const starkinfra = require('starkinfra');
 
 ### Query PixRequests
 
-You can query multiple pix requests according to filters.
+You can query multiple Pix requests according to filters.
 
 ```javascript
 (async() => {
@@ -867,7 +869,7 @@ You can query multiple pix requests according to filters.
 
 ### Get a PixRequest
 
-After its creation, information on a pix request may be retrieved by its id. Its status indicates whether it has been paid.
+After its creation, information on a Pix request may be retrieved by its id. Its status indicates whether it has been paid.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -910,7 +912,7 @@ app.listen(port, () => console.log(`Example app listening at http://localhost:${
 
 ### Query PixRequest logs
 
-You can query pix request logs to better understand pix request life cycles.
+You can query Pix request logs to better understand Pix request life cycles.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -1197,22 +1199,22 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-### Delete a PixKey
+### Cancel a PixKey
 
 Cancel a specific Pix Key using its id.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
-(async() => {
-    let key = await starkinfra.pixKey.delete("5155165527080960");
-    console.log(key);
+(async () => {
+  let key = await starkinfra.pixKey.cancel("5155165527080960");
+  console.log(key);
 })();
 ```
 
 ### Query PixKey logs
 
-You can query pix key logs to better understand a Pix key life cycle.
+You can query Pix key logs to better understand a Pix key life cycle.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -1295,7 +1297,7 @@ const starkinfra = require('starkinfra');
 
 ### Get a PixClaim
 
-After its creation, information on a pix claim may be retrieved by its id.
+After its creation, information on a Pix claim may be retrieved by its id.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -1379,25 +1381,28 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-### Create an InfractionReport
+### Create PixInfractions
 
-Infraction reports are used to report transactions that raise fraud suspicion, to request a refund or to
-reverse a refund. Infraction reports can be created by either participant of a transaction.
+Pix infractions are used to report transactions that raise fraud suspicion, to request a refund or to
+reverse a refund. Pix infractions can be created by either participant of a transaction.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let report = await starkinfra.infractionReport.create({
-        referenceId: "E20018183202201201450u34sDGd19lz",
-        type: "fraud",
-    });
-    
-    console.log(report);
+    let infractions = await starkinfra.pixInfraction.create([
+        {
+            referenceId: "E20018183202201201450u34sDGd19lz",
+            type: "fraud"
+        }
+    ]);
+    for (let infraction of infractions) {
+        console.log(infraction);
+    }
 })();
 ```
 
-### Query InfractionReports
+### Query PixInfractions
 
 You can query multiple infraction reports according to filters.
 
@@ -1405,7 +1410,7 @@ You can query multiple infraction reports according to filters.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let reports = await starkinfra.infractionReport.query({
+    let reports = await starkinfra.pixInfraction.query({
         limit: 1,
         after: '2022-01-01',
         before: '2022-01-12',
@@ -1419,55 +1424,55 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-### Get an InfractionReport
+### Get a PixInfraction
 
-After its creation, information on an Infraction Report may be retrieved by its id.
+After its creation, information on a Pix infraction may be retrieved by its id.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let report = await starkinfra.infractionReport.get("5155165527080960");
+    let report = await starkinfra.pixInfraction.get("5155165527080960");
     console.log(report);
 })();
 ```
 
-### Patch an InfractionReport
+### Patch a PixInfraction
 
-A received Infraction Report can be confirmed or declined by patching its status.
-After an Infraction Report is patched, its status changes to closed.
+A received Pix infraction can be confirmed or declined by patching its status.
+After a Pix infraction is patched, its status changes to closed.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let report = await starkinfra.infractionReport.update('5155165527080960', 'agreed');
+    let report = await starkinfra.pixInfraction.update('5155165527080960', 'agreed');
     console.log(report);
 })();
 ```
 
-### Delete an InfractionReport
+### Cancel a PixInfraction
 
-Cancel a specific Infraction Report using its id.
+Cancel a specific Pix infraction using its id.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
-(async() => {
-  let report = await starkinfra.infractionReport.delete("5155165527080960");
+(async () => {
+  let report = await starkinfra.pixInfraction.cancel("5155165527080960");
   console.log(report);
 })();
 ```
 
-### Query InfractionReport logs
+### Query PixInfraction logs
 
-You can query infraction report logs to better understand their life cycles.
+You can query Pix infraction logs to better understand their life cycles.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    const logs = await starkinfra.infractionReport.log.query({
+    const logs = await starkinfra.pixInfraction.log.query({
         limit: 50,
         ids: ["5729405850615808"],
         after: "2022-01-01",
@@ -1481,7 +1486,7 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-### Get an InfractionReport log
+### Get a PixInfraction log
 
 You can also get a specific log by its id.
 
@@ -1489,39 +1494,42 @@ You can also get a specific log by its id.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let log = await starkinfra.infractionReport.log.get("5155165527080960");
+    let log = await starkinfra.pixInfraction.log.get("5155165527080960");
     console.log(log);
 })();
 ```
 
-### Create a ReversalRequest
+### Create PixChargebacks
 
-A reversal request can be created when fraud is detected on a transaction or a system malfunction
-results in an erroneous transaction.
+Pix chargebacks can be created when fraud is detected on a transaction or a system malfunction results in an erroneous transaction.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let request = await starkinfra.reversalRequest.create({
-        amount: 100,
-        referenceId: "E20018183202201201450u34sDGd19lz",
-        reason: "fraud",
-    });
-    
-    console.log(request);
+    let chargebacks = await starkinfra.pixChargeback.create([
+        {
+            amount: 100,
+            referenceId: "E20018183202201201450u34sDGd19lz",
+            reason: "fraud",
+        }
+    ]);
+
+    for (let chargeback of chargebacks) {
+        console.log(chargeback);
+    }
 })();
 ```
 
-### Query ReversalRequests
+### Query PixChargebacks
 
-You can query multiple reversal requests according to filters.
+You can query multiple Pix chargebacks according to filters.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let requests = await starkinfra.reversalRequest.query({
+    let requests = await starkinfra.pixChargeback.query({
         limit: 1,
         after: '2022-01-01',
         before: '2022-01-12',
@@ -1535,7 +1543,7 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-### Get a ReversalRequest
+### Get a PixChargeback
 
 After its creation, information on a Reversal Request may be retrieved by its id.
 
@@ -1543,12 +1551,12 @@ After its creation, information on a Reversal Request may be retrieved by its id
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let request = await starkinfra.reversalRequest.get("5155165527080960");
+    let request = await starkinfra.pixChargeback.get("5155165527080960");
     console.log(request);
 })();
 ```
 
-### Patch a ReversalRequest
+### Patch a PixChargeback
 
 A received Reversal Request can be accepted or rejected by patching its status.
 After a Reversal Request is patched, its status changes to closed.
@@ -1557,33 +1565,40 @@ After a Reversal Request is patched, its status changes to closed.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let request = await starkinfra.reversalRequest.update('5155165527080960', 'accepted', { reversalReferenceId: starkinfra.returnId.create('20018183') });
-    console.log(request);
-})();
+    let chargeback = starkinfra.pixChargeback.update(
+        '5719405850615809',
+        'accepted',
+        {
+            analysis:'Upon investigation fraud was confirmed.',
+            reversalReferenceId:'D20018183202201201450u34sDGd19lz'
+        }
+    )
+    console.log(chargeback)
+})()
 ```
 
-### Delete a ReversalRequest
+### Cancel a PixChargeback
 
 Cancel a specific Reversal Request using its id.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
-(async() => {
-    let request = await starkinfra.reversalRequest.delete("5155165527080960");
-    console.log(request);
+(async () => {
+  let request = await starkinfra.pixChargeback.cancel("5155165527080960");
+  console.log(request);
 })();
 ```
 
-### Query ReversalRequest logs
+### Query PixChargeback logs
 
-You can query reversal request logs to better understand reversal request life cycles.
+You can query Pix chargeback logs to better understand Pix chargeback life cycles.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    const logs = await starkinfra.reversalRequest.log.query({
+    const logs = await starkinfra.pixChargeback.log.query({
         limit: 50,
         ids: ["5729405850615808"],
         after: "2022-01-01",
@@ -1597,7 +1612,7 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-### Get a ReversalRequest log
+### Get a PixChargeback log
 
 You can also get a specific log by its id.
 
@@ -1605,21 +1620,22 @@ You can also get a specific log by its id.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let log = await starkinfra.reversalRequest.log.get("5155165527080960");
+    let log = await starkinfra.pixChargeback.log.get("5155165527080960");
     console.log(log);
 })();
 ```
 
-### Query BrcodeCertificates
+### Query PixDomains
 
-You can query for the Pix QR Code domain certificates registered with the Central Bank.
+Here you can list all Pix domains registered at the Brazilian Central Bank. The PixDomain object displays the domain 
+name and the QR Code domain certificates of registered Pix participants able to issue dynamic QR Codes.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let brcodeCertificates = await starkinfra.brcodeCertificate.query();
-    for await (let certificate of brcodeCertificates) {
+    let pixDomains = await starkinfra.pixDomain.query();
+    for await (let certificate of pixDomains) {
         console.log(certificate);
     }
 })();
@@ -1642,26 +1658,26 @@ const starkinfra = require('starkinfra');
             nominalAmount: 100000,
             scheduled: '2022-04-28',
             invoices: [
-                {
-                    due: '2023-06-25',
+                starkinfra.creditNote.Invoice({
                     amount: 120000,
+                    due: '2023-06-25',
                     fine: 10,
                     interest: 2
-                }
+                })
             ],
-            transfer: {
+            transfer: starkinfra.creditNote.Invoice({
                 bankCode: '00000000',
                 branchCode: '1234',
                 accountNumber: '129340-1',
                 name: 'Jamie Lannister',
                 taxId: '012.345.678-90'
-            },
+            }),
             signers:[
-                {
+              starkinfra.creditNote.Signer({
                     name: 'Jamie Lannister',
                     contact: 'jamie.lannister@gmail.com',
                     method: 'link'
-                }
+                })
             ]
         },
         {
@@ -1778,6 +1794,71 @@ const starkinfra = require('starkinfra');
 (async() => {
     let log = await starkinfra.creditNote.log.get('5155165527080960');
     console.log(log);
+})();
+```
+
+## Webhook
+
+### Create a webhook subscription
+
+To create a webhook subscription and be notified whenever an event occurs, run:
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let webhook = await starkinfra.webhook.create({
+        url: 'https://webhook.site/dd784f26-1d6a-4ca6-81cb-fda0267761ec',
+        subscriptions: [
+            'contract', 'credit-note', 'signer',
+            'issuing-card', 'issuing-invoice', 'issuing-purchase',
+            'pix-request.in', 'pix-request.out', 'pix-reversal.in', 'pix-reversal.out'
+        ],
+    });
+
+    console.log(webhook);
+})();
+```
+
+### Query webhook subscriptions
+
+To search for registered webhooks, run:
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let webhooks = await starkinfra.webhook.query();
+
+    for await (let webhook of webhooks) {
+        console.log(webhook);
+    }
+})();
+```
+
+### Get a webhook subscription
+
+You can get a specific webhook by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let webhook = await starkinfra.webhook.get('5155165527080960');
+    console.log(webhook);
+})();
+```
+
+### Delete a webhook subscription
+
+You can also delete a specific webhook by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let webhook = await starkinfra.webhook.delete('5155165527080960');
+    console.log(webhook);
 })();
 ```
 

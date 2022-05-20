@@ -57,7 +57,7 @@ describe('TestIssuingCardPostAndDelete', function() {
                 let cardId = card.id;
                 card = await starkinfra.issuingCard.update(cardId, {'displayName': 'Updated Name'})
                 assert(card.displayName === 'Updated Name');
-                card = await starkinfra.issuingCard.delete(cardId);
+                card = await starkinfra.issuingCard.cancel(cardId);
                 assert(card.status === "canceled");
             }
         }

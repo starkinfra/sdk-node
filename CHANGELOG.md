@@ -26,11 +26,12 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - PixDirector resource for Direct Participants
 - PixKey resource for Indirect and Direct Participants
 - PixClaim resource for Indirect and Direct Participants
-- ReversalRequest resource for Indirect and Direct Participants
-- InfractionReport resource for Indirect and Direct Participants
-- BrcodeCertificate resource for Indirect and Direct Participants
+- PixChargeback resource for Indirect and Direct Participants
+- PixInfraction resource for Indirect and Direct Participants
+- PixDomain resource for Indirect and Direct Participants
 - Event.get(), Event.query(), Event.page(), Event.delete() and Event.update() functions
 - Event.Attempt sub-resource to allow retrieval of information on failed webhook event delivery attempts
+- Webhook resource to receive Events
 
 ## [0.0.1] - 2022-03-18
 ### Added

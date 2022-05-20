@@ -17,7 +17,7 @@ class IssuingRule extends Resource {
      * @param currencyCode [string, default "BRL"]: code of the currency that the rule amount refers to. ex: "BRL" or "USD"
      * @param categories [list of strings, default []]: merchant categories accepted by the rule. ex: ["eatingPlacesRestaurants", "travelAgenciesTourOperators"]
      * @param countries [list of strings, default []]: countries accepted by the rule. ex: ["BRA", "USA"]
-     * @param methods [list of strings, default []]: card purchase methods accepted by the rule. ex: ["contactless", "manual"]
+     * @param methods [list of strings, default []]: card purchase methods accepted by the rule. ex: ["chip", "token", "server", "manual", "magstripe", "contactless"]
      *
      * Attributes (expanded return-only):
      * @param counterAmount [integer]: current rule spent amount. ex: 1000

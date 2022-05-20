@@ -6,5 +6,5 @@ exports.get = issuingCard.get;
 exports.query = issuingCard.query;
 exports.page = issuingCard.page;
 exports.update = issuingCard.update;
-exports.delete = issuingCard.delete;
+exports.cancel = issuingCard.cancel;
 exports.IssuingCard = issuingCard.IssuingCard;

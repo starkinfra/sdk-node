@@ -1,5 +1,8 @@
 const starkinfra = require('../../index.js');
 
+exports.bankCode = process.env.SANDBOX_BANK_CODE
+exports.templateId = process.env.SANDBOX_TEMPLATE_ID
+
 exports.exampleProject = new starkinfra.Project(
     {
         environment: 'sandbox',

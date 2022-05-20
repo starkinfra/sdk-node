@@ -93,7 +93,7 @@ exports.query = async function ({ limit, status, tags, ids, expand, after, befor
      * @description Receive a generator of IssuingHolder objects previously created in the Stark Infra API
      *
      * Parameters (optional):
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if None. ex: 35
+     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: "2020-04-03"
      * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: "2020-04-03"
      * @param status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"
@@ -127,7 +127,7 @@ exports.page = async function ({ cursor, limit, status, tags, ids, expand, after
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if None. ex: 35
+     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: "2020-04-03"
      * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: "2020-04-03"
      * @param status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"
@@ -183,12 +183,12 @@ exports.update = async function (id, { status, name, rules, tags, user } = {}) {
     return rest.patchId(resource, id, payload, user);
 };
 
-exports.delete = async function (id, {user} = {}) {
+exports.cancel = async function (id, {user} = {}) {
     /**
      *
-     * Delete an IssuingHolder entity
+     * Cancel an IssuingHolder entity
      *
-     * @description Delete an IssuingHolder entity previously created in the Stark Infra API
+     * @description Cancel an IssuingHolder entity previously created in the Stark Infra API
      *
      * Parameters (required):
      * @param id [string]: IssuingHolder unique id. ex: "5656565656565656"
@@ -197,7 +197,7 @@ exports.delete = async function (id, {user} = {}) {
      * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns deleted IssuingHolder object
+     * @returns canceled IssuingHolder object
      *
      */
     return rest.deleteId(resource, id, user);
