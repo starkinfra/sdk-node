@@ -34,9 +34,9 @@ class IssuingCard extends Resource {
      * @param status [string]: current IssuingCard status. ex: "canceled" or "active"
      * @param number [string]: [EXPANDABLE] masked card number. ex: "1234 5678 1234 5678"
      * @param securityCode [string]: [EXPANDABLE] masked card verification value (cvv). Expand to unmask the value. ex: "123".
-     * @param expiration [string]: [EXPANDABLE] masked card expiration datetime. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
-     * @param created [string]: creation datetime for the IssuingCard. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
-     * @param updated [string]: latest update datetime for the IssuingCard. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+     * @param expiration [string]: [EXPANDABLE] masked card expiration datetime. ex: '2020-03-10 10:30:00.000'
+     * @param created [string]: creation datetime for the IssuingCard. ex: '2020-03-10 10:30:00.000'
+     * @param updated [string]: latest update datetime for the IssuingCard. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({
@@ -122,7 +122,7 @@ exports.query = async function ({ status, types, holderIds, after, before, tags,
      * @description Receive a generator of IssuingCard objects previously created in the Stark Infra API
      *
      * Parameters (optional):
-     * @param status [string, default null]: filter for status of retrieved objects. ex: "paid" or "registered"
+     * @param status [string, default null]: filter for status of retrieved objects. ex: "active", "blocked", "expired" or "canceled"
      * @param types [list of strings, default null]: card type. ex: ["virtual"]
      * @param holderIds [list of strings]: cardholder IDs. ex: ["5656565656565656", "4545454545454545"]
      * @param after [datetime.date or string, default null] date filter for objects created only after specified date. ex: datetime.date(2020, 3, 10)
@@ -202,7 +202,7 @@ exports.update = async function (id, { status, displayName, rules, tags, user } 
      * @param id [string]: IssuingCard id. ex: '5656565656565656'
      *
      * Parameters (optional):
-     * @param status [string]: You may block the IssuingCard by passing 'blocked' in the status
+     * @param status [string]: You may block the IssuingCard by passing 'blocked' or activate by passing 'active' in the status
      * @param displayName [string, default null]: card displayed name
      * @param rules [list of dictionaries, default null]: list of dictionaries with "amount": int, "currencyCode": string, "id": string, "interval": string, "name": string pairs.
      * @param tags [list of strings]: list of strings for tagging
@@ -221,12 +221,12 @@ exports.update = async function (id, { status, displayName, rules, tags, user } 
     return rest.patchId(resource, id, payload, user);
 };
 
-exports.delete = async function (id, {user} = {}) {
+exports.cancel = async function (id, {user} = {}) {
     /**
      *
-     * Delete an IssuingCard entity
+     * Cancel an IssuingCard entity
      *
-     * @description Delete an IssuingCard entity previously created in the Stark Infra API
+     * @description Cancel an IssuingCard entity previously created in the Stark Infra API
      *
      * Parameters (required):
      * @param id [string]: IssuingCard unique id. ex: '5656565656565656'
@@ -235,7 +235,7 @@ exports.delete = async function (id, {user} = {}) {
      * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns deleted IssuingCard object
+     * @returns canceled IssuingCard object
      *
      */
     return rest.deleteId(resource, id, user);

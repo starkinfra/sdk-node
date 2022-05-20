@@ -95,7 +95,7 @@ exports.get = async function (id, payerId, { endToEndId, user } = {}) {
      * @param payerId [string]: tax id (CPF/CNPJ) of the individual or business requesting the PixKey information. This id is used by the Central Bank to limit request rates. ex: "20.018.183/0001-80".
      *
      * Parameters (optional):
-     * @param endToEndId [string, default None]: central bank's unique transaction id. If the request results in the creation of a PixRequest, the same endToEndId should be used. If this parameter is not passed, one endToEndId will be automatically created. Example: "E00002649202201172211u34srod19le"
+     * @param endToEndId [string, default null]: central bank's unique transaction id. If the request results in the creation of a PixRequest, the same endToEndId should be used. If this parameter is not passed, one endToEndId will be automatically created. Example: "E00002649202201172211u34srod19le"
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -205,12 +205,12 @@ exports.update = async function ( id, reason, { accountCreated, accountNumber, a
     return rest.patchId(resource, id, payload, user);
 };
 
-exports.delete = async function (id, {user} = {}) {
+exports.cancel = async function (id, {user} = {}) {
     /**
      *
-     * Delete the PixKey object by its id
+     * Cancel the PixKey object by its id
      *
-     * @description Delete a PixKey object linked to your Workspace in the Stark Infra API.
+     * @description Cancel a PixKey object linked to your Workspace in the Stark Infra API.
      * This will also remove the link this participant has with the Central Bank.
      *
      * Parameters (required):
@@ -220,7 +220,7 @@ exports.delete = async function (id, {user} = {}) {
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns PixKey object with updated attributes
+     * @returns canceled PixKey object with updated attributes
      *
      */
     return rest.deleteId(resource, id, user);

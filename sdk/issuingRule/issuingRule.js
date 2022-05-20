@@ -17,7 +17,7 @@ class IssuingRule extends Resource {
      * @param currencyCode [string, default "BRL"]: code of the currency that the rule amount refers to. ex: "BRL" or "USD"
      * @param categories [list of strings, default []]: merchant categories accepted by the rule. ex: ["eatingPlacesRestaurants", "travelAgenciesTourOperators"]
      * @param countries [list of strings, default []]: countries accepted by the rule. ex: ["BRA", "USA"]
-     * @param methods [list of strings, default []]: card purchase methods accepted by the rule. ex: ["contactless", "manual"]
+     * @param methods [list of strings, default []]: card purchase methods accepted by the rule. ex: ["chip", "token", "server", "manual", "magstripe", "contactless"]
      *
      * Attributes (expanded return-only):
      * @param counterAmount [integer]: current rule spent amount. ex: 1000
@@ -25,7 +25,7 @@ class IssuingRule extends Resource {
      * @param currencyName [string]: currency name. ex: "Brazilian Real"
      *
      * Attributes (return-only):
-     * @param id [string, default null]: unique id returned when Rule is created. ex: "5656565656565656"
+     * @param id [string]: unique id returned when Rule is created. ex: "5656565656565656"
      * 
      */
     constructor({ id, name, interval, amount, currencyCode, counterAmount, currencyName, currencySymbol, categories, countries, methods }) {

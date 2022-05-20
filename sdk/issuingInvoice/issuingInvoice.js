@@ -22,8 +22,8 @@ class IssuingInvoice extends Resource {
      * @param id [string]: unique id returned when the IssuingInvoice is created. ex: "5656565656565656"
      * @param status [string]: current IssuingInvoice status. ex: "created", "paid", "canceled" or "overdue"
      * @param issuingTransactionId [string]: ledger transaction ids linked to this IssuingInvoice. ex: "issuing-invoice/5656565656565656"
-     * @param created [string]: creation datetime for the IssuingInvoice. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
-     * @param updated [string]: latest update datetime for the IssuingInvoice. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+     * @param created [string]: creation datetime for the IssuingInvoice. ex: '2020-03-10 10:30:00.000'
+     * @param updated [string]: latest update datetime for the IssuingInvoice. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({ id, amount, taxId, name, tags, status, issuingTransactionId, created, updated }) {

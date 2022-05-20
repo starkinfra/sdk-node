@@ -23,14 +23,14 @@ class PixReversal extends Resource {
      * @param tags [array of strings, default null]: list of strings for reference when searching for PixReversals. ex: ["employees", "monthly"]
      *
      * Attributes (return-only):
-     * @param id [string, default null]: unique id returned when the PixReversal is created. ex: "5656565656565656"
-     * @param returnId [string, default null]: central bank's unique reversal transaction ID. ex: "D20018183202202030109X3OoBHG74wo".
-     * @param bankCode [string, default null]: code of the bank institution in Brazil. ex: "20018183" or "341"
-     * @param fee [integer, default null]: fee charged when PixReversal is paid. ex: 200 (= R$ 2.00)
-     * @param status [string, default null]: current PixReversal status. ex: "registered" or "paid"
-     * @param flow [string, default null]: direction of money flow. ex: "in" or "out"
-     * @param created [string, default null]: creation datetime for the PixReversal. ex: "2020-03-10 10:30:00.000"
-     * @param updated [string, default null]: latest update datetime for the PixReversal. ex: "2020-03-10 10:30:00.000"
+     * @param id [string]: unique id returned when the PixReversal is created. ex: "5656565656565656"
+     * @param returnId [string]: central bank's unique reversal transaction ID. ex: "D20018183202202030109X3OoBHG74wo".
+     * @param bankCode [string]: code of the bank institution in Brazil. ex: "20018183" or "341"
+     * @param fee [integer]: fee charged when PixReversal is paid. ex: 200 (= R$ 2.00)
+     * @param status [string]: current PixReversal status. ex: "registered" or "paid"
+     * @param flow [string]: direction of money flow. ex: "in" or "out"
+     * @param created [string]: creation datetime for the PixReversal. ex: "2020-03-10 10:30:00.000"
+     * @param updated [string]: latest update datetime for the PixReversal. ex: "2020-03-10 10:30:00.000"
      *
      */
     constructor({ amount, externalId, endToEndId, reason, tags, id, returnId, bankCode, fee, status,

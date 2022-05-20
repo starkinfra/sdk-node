@@ -10,7 +10,6 @@ class IssuingPurchase extends Resource {
      *
      * @description Displays the IssuingPurchase objects created in your Workspace.
      *
-     * Parameters (required):
      * Attributes (return-only):
      * @param id [string]: unique id returned when IssuingPurchase is created. ex: "5656565656565656"
      * @param holderName [string]: cardholder's name. ex: "Tony Stark"
@@ -29,6 +28,7 @@ class IssuingPurchase extends Resource {
      * @param acquirerId [string]: acquirer ID. ex: "5656565656565656"
      * @param merchantId [string]: merchant ID. ex: "5656565656565656"
      * @param merchantName [string]: merchant name. ex: "Google Cloud Platform"
+     * @param merchantFee [integer]: fee charged by the merchant to cover specific costs, such as ATM withdrawal logistics, etc. ex: 200 (= R$ 2.00)
      * @param walletId [string]: virtual wallet ID. ex: "5656565656565656"
      * @param methodCode [string]: method code. ex: "chip", "token", "server", "manual", "magstripe" or "contactless"
      * @param score [float]: internal score calculated for the authenticity of the purchase. ex: 7.6
@@ -36,14 +36,14 @@ class IssuingPurchase extends Resource {
      * @param endToEndId [string]: central bank's unique transaction ID. ex: "E79457883202101262140HHX553UPqeq"
      * @param status [string]: current IssuingCard status. ex: "approved", "canceled", "denied", "confirmed" or "voided"
      * @param tags [string]: list of strings for tagging. ex: ["travel", "food"]
-     * @param created [string]: creation datetime for the IssuingPurchase. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
-     * @param updated [string]: latest update datetime for the IssuingPurchase. ex: datetime.datetime(2020, 3, 10, 10, 30, 0, 0)
+     * @param created [string]: creation datetime for the IssuingPurchase. ex: '2020-03-10 10:30:00.000'
+     * @param updated [string]: latest update datetime for the IssuingPurchase. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({ id, holderName, cardId, cardEnding, amount, tax, issuerAmount, issuerCurrencyCode, 
                     issuerCurrencySymbol, merchantAmount, merchantCurrencyCode, merchantCurrencySymbol, 
-                    merchantCategoryCode, merchantCountryCode, acquirerId, merchantId, merchantName, walletId, 
-                    methodCode, score, issuingTransactionIds, endToEndId, status, tags, created, updated 
+                    merchantCategoryCode, merchantCountryCode, acquirerId, merchantId, merchantName, merchantFee,
+                    walletId, methodCode, score, issuingTransactionIds, endToEndId, status, tags, created, updated
                 }) {
         super(id);
         this.holderName = holderName;
@@ -62,6 +62,7 @@ class IssuingPurchase extends Resource {
         this.acquirerId = acquirerId;
         this.merchantId = merchantId;
         this.merchantName = merchantName;
+        this.merchantFee = merchantFee;
         this.walletId = walletId;
         this.methodCode = methodCode;
         this.score = score;

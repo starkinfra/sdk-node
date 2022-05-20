@@ -17,15 +17,15 @@ class Log extends Resource {
      * @param created [string]: creation datetime for the log. ex: '2020-03-10 10:30:00.000'
      * @param type [string]: type of the CreditNote event which triggered the log creation. ex: 'processing' or 'success'
      * @param errors [list of strings]: list of errors linked to this CreditNote event.
-     * @param request [CreditNote]: CreditNote entity to which the log refers to.
+     * @param note [CreditNote]: CreditNote entity to which the log refers to.
      *
      */
-    constructor({ created, type, errors, request, id }) {
+    constructor({ created, type, errors, note, id }) {
         super(id);
         this.created = check.datetime(created);
         this.type = type;
         this.errors = errors;
-        this.request = request;
+        this.note = note;
     }
 }
 

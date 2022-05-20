@@ -1,6 +1,13 @@
+const api = require('../utils/api.js');
 const rest = require('../utils/rest.js');
 const check = require('../utils/check.js');
 const parse = require('../utils/parse.js');
+const {Signer} = require('./signer');
+const {Invoice} = require("./invoice");
+const {Transfer} = require('./transfer.js');
+const invoiceResource = require('./invoice.js').resource;
+const signerResource = require('./signer.js').subResource;
+const transferResource = require('./transfer.js').resource;
 const Resource = require('../utils/resource.js').Resource
 
 
@@ -14,29 +21,40 @@ class CreditNote extends Resource {
      * to the Stark Infra API and returns the list of created objects.
      *
      * Parameters (required):
-     * @param templateId [string]: ID of the contract template on which the credit note will be based. ex: templateId="0123456789101112"
-     * @param name [string]: credit receiver's full name. ex: name="Anthony Edward Stark"
-     * @param taxId [string]: credit receiver's tax ID (CPF or CNPJ). ex: taxId="20.018.183/0001-80"
+     * @param templateId [string]: ID of the contract template on which the credit note will be based. ex: templateId='0123456789101112'
+     * @param name [string]: credit receiver's full name. ex: name='Anthony Edward Stark'
+     * @param taxId [string]: credit receiver's tax ID (CPF or CNPJ). ex: taxId='20.018.183/0001-80'
      * @param nominalAmount [integer]: amount in cents transferred to the credit receiver, before deductions. ex: nominalAmount=11234 (= R$ 112.34)
-     * @param scheduled [string, default now]: date of transfer execution. ex: '2020-03-10'
-     * @param invoices [list of Invoice objects]: list of Invoice objects to be created and sent to the credit receiver. ex: invoices=[Invoice(), Invoice()]
-     * @param transfer [Transfer object]: Transfer object to be created and sent to the credit receiver. ex: transfer=Transfer()
-     * @param signers [list of contacts]: name and e-mail of signers that sign the contract. ex: signers=[{"name": "Tony Stark", "contact": "tony@starkindustries.com", "method": "link"}]
-     * @param externalId [string]: url safe string that must be unique among all your CreditNotes. ex: externalId="my-internal-id-123456"
+     * @param scheduled [string]: date for the payment execution. ex: '2020-03-10'
+     * @param invoices [list of CreditNote.Invoice objects or dictionaries]: list of Invoice objects to be created and sent to the credit receiver.
+     * @param payment [CreditNote.Transfer object]: payment entity to be created and sent to the credit receiver. ex: payment=creditNote.Transfer()
+     * @param signers [list of CreditNote.Signer objects or dictionaries]: The Signer object contains the name and email of the signer and the method of delivery. ex: signers=[{'name': 'Tony Stark', 'contact': 'tony@starkindustries.com', 'method': 'link'}]
+     * @param externalId [string]: url safe string that must be unique among all your CreditNotes. ex: externalId='my-internal-id-123456'
+     *
+     * Parameters (conditionally required):
+     * @param paymentType [string]: payment type, inferred from the payment parameter if it is not a dictionary. ex: 'transfer'
      *
      * Parameters (optional):
      * @param rebateAmount [integer, default null]: credit analysis fee deducted from lent amount. ex: rebateAmount=11234 (= R$ 112.34)
-     * @param tags [list of strings, default null]: list of strings for reference when searching for CreditNotes. ex: tags=[\"employees\", \"monthly\"]
+     * @param tags [list of strings, default null]: list of strings for reference when searching for CreditNotes. ex: tags=[\'employees\', \'monthly\']
      *
      * Attributes (return-only):
-     * @param id [string, default null]: unique id returned when the CreditNote is created. ex: "5656565656565656"
+     * @param id [string]: unique id returned when the CreditNote is created. ex: '5656565656565656'
+     * @param amount [integer]: CreditNote value in cents. ex: 1234 (= R$ 12.34)
+     * @param expiration [integer]: time interval in seconds between due date and expiration date. ex 123456789
+     * @param documentId [string]: ID of the signed document to execute this CreditNote. ex: "4545454545454545"
+     * @param status [string]: current status of the CreditNote. ex: "canceled", "created", "expired", "failed", "processing", "signed", "success"
+     * @param transactionIds [list of strings]: ledger transaction ids linked to this CreditNote. ex: ["19827356981273"]
+     * @param workspaceId [string]: ID of the Workspace that generated this CreditNote. ex: "4545454545454545"
+     * @param taxAmount [integer]: tax amount included in the CreditNote. ex: 100
      * @param interest [float]: yearly effective interest rate of the credit note, in percentage. ex: 12.5
-     * @param created [string, default null]: creation datetime for the CreditNote. ex: "2020-03-10 10:30:00.000"
-     * @param updated [string, default null]: latest update datetime for the CreditNote. ex: "2020-03-10 10:30:00.000"
+     * @param created [string]: creation datetime for the CreditNote. ex: '2020-03-10 10:30:00.000'
+     * @param updated [string]: latest update datetime for the CreditNote. ex: '2020-03-10 10:30:00.000'
      */
     constructor({
-                    templateId, name, taxId, nominalAmount, scheduled, invoices, transfer, signers, externalId, interest,
-                    rebateAmount, tags, created, updated, id
+                    templateId, name, taxId, nominalAmount, scheduled, invoices, payment, paymentType, signers,
+                    externalId, rebateAmount, tags, interest, expiration, amount, documentId, status, transactionIds,
+                    workspaceId, taxAmount, created, updated, id
                 }) {
         super(id);
         this.templateId = templateId;
@@ -44,16 +62,78 @@ class CreditNote extends Resource {
         this.taxId = taxId;
         this.nominalAmount = nominalAmount;
         this.scheduled = scheduled;
-        this.invoices = invoices;
-        this.transfer = transfer;
-        this.signers = signers;
+        this.invoices = parseInvoices(invoices);
+        this.signers = parseSigners(signers);
         this.externalId = externalId;
-        this.interest = interest;
         this.rebateAmount = rebateAmount;
         this.tags = tags;
+        this.amount = amount;
+        this.expiration = expiration;
+        this.documentId = documentId;
+        this.status = status;
+        this.transactionIds = transactionIds;
+        this.workspaceId = workspaceId;
+        this.taxAmount = taxAmount;
+        this.interest = interest;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
+
+        let parsePaymentObject = parsePayment(payment, paymentType);
+        this.payment = parsePaymentObject['payment'];
+        this.paymentType = parsePaymentObject['paymentType'];
     }
+}
+
+parsePayment = function (payment, paymentType) {
+    if (payment.constructor === Object) {
+        if (paymentType){
+            const paymentResource = {
+                'transfer': transferResource
+            }[paymentType];
+            return { 'payment': Object.assign(new paymentResource['class'](payment), payment), 'paymentType': paymentType };
+        }
+        throw 'if payment is a dictionary, paymentType must be' +
+            ' transfer';
+    }
+
+    if (payment instanceof Transfer)
+        return { 'payment': payment, 'paymentType': 'transfer' };
+
+    throw new Error('payment must be either ' +
+        'a dictionary' +
+        ', a starkinfra.creditNote.Transfer' +
+        ', but not a ' + typeof (payment)
+    );
+}
+
+parseSigners = function (signers) {
+    let parsedSigners = [];
+    for (let signer of signers) {
+        if (signer instanceof Signer) {
+            api.removeNullKeys(signer)
+            parsedSigners.push(signer);
+            continue;
+        }
+        signer = Object.assign(new signerResource['class'](signer), signer);
+        api.removeNullKeys(signer);
+        parsedSigners.push(signer);
+    }
+    return parsedSigners;
+}
+
+parseInvoices = function (invoices) {
+    let parsedInvoices = [];
+    for (let invoice of invoices) {
+        if (invoice instanceof Invoice) {
+            api.removeNullKeys(invoice)
+            parsedInvoices.push(invoice);
+            continue;
+        }
+        invoice = Object.assign(new invoiceResource['class'](invoice), invoice);
+        api.removeNullKeys(invoice);
+        parsedInvoices.push(invoice);
+    }
+    return parsedInvoices;
 }
 
 exports.CreditNote = CreditNote;
@@ -164,6 +244,26 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
     return rest.getPage(resource, query, user);
 };
 
+exports.cancel = async function (id, {user} = {}) {
+    /**
+     *
+     * Cancel a CreditNote entity
+     *
+     * @description Cancel a CreditNote entity previously created in the Stark Infra API
+     *
+     * Parameters (required):
+     * @param id [string]: CreditNote unique id. ex: '5656565656565656'
+     *
+     * Parameters (optional):
+     * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns canceled CreditNote object
+     *
+     */
+    return rest.deleteId(resource, id, user);
+};
+
 exports.parse = async function ({content, signature, user} = {}) {
     /**
      *
@@ -175,7 +275,7 @@ exports.parse = async function ({content, signature, user} = {}) {
      *
      * Parameters (required):
      * @param content [string]: response content from request received at user endpoint (not parsed)
-     * @param signature [string]: base-64 digital signature received at response header "Digital-Signature"
+     * @param signature [string]: base-64 digital signature received at response header 'Digital-Signature'
      *
      * Parameters (optional):
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call

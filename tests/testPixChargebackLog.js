@@ -4,11 +4,11 @@ const starkinfra = require('../index.js');
 starkinfra.user = require('./utils/user').exampleProject;
 
 
-describe('TestReversalRequestLogGet', function(){
+describe('TestPixChargebackLogGet', function(){
     this.timeout(10000);
     it('test_success', async () => {
         let i = 0;
-        const logs = await starkinfra.reversalRequest.log.query({limit: 5});
+        const logs = await starkinfra.pixChargeback.log.query({limit: 5});
         for await (let log of logs) {
             assert(typeof log.id == 'string');
             i += 1;
@@ -18,26 +18,26 @@ describe('TestReversalRequestLogGet', function(){
 });
 
 
-describe('TestReversalRequestLogInfoGet', function(){
+describe('TestPixChargebackLogInfoGet', function(){
     this.timeout(10000);
     it('test_success', async () => {
-        let logs = await starkinfra.reversalRequest.log.query({limit: 1});
+        let logs = await starkinfra.pixChargeback.log.query({limit: 1});
         for await (let log of logs) {
             assert(typeof log.id == 'string');
-            log = await starkinfra.reversalRequest.log.get(log.id);
+            log = await starkinfra.pixChargeback.log.get(log.id);
             assert(typeof log.id == 'string');
         }
     });
 });
 
-describe('TestReversalRequestLogGetPage', function () {
+describe('TestPixChargebackLogGetPage', function () {
     this.timeout(10000);
     it('test_success', async () => {
         let ids = [];
         let cursor = null;
         let page = null;
         for (let i = 0; i < 2; i++) {
-            [page, cursor] = await starkinfra.reversalRequest.log.page({ limit: 5, cursor: cursor });
+            [page, cursor] = await starkinfra.pixChargeback.log.page({ limit: 5, cursor: cursor });
             for (let entity of page) {
                 assert(!ids.includes(entity.id));
                 ids.push(entity.id);
@@ -51,10 +51,10 @@ describe('TestReversalRequestLogGetPage', function () {
 });
 
 
-describe('TestReversalRequestLogQueryParams', function(){
+describe('TestPixChargebackLogQueryParams', function(){
     this.timeout(10000);
     it('test_success', async () => {
-        const logs = await starkinfra.reversalRequest.log.query({
+        const logs = await starkinfra.pixChargeback.log.query({
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',
@@ -65,12 +65,12 @@ describe('TestReversalRequestLogQueryParams', function(){
     });
 });
 
-describe('TestReversalRequestLogQueryParams', function(){
+describe('TestPixChargebackLogQueryParams', function(){
     this.timeout(10000);
     it('test_success', async () => {
         let cursor = null;
         let logs = null;
-        [logs, cursor] = await starkinfra.reversalRequest.log.page({
+        [logs, cursor] = await starkinfra.pixChargeback.log.page({
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',

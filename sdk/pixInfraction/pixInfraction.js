@@ -3,14 +3,14 @@ const check = require('../utils/check.js');
 const Resource = require('../utils/resource.js').Resource
 
 
-class InfractionReport extends Resource {
+class PixInfraction extends Resource {
     /**
      *
-     * InfractionReport object
+     * PixInfraction object
      *
      * @description Infraction reports are used to report transactions that are suspected of
      * fraud, to request a refund or to reverse a refund.
-     * When you initialize a InfractionReport, the entity will not be automatically
+     * When you initialize a PixInfraction, the entity will not be automatically
      * created in the Stark Infra API. The 'create' function sends the objects
      * to the Stark Infra API and returns the created object.
      *
@@ -20,19 +20,19 @@ class InfractionReport extends Resource {
      *
      * Parameters (optional):
      * @param description [string, default null]: description for any details that can help with the infraction investigation.
-     * @param creditedBankCode [string, default null]: bankCode of the credited Pix participant in the reported transaction. ex: "20018183"
      *
      * Attributes (return-only):
-     * @param id [string]: unique id returned when the InfractionReport is created. ex: "5656565656565656"
-     * @param agent [string]: Options: "reporter" if you created the InfractionReport, "reported" if you received the InfractionReport.
+     * @param id [string]: unique id returned when the PixInfraction is created. ex: "5656565656565656"
+     * @param creditedBankCode [string]: bankCode of the credited Pix participant in the reported transaction. ex: "20018183"
+     * @param debitedBankCode [string]: bankCode of the debited Pix participant in the reported transaction. ex: "20018183"
+     * @param agent [string]: Options: "reporter" if you created the PixInfraction, "reported" if you received the PixInfraction.
      * @param analysis [string]: analysis that led to the result.
      * @param bacenId [string]: central bank's unique UUID that identifies the infraction report.
-     * @param debitedBankCode [string]: bankCode of the debited Pix participant in the reported transaction. ex: "20018183"
-     * @param reportedBy [string]: agent that reported the InfractionReport. Options: "debited", "credited".
-     * @param result [string]: result after the analysis of the InfractionReport by the receiving party. Options: "agreed", "disagreed"
-     * @param status [string]: current InfractionReport status. Options: "created", "failed", "delivered", "closed", "canceled".
-     * @param created [string]: creation datetime for the InfractionReport. ex: "2020-03-10 10:30:00.000"
-     * @param updated [string]: latest update datetime for the InfractionReport. ex: "2020-03-10 10:30:00.000"
+     * @param reportedBy [string]: agent that reported the PixInfraction. Options: "debited", "credited".
+     * @param result [string]: result after the analysis of the PixInfraction by the receiving party. Options: "agreed", "disagreed"
+     * @param status [string]: current PixInfraction status. Options: "created", "failed", "delivered", "closed", "canceled".
+     * @param created [string]: creation datetime for the PixInfraction. ex: "2020-03-10 10:30:00.000"
+     * @param updated [string]: latest update datetime for the PixInfraction. ex: "2020-03-10 10:30:00.000"
      *
      */
     constructor({
@@ -58,44 +58,44 @@ class InfractionReport extends Resource {
     }
 }
 
-exports.InfractionReport = InfractionReport;
-let resource = {'class': exports.InfractionReport, 'name': 'InfractionReport'};
+exports.PixInfraction = PixInfraction;
+let resource = {'class': exports.PixInfraction, 'name': 'PixInfraction'};
 
-exports.create = async function (report, {user} = {}) {
+exports.create = async function (infractions, {user} = {}) {
     /**
      *
-     * Create a InfractionReport object
+     * Create PixInfraction objects
      *
-     * @description Create a InfractionReport in the Stark Infra API
+     * @description Create PixInfractions in the Stark Infra API
      *
      * Parameters (required):
-     * @param report [InfractionReport object]: InfractionReport object to be created in the API.
+     * @param infractions [list of PixInfractions]: list of PixInfraction objects to be created in the API.
      *
      * Parameters (optional):
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns InfractionReport object with updated attributes.
+     * @returns List of PixInfraction objects with updated attributes.
      *
      */
-    return rest.postSingle(resource, report, user);
+    return rest.post(resource, infractions, user);
 };
 
 exports.get = async function (id, {user} = {}) {
     /**
      *
-     * Retrieve a InfractionReport object
+     * Retrieve a PixInfraction object
      *
-     * @description Retrieve the InfractionReport object linked to your Workspace in the Stark Infra API using its id.
+     * @description Retrieve the PixInfraction object linked to your Workspace in the Stark Infra API using its id.
      *
      * Parameters (required):
-     * @param id [string]: InfractionReport object unique id. ex: '5656565656565656'
+     * @param id [string]: PixInfraction object unique id. ex: '5656565656565656'
      *
      * Parameters (optional):
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns InfractionReport object that corresponds to the given id.
+     * @returns PixInfraction object that corresponds to the given id.
      *
      */
     return rest.getId(resource, id, user);
@@ -104,9 +104,9 @@ exports.get = async function (id, {user} = {}) {
 exports.query = async function ({ limit, after, before, status, ids, type, user } = {}) {
     /**
      *
-     * Retrieve InfractionReports
+     * Retrieve PixInfractions
      *
-     * @description Receive a generator of InfractionReports objects previously created in the Stark Infra API
+     * @description Receive a generator of PixInfractions objects previously created in the Stark Infra API
      *
      * Parameters (optional):
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
@@ -114,11 +114,11 @@ exports.query = async function ({ limit, after, before, status, ids, type, user 
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
      * @param status [list of strings, default null]: filter for status of retrieved objects. Options: "created", "failed", "delivered", "closed", "canceled".
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-     * @param type [list of strings, default null]: filter for the type of retrieved InfractionReports. Options: "fraud", "reversal", "reversalChargeback"
+     * @param type [list of strings, default null]: filter for the type of retrieved PixInfractions. Options: "fraud", "reversal", "reversalChargeback"
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns generator of InfractionReport objects with updated attributes
+     * @returns generator of PixInfraction objects with updated attributes
      *
      */
     let query = {
@@ -135,9 +135,9 @@ exports.query = async function ({ limit, after, before, status, ids, type, user 
 exports.page = async function ({ cursor, limit, after, before, status, ids, type, user } = {}) {
     /**
      *
-     * Retrieve paged InfractionReports
+     * Retrieve paged PixInfractions
      *
-     * @description Receive a list of up to 100 InfractionReport objects previously created in the Stark Infra API and the cursor to the next page.
+     * @description Receive a list of up to 100 PixInfraction objects previously created in the Stark Infra API and the cursor to the next page.
      * Use this function instead of query if you want to manually page your requests.
      *
      * Parameters (optional):
@@ -147,11 +147,11 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, type
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
      * @param status [list of strings, default null]: filter for status of retrieved objects. Options: "created", "failed", "delivered", "closed", "canceled".
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-     * @param type [list of strings, default null]: filter for the type of retrieved InfractionReports. Options: "fraud", "reversal", "reversalChargeback"
+     * @param type [list of strings, default null]: filter for the type of retrieved PixInfractions. Options: "fraud", "reversal", "reversalChargeback"
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns list of InfractionReport objects with updated attributes and cursor to retrieve the next page of InfractionReport objects
+     * @returns list of PixInfraction objects with updated attributes and cursor to retrieve the next page of PixInfraction objects
      *
      */
     let query = {
@@ -169,19 +169,19 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, type
 exports.update = async function ( id, result, { analysis, user } = {}) {
     /**
      *
-     * Update InfractionReport entity
+     * Update PixInfraction entity
      *
-     * @description Update the InfractionReport information by its id.
+     * @description Update the PixInfraction information by its id.
      *
      * Parameters (required):
-     * @param id [string]: InfractionReport id. ex: '5656565656565656'
-     * @param result [string]: result after the analysis of the InfractionReport. Options: 'agreed', 'disagreed'
+     * @param id [string]: PixInfraction id. ex: '5656565656565656'
+     * @param result [string]: result after the analysis of the PixInfraction. Options: 'agreed', 'disagreed'
      *
      * Parameters (optional):
      * @param analysis [string, default null]: analysis that led to the result.
      *
      * Return:
-     * @returns list of InfractionReport objects with updated attributes and cursor to retrieve the next page of InfractionReport objects
+     * @returns list of PixInfraction objects with updated attributes and cursor to retrieve the next page of PixInfraction objects
      *
      */
     let payload = {
@@ -191,12 +191,12 @@ exports.update = async function ( id, result, { analysis, user } = {}) {
     return rest.patchId(resource, id, payload, user);
 };
 
-exports.delete = async function (id, {user} = {}) {
+exports.cancel = async function (id, {user} = {}) {
     /**
      *
-     * Delete a InfractionReport entity
+     * Cancel a PixInfraction entity
      *
-     * @description Delete a InfractionReport entity previously created in the Stark Infra API
+     * @description Cancel a PixInfraction entity previously created in the Stark Infra API
      *
      * Parameters (required):
      * @param id [string]: object unique id. ex: '5656565656565656'
@@ -205,7 +205,7 @@ exports.delete = async function (id, {user} = {}) {
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns deleted InfractionReport object
+     * @returns canceled PixInfraction object
      *
      */
     return rest.deleteId(resource, id, user);

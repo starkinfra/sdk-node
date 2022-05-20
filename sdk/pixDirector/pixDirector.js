@@ -16,11 +16,11 @@ class PixDirector extends Resource {
      * Parameters (required):
      * @param name [string]: name of the PixDirector. ex: "Edward Stark".
      * @param taxId [string]: tax ID (CPF/CNPJ) of the PixDirector. ex: "03.300.300/0001-00"
-     * @param phone [string]: phone of the PixDirector. ex: "+55-1198989898"
+     * @param phone [string]: phone of the PixDirector. ex: "+551198989898"
      * @param email [string]: email of the PixDirector. ex: "ned.stark@starkbank.com"
      * @param password [string]: password of the PixDirector. ex: "12345678"
      * @param teamEmail [string]: team email. ex: "pix.team@company.com"
-     * @param teamPhones [list of strings]: list of phones of the team. ex: ["+55-11988889999", "+55-11988889998"]
+     * @param teamPhones [list of strings]: list of phones of the team. ex: ["+5511988889999", "+5511988889998"]
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the PixDirector is created. ex: "5656565656565656"

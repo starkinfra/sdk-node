@@ -1,9 +1,9 @@
 const starkinfra = require('../../index.js');
 
 
-exports.get = async function () {
+exports.get = async function (n=1) {
     let endToEndIds = [];
-    let requests = await starkinfra.pixRequest.query({ limit: 10 });
+    let requests = await starkinfra.pixRequest.query({ limit: n });
     for await (let request of requests) {
         endToEndIds.push(String(request.endToEndId));
     }
