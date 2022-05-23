@@ -1,11 +1,11 @@
-const api = require('../utils/api.js');
 const rest = require('../utils/rest.js');
 const check = require('../utils/check.js');
 const parse = require('../utils/parse.js');
-const {Signer} = require('./signer');
-const {Invoice} = require("./invoice");
+const {Signer} = require('./signer.js');
+const {Invoice} = require("./invoice/invoice.js");
 const {Transfer} = require('./transfer.js');
-const invoiceResource = require('./invoice.js').resource;
+const {parseObjects} = require("../utils/parse");
+const invoiceResource = require('./invoice/invoice.js').resource;
 const signerResource = require('./signer.js').subResource;
 const transferResource = require('./transfer.js').resource;
 const Resource = require('../utils/resource.js').Resource
@@ -62,8 +62,8 @@ class CreditNote extends Resource {
         this.taxId = taxId;
         this.nominalAmount = nominalAmount;
         this.scheduled = scheduled;
-        this.invoices = parseInvoices(invoices);
-        this.signers = parseSigners(signers);
+        this.invoices = parseObjects(invoices, invoiceResource, Invoice);
+        this.signers = parseObjects(signers, signerResource, Signer);
         this.externalId = externalId;
         this.rebateAmount = rebateAmount;
         this.tags = tags;
@@ -104,36 +104,6 @@ parsePayment = function (payment, paymentType) {
         ', a starkinfra.creditNote.Transfer' +
         ', but not a ' + typeof (payment)
     );
-}
-
-parseSigners = function (signers) {
-    let parsedSigners = [];
-    for (let signer of signers) {
-        if (signer instanceof Signer) {
-            api.removeNullKeys(signer)
-            parsedSigners.push(signer);
-            continue;
-        }
-        signer = Object.assign(new signerResource['class'](signer), signer);
-        api.removeNullKeys(signer);
-        parsedSigners.push(signer);
-    }
-    return parsedSigners;
-}
-
-parseInvoices = function (invoices) {
-    let parsedInvoices = [];
-    for (let invoice of invoices) {
-        if (invoice instanceof Invoice) {
-            api.removeNullKeys(invoice)
-            parsedInvoices.push(invoice);
-            continue;
-        }
-        invoice = Object.assign(new invoiceResource['class'](invoice), invoice);
-        api.removeNullKeys(invoice);
-        parsedInvoices.push(invoice);
-    }
-    return parsedInvoices;
 }
 
 exports.CreditNote = CreditNote;

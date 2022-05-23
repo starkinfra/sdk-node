@@ -2,6 +2,7 @@ const rest = require('../utils/rest.js');
 const api = require("../utils/api");
 const {Certificate} = require("./certificate");
 const certificateResource = require('./certificate.js').subResource;
+const {parseObjects} = require("../utils/parse");
 const SubResource = require("../utils/subResource").SubResource;
 
 
@@ -20,24 +21,9 @@ class PixDomain extends SubResource {
      */
     constructor({ certificates, name }) {
         super();
-        this.certificates = parseCertificates(certificates);
+        this.certificates = parseObjects(certificates, certificateResource, Certificate);
         this.name = name;
     }
-}
-
-parseCertificates = function (certificates) {
-    let parsedCertificates = [];
-    for (let certificate of certificates) {
-        if (certificate instanceof Certificate) {
-            api.removeNullKeys(certificate)
-            parsedCertificates.push(certificate);
-            continue;
-        }
-        certificate = Object.assign(new certificateResource['class'](certificate), certificate);
-        api.removeNullKeys(certificate);
-        parsedCertificates.push(certificate);
-    }
-    return parsedCertificates;
 }
 
 exports.PixDomain = PixDomain;
