@@ -2,8 +2,9 @@ const creditNote = require('./creditNote.js');
 
 exports.log = require('./log');
 exports.Signer = require('./signer.js').Signer;
-exports.Invoice = require('./invoice.js').Invoice;
+exports.Invoice = require('./invoice/invoice.js').Invoice;
 exports.Transfer = require('./transfer.js').Transfer;
+exports.invoice = require('./invoice');
 exports.create = creditNote.create;
 exports.query = creditNote.query;
 exports.get = creditNote.get;

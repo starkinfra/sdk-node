@@ -1,4 +1,4 @@
-const Resource = require('./resource.js').Resource
+const SubResource = require('./subResource.js').SubResource
 
 
 function decamelize(str, separator="-") {
@@ -37,7 +37,7 @@ exports.removeNullKeys = function(dict) {
    Object.entries(dict).forEach(([key, value]) => {
         if (value === undefined || value === null)
             delete dict[key];
-        else if (value.constructor == Object || value instanceof Resource)
+        else if (value.constructor == Object || value instanceof SubResource || value instanceof Array)
             exports.removeNullKeys(value);
    });
 }

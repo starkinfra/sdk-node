@@ -33,7 +33,7 @@ class IssuingPurchase extends Resource {
      * @param methodCode [string]: method code. ex: "chip", "token", "server", "manual", "magstripe" or "contactless"
      * @param score [float]: internal score calculated for the authenticity of the purchase. ex: 7.6
      * @param issuingTransactionIds [string]: ledger transaction ids linked to this Purchase
-     * @param endToEndId [string]: central bank's unique transaction ID. ex: "E79457883202101262140HHX553UPqeq"
+     * @param endToEndId [string]: Unique id used to identify the transaction through all of its life cycle, even before the purchase is denied or accepted and gets its usual id. Example: endToEndId="679cd385-642b-49d0-96b7-89491e1249a5"
      * @param status [string]: current IssuingCard status. ex: "approved", "canceled", "denied", "confirmed" or "voided"
      * @param tags [string]: list of strings for tagging. ex: ["travel", "food"]
      * @param created [string]: creation datetime for the IssuingPurchase. ex: '2020-03-10 10:30:00.000'

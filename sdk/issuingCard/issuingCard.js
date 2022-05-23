@@ -1,5 +1,8 @@
 const rest = require('../utils/rest.js');
 const check = require('../utils/check.js');
+const {parseObjects} = require("../utils/parse");
+const {IssuingRule} = require('../issuingRule/issuingRule.js');
+const ruleResource = require('../issuingRule/issuingRule').resource;
 const Resource = require('../utils/resource.js').Resource
 
 
@@ -52,7 +55,7 @@ class IssuingCard extends Resource {
         this.type = type;
         this.displayName = displayName;
         this.status = status;
-        this.rules = rules;
+        this.rules = parseObjects(rules, ruleResource, IssuingRule);
         this.binId = binId;
         this.streetLine1 = streetLine1;
         this.streetLine2 = streetLine2;

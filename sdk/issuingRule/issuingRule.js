@@ -44,3 +44,4 @@ class IssuingRule extends Resource {
 }
 
 exports.IssuingRule = IssuingRule;
+exports.resource = {'class': exports.IssuingRule, 'name': 'IssuingRule'};
