@@ -1,5 +1,8 @@
 const rest = require('../utils/rest.js');
 const check = require('../utils/check.js');
+const {parseObjects} = require("../utils/parse");
+const {IssuingRule} = require('../issuingRule/issuingRule.js');
+const ruleResource = require('../issuingRule/issuingRule').resource;
 const Resource = require('../utils/resource.js').Resource
 
 
@@ -32,7 +35,7 @@ class IssuingHolder extends Resource {
         super(id);
         this.externalId = externalId;
         this.name = name;
-        this.rules = rules;
+        this.rules = parseObjects(rules, ruleResource, IssuingRule);
         this.status = status;
         this.tags = tags;
         this.taxId = taxId;

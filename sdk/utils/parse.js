@@ -4,6 +4,25 @@ const rest = require('../utils/rest.js');
 const error = require('../error.js');
 const api = require("./api");
 
+exports.parseOptionalObjects = function (objects, resource, resourceClass) {
+    if (objects == null)
+        return [];
+    return exports.parseObjects(objects, resource, resourceClass);
+}
+
+
+exports.parseObjects = function (objects, resource, resourceClass) {
+    let parsedObjects = [];
+    for (let object of objects) {
+        if (object instanceof resourceClass) {
+            parsedObjects.push(object);
+            continue;
+        }
+        object = Object.assign(new resource['class'](object), object);
+        parsedObjects.push(object);
+    }
+    return parsedObjects;
+}
 
 exports.parseAndVerify = async function (resource, content, signature, user = null) {
 
