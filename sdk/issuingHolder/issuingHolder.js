@@ -156,7 +156,7 @@ exports.page = async function ({ cursor, limit, status, tags, ids, expand, after
     return rest.getPage(resource, query, user);
 };
 
-exports.update = async function (id, { status, name, rules, tags, user } = {}) {
+exports.update = async function (id, { status, name, rules, tags, user }) {
     /**
      *
      * Update IssuingHolder entity

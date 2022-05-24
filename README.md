@@ -1173,9 +1173,9 @@ const starkinfra = require('starkinfra');
 
 ### Get a PixKey
 
-Information on a Pix key may be retrieved by its id and the tax ID of the consulting agent.
-An endToEndId must be informed so you can link any resulting purchases to this query,
-avoiding sweep blocks by the Central Bank.
+Information on any Pix key may be retrieved by its id and the tax ID of the consulting agent.
+If the request results in the creation of a Pix Request, the same end to end id should be used. 
+If this parameter is not passed, one endToEndId will be automatically created.
 
 ```javascript
 const starkinfra = require('starkinfra');

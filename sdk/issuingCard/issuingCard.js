@@ -1,6 +1,6 @@
 const rest = require('../utils/rest.js');
 const check = require('../utils/check.js');
-const {parseObjects} = require("../utils/parse");
+const {parseOptionalObjects} = require("../utils/parse");
 const {IssuingRule} = require('../issuingRule/issuingRule.js');
 const ruleResource = require('../issuingRule/issuingRule').resource;
 const Resource = require('../utils/resource.js').Resource
@@ -55,7 +55,7 @@ class IssuingCard extends Resource {
         this.type = type;
         this.displayName = displayName;
         this.status = status;
-        this.rules = parseObjects(rules, ruleResource, IssuingRule);
+        this.rules = parseOptionalObjects(rules, ruleResource, IssuingRule);
         this.binId = binId;
         this.streetLine1 = streetLine1;
         this.streetLine2 = streetLine2;
@@ -194,7 +194,7 @@ exports.page = async function ({ cursor, status, types, holderIds, after, before
     return rest.getPage(resource, query, user);
 };
 
-exports.update = async function (id, { status, displayName, rules, tags, user } = {}) {
+exports.update = async function (id, { status, displayName, rules, tags, user }) {
     /**
      *
      * Update IssuingCard entity
