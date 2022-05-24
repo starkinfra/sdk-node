@@ -172,7 +172,7 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
     return rest.getPage(resource, query, user);
 };
 
-exports.update = async function ( id, reason, { accountCreated, accountNumber, accountType, branchCode, name, user } = {}) {
+exports.update = async function ( id, reason, { accountCreated, accountNumber, accountType, branchCode, name, user }) {
     /**
      *
      * Update PixKey entity
