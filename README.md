@@ -126,7 +126,7 @@ You can interact directly with our API using two types of users: Projects and Or
 
 3.1.2. Go to Menu > Integrations
 
-3.1.3. Click on the "New Project" button
+3.1.3. Click on the 'New Project' button
 
 3.1.4. Create a Project: Give it a name and upload the public key you created in section 2
 
@@ -163,11 +163,11 @@ let project = new starkinfra.Project({
 
 3.2.2. Go to Menu > Integrations
 
-3.2.3. Click on the "Organization public key" button
+3.2.3. Click on the 'Organization public key' button
 
 3.2.4. Upload the public key you created in section 2 (only a legal representative of the organization can upload the public key)
 
-3.2.5. Click on your profile picture and then on the "Organization" menu to get the Organization ID
+3.2.5. Click on your profile picture and then on the 'Organization' menu to get the Organization ID
 
 3.2.6. Use the Organization ID and private key to create the object below:
 
@@ -255,7 +255,7 @@ const starkinfra = require('starkinfra');
 starkinfra.language = 'en-US';
 ```
 
-Language options are "en-US" for English and "pt-BR" for Brazilian Portuguese. English is the default.
+Language options are 'en-US' for English and 'pt-BR' for Brazilian Portuguese. English is the default.
 
 # Resource listing and manual pagination
 
@@ -307,11 +307,11 @@ To simplify the following SDK examples, we will only use the `query` function, b
 # Testing in Sandbox
 
 Your initial balance is zero. For many operations in Stark Infra, you'll need funds
-in your account, which can be added to your balance by creating a Pix Request.
+in your account, which can be added to your balance by creating a starkbank.Invoice.
 
-In the Sandbox environment, most of the created Pix Requests will be automatically paid,
+In the Sandbox environment, most of the created starkbank.Invoices will be automatically paid,
 so there's nothing else you need to do to add funds to your account. Just create
-a few Pix Request and wait around a bit.
+a few starkbank.Invoices and wait around a bit.
 
 In Production, you (or one of your clients) will need to actually pay this Pix Request
 for the value to be credited to your account.
@@ -352,7 +352,7 @@ await (async() => {
         new starkinfra.IssuingHolder({
             'name': 'Iron Bank S.A.',
             'taxId': '012.345.678-90',
-            'externalId': "1234",
+            'externalId': '1234',
             'tags': ['Traveler Employee'],
             'rules': [
                 new starkinfra.IssuingRule({
@@ -447,7 +447,7 @@ await (async() => {
         new starkinfra.issuingCard({
             'holderName': 'Developers',
             'holderTaxId': '012.345.678-90',
-            'holderExternalId': "1234",
+            'holderExternalId': '1234',
             'rules': [
                 new starkinfra.IssuingRule({
                     'name': 'general',
@@ -554,7 +554,7 @@ const starkinfra = require('starkinfra');
 const express = require('express')
 const app = express()
 
-app.use(express.raw({type: "*/*"}));
+app.use(express.raw({type: '*/*'}));
 
 const port = 3000
 app.post('/', async (req, res) => {
@@ -565,9 +565,9 @@ app.post('/', async (req, res) => {
         });
         res.send(
             starkinfra.issuingAuthorization.response( // this optional method just helps you build the response JSON
-                status="accepted",
+                status='accepted',
                 amount=authorization.amount,
-                tags=["my-purchase-id/123"]
+                tags=['my-purchase-id/123']
             )
         );
 
@@ -575,9 +575,9 @@ app.post('/', async (req, res) => {
 
         res.send(
             starkinfra.issuingAuthorization.response(
-                status="denied",
-                reason="other",
-                tags=["other-id/456"]
+                status='denied',
+                reason='other',
+                tags=['other-id/456']
             )
         );
     }
@@ -826,19 +826,19 @@ const starkinfra = require('starkinfra');
     let requests = await starkinfra.pixRequest.create([
         {    
             amount: 1000,
-            externalId: "my-external-id:021243543252345",
-            senderAccountNumber: "76543-8",
-            senderBranchCode: "2201",
-            senderAccountType: "checking",
-            senderName: "checking",
-            senderTaxId: "594.739.480-42",
-            receiverBankCode: "341",
-            receiverAccountNumber: "00000-0",
-            receiverBranchCode: "0001",
-            receiverAccountType: "checking",
-            receiverName: "Daenerys Targaryen Stormborn",
-            receiverTaxId: "012.345.678-90",
-            endToEndId: endToEndId.create("20018183")
+            externalId: 'my-external-id:021243543252345',
+            senderAccountNumber: '76543-8',
+            senderBranchCode: '2201',
+            senderAccountType: 'checking',
+            senderName: 'checking',
+            senderTaxId: '594.739.480-42',
+            receiverBankCode: '341',
+            receiverAccountNumber: '00000-0',
+            receiverBranchCode: '0001',
+            receiverAccountType: 'checking',
+            receiverName: 'Daenerys Targaryen Stormborn',
+            receiverTaxId: '012.345.678-90',
+            endToEndId: endToEndId.create('20018183')
         }
     ])
 
@@ -891,7 +891,7 @@ const starkinfra = require('starkinfra');
 const express = require('express')
 const app = express()
 
-app.use(express.raw({type: "*/*"}));
+app.use(express.raw({type: '*/*'}));
 
 const port = 3000
 app.post('/', async (req, res) => {
@@ -950,9 +950,9 @@ const starkinfra = require('starkinfra');
     let revrersals = await starkinfra.pixReversal.create([
         {
             amount: 1000,
-            externalId: "my-external-id:17238435823958934",
-            endToEndId: "E00000000202201060100rzsJzG9PzMg",
-            reason: "fraud"
+            externalId: 'my-external-id:17238435823958934',
+            endToEndId: 'E00000000202201060100rzsJzG9PzMg',
+            reason: 'fraud'
         }
     ])
   
@@ -1004,7 +1004,7 @@ const starkinfra = require('starkinfra');
 const express = require('express')
 const app = express()
 
-app.use(express.raw({type: "*/*"}));
+app.use(express.raw({type: '*/*'}));
 
 const port = 3000
 app.post('/', async (req, res) => {
@@ -1078,7 +1078,7 @@ const starkinfra = require('starkinfra');
         {
             after: '2022-01-01', // This is the date that you want to create a statement.
             before: '2022-01-01', // After and before must be the same date.
-            type: 'transaction' // Options are "interchange", "interchangeTotal", "transaction".
+            type: 'transaction' // Options are 'interchange', 'interchangeTotal', 'transaction'.
         }
     )
     console.log(statement)
@@ -1136,13 +1136,13 @@ const starkinfra = require('starkinfra');
 
 (async() => {
     let key = await starkinfra.pixKey.create({
-        accountCreated: "2022-02-01T00:00:00.00",
-        accountNumber: "00000",
-        accountType: "savings",
-        branchCode: "0000",
-        name: "Jamie Lannister",
-        taxId: "012.345.678-90",
-        id: "+5511989898989",
+        accountCreated: '2022-02-01T00:00:00.00',
+        accountNumber: '00000',
+        accountType: 'savings',
+        branchCode: '0000',
+        name: 'Jamie Lannister',
+        taxId: '012.345.678-90',
+        id: '+5511989898989',
     });
     console.log(key);
 })();
@@ -1158,12 +1158,12 @@ const starkinfra = require('starkinfra');
 (async() => {
     let keys = await starkinfra.pixKey.query({
         'limit': 1,
-        'after': "2022-01-01",
-        'before': "2022-01-12",
-        'status': "registered",
-        'tags': ["iron", "bank"],
-        'ids': ["+5511989898989"],
-        'type': "phone"
+        'after': '2022-01-01',
+        'before': '2022-01-12',
+        'status': 'registered',
+        'tags': ['iron', 'bank'],
+        'ids': ['+5511989898989'],
+        'type': 'phone'
     });
     for await (let key of keys) {
         console.log(key);
@@ -1181,7 +1181,7 @@ If this parameter is not passed, one endToEndId will be automatically created.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let key = await starkinfra.pixKey.get("5155165527080960", '012.345.678-90', { endToEndId: starkinfra.endToEndId.create(bankCode) });
+    let key = await starkinfra.pixKey.get('5155165527080960', '012.345.678-90', { endToEndId: starkinfra.endToEndId.create(bankCode) });
     console.log(key);
 })();
 ```
@@ -1194,7 +1194,7 @@ Update the account information linked to a Pix Key.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let key = await starkinfra.pixKey.update("+5511989898989", 'branchTransfer', { name: 'Jamie Lannister' });
+    let key = await starkinfra.pixKey.update('+5511989898989', 'branchTransfer', { name: 'Jamie Lannister' });
     console.log(key);
 })();
 ```
@@ -1207,7 +1207,7 @@ Cancel a specific Pix Key using its id.
 const starkinfra = require('starkinfra');
 
 (async () => {
-  let key = await starkinfra.pixKey.cancel("5155165527080960");
+  let key = await starkinfra.pixKey.cancel('5155165527080960');
   console.log(key);
 })();
 ```
@@ -1242,7 +1242,7 @@ You can also get a specific log by its id.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let log = await starkinfra.pixKey.log.get("5155165527080960");
+    let log = await starkinfra.pixKey.log.get('5155165527080960');
     console.log(log);
 })();
 ```
@@ -1303,7 +1303,7 @@ After its creation, information on a Pix claim may be retrieved by its id.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let claim = await starkinfra.pixClaim.get("5155165527080960");
+    let claim = await starkinfra.pixClaim.get('5155165527080960');
     console.log(claim);
 })();
 ```
@@ -1312,7 +1312,7 @@ const starkinfra = require('starkinfra');
 
 A Pix Claim can be confirmed or canceled by patching its status.
 A received Pix Claim must be confirmed by the donor to be completed.
-Ownership Pix Claims can only be canceled by the donor if the reason is "fraud".
+Ownership Pix Claims can only be canceled by the donor if the reason is 'fraud'.
 A sent Pix Claim can also be canceled.
 
 ```javascript
@@ -1334,11 +1334,11 @@ const starkinfra = require('starkinfra');
 (async() => {
     const logs = await starkinfra.pixClaim.log.query({
         limit: 50,
-        ids: ["5729405850615808"],
-        after: "2022-01-01",
-        before: "2022-01-20",
-        types: ["registered"],
-        claimIds: ["5719405850615809"]
+        ids: ['5729405850615808'],
+        after: '2022-01-01',
+        before: '2022-01-20',
+        types: ['registered'],
+        claimIds: ['5719405850615809']
     });
     for await (let log of logs) {
         console.log(log);
@@ -1354,7 +1354,7 @@ You can also get a specific log by its id.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let log = await starkinfra.pixClaim.log.get("5155165527080960");
+    let log = await starkinfra.pixClaim.log.get('5155165527080960');
     console.log(log);
 })();
 ```
@@ -1392,8 +1392,8 @@ const starkinfra = require('starkinfra');
 (async() => {
     let infractions = await starkinfra.pixInfraction.create([
         {
-            referenceId: "E20018183202201201450u34sDGd19lz",
-            type: "fraud"
+            referenceId: 'E20018183202201201450u34sDGd19lz',
+            type: 'fraud'
         }
     ]);
     for (let infraction of infractions) {
@@ -1432,7 +1432,7 @@ After its creation, information on a Pix infraction may be retrieved by its id.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let report = await starkinfra.pixInfraction.get("5155165527080960");
+    let report = await starkinfra.pixInfraction.get('5155165527080960');
     console.log(report);
 })();
 ```
@@ -1459,7 +1459,7 @@ Cancel a specific Pix infraction using its id.
 const starkinfra = require('starkinfra');
 
 (async () => {
-  let report = await starkinfra.pixInfraction.cancel("5155165527080960");
+  let report = await starkinfra.pixInfraction.cancel('5155165527080960');
   console.log(report);
 })();
 ```
@@ -1474,11 +1474,11 @@ const starkinfra = require('starkinfra');
 (async() => {
     const logs = await starkinfra.pixInfraction.log.query({
         limit: 50,
-        ids: ["5729405850615808"],
-        after: "2022-01-01",
-        before: "2022-01-20",
-        types: ["registered"],
-        reportIds: ["5719405850615809"]
+        ids: ['5729405850615808'],
+        after: '2022-01-01',
+        before: '2022-01-20',
+        types: ['registered'],
+        reportIds: ['5719405850615809']
     });
     for await (let log of logs) {
         console.log(log);
@@ -1494,7 +1494,7 @@ You can also get a specific log by its id.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let log = await starkinfra.pixInfraction.log.get("5155165527080960");
+    let log = await starkinfra.pixInfraction.log.get('5155165527080960');
     console.log(log);
 })();
 ```
@@ -1510,8 +1510,8 @@ const starkinfra = require('starkinfra');
     let chargebacks = await starkinfra.pixChargeback.create([
         {
             amount: 100,
-            referenceId: "E20018183202201201450u34sDGd19lz",
-            reason: "fraud",
+            referenceId: 'E20018183202201201450u34sDGd19lz',
+            reason: 'fraud',
         }
     ]);
 
@@ -1551,7 +1551,7 @@ After its creation, information on a Reversal Request may be retrieved by its id
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let request = await starkinfra.pixChargeback.get("5155165527080960");
+    let request = await starkinfra.pixChargeback.get('5155165527080960');
     console.log(request);
 })();
 ```
@@ -1585,7 +1585,7 @@ Cancel a specific Reversal Request using its id.
 const starkinfra = require('starkinfra');
 
 (async () => {
-  let request = await starkinfra.pixChargeback.cancel("5155165527080960");
+  let request = await starkinfra.pixChargeback.cancel('5155165527080960');
   console.log(request);
 })();
 ```
@@ -1600,11 +1600,11 @@ const starkinfra = require('starkinfra');
 (async() => {
     const logs = await starkinfra.pixChargeback.log.query({
         limit: 50,
-        ids: ["5729405850615808"],
-        after: "2022-01-01",
-        before: "2022-01-20",
-        types: ["created"],
-        requestIds: ["5155165527080960"]
+        ids: ['5729405850615808'],
+        after: '2022-01-01',
+        before: '2022-01-20',
+        types: ['created'],
+        requestIds: ['5155165527080960']
     });
     for await (let log of logs) {
         console.log(log);
@@ -1620,7 +1620,7 @@ You can also get a specific log by its id.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let log = await starkinfra.pixChargeback.log.get("5155165527080960");
+    let log = await starkinfra.pixChargeback.log.get('5155165527080960');
     console.log(log);
 })();
 ```
@@ -1875,7 +1875,7 @@ const starkinfra = require('starkinfra');
 const express = require('express')
 const app = express()
 
-app.use(express.raw({type: "*/*"}));
+app.use(express.raw({type: '*/*'}));
 
 const port = 3000
 app.post('/', async (req, res) => {
@@ -1884,17 +1884,17 @@ app.post('/', async (req, res) => {
             content: req.body.toString(),
             signature: req.headers['digital-signature']
         });
-        if (event.subscription.includes("pix-request")) {
+        if (event.subscription.includes('pix-request')) {
             console.log(event.log.request);
-        } else if (event.subscription.includes("pix-reversal")) {
+        } else if (event.subscription.includes('pix-reversal')) {
             console.log(event.log.reversal);
-        } else if (event.subscription.includes("issuing-card")) {
+        } else if (event.subscription.includes('issuing-card')) {
             console.log(event.log.reversal);
-        } else if (event.subscription.includes("issuing-invoice")) {
+        } else if (event.subscription.includes('issuing-invoice')) {
             console.log(event.log.reversal);
-        } else if (event.subscription.includes("issuing-embossing")) {
+        } else if (event.subscription.includes('issuing-embossing')) {
             console.log(event.log.reversal);
-        } else if (event.subscription.includes("issuing-purchase")) {
+        } else if (event.subscription.includes('issuing-purchase')) {
             console.log(event.log.reversal);
         res.end()
       }
@@ -1916,7 +1916,7 @@ const starkinfra = require('starkinfra');
 
 (async() => {
     const events = await starkinfra.event.query({
-        after: "2020-03-20",
+        after: '2020-03-20',
         isDelivered: false
     });
     for await (let event of events) {
@@ -1933,7 +1933,7 @@ You can get a specific webhook event by its id.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let event = await starkinfra.event.get("10827361982368179");
+    let event = await starkinfra.event.get('1082736198236819');
     console.log(event);
 })();
 ```
@@ -1946,7 +1946,7 @@ You can also delete a specific webhook event by its id.
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let event = await starkinfra.event.delete("10827361982368179");
+    let event = await starkinfra.event.delete('1082736198236817');
     console.log(event);
 })();
 ```
@@ -1955,13 +1955,13 @@ const starkinfra = require('starkinfra');
 
 This can be used in case you've lost events.
 With this function, you can manually set events retrieved from the API as
-"delivered" to help future event queries with `isDelivered=False`.
+'delivered' to help future event queries with `isDelivered=False`.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let event = await starkinfra.event.update('129837198237192', { isDelivered: true });
+    let event = await starkinfra.event.update('1298371982371921', { isDelivered: true });
     console.log(event);
 })();
 ```
@@ -1975,7 +1975,7 @@ const starkinfra = require('starkinfra');
 
 (async() => {
     const attempts = await starkinfra.event.attempt.query({
-        after: "2020-03-20",
+        after: '2020-03-20',
     });
     for await (let attempt of attempts) {
         console.log(attempt.code);

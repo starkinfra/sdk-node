@@ -1,4 +1,4 @@
-const rest = require("../utils/rest");
+const rest = require('../utils/rest');
 const check = require('../utils/check.js');
 const parse = require('../utils/parse.js');
 const Resource = require('../utils/resource.js').Resource;
@@ -15,10 +15,10 @@ class Event extends Resource {
      *
      * Attributes:
      * @param id [string]: unique id returned when the event is created. ex: '5656565656565656'
-     * @param log [Log]: a Log object from one the subscription services (Transfer Log, Boleto Log, BoletoHolmes Log, BoletoPayment Log, BrcodePayment Log, Deposit Log, Invoice Log or UtilityPayment Log)
+     * @param log [Log]: a Log object from one the subscription services (PixRequest Log, PixReversal Log)
      * @param created [string]: creation datetime for the notification event. ex: '2020-03-10 10:30:00.000'
      * @param delivered [string]: delivery datetime when the notification was delivered to the user url. Will be null if no successful attempts to deliver the event occurred. ex: '2020-03-10 10:30:00.000'
-     * @param subscription [string]: service that triggered this event. ex: 'transfer', 'utility-payment'
+     * @param subscription [string]: service that triggered this event. ex: 'pix-request.in', 'pix-request.out'
      * @param workspaceId [string]: ID of the Workspace that generated this event. Mostly used when multiple Workspaces have Webhooks registered to the same endpoint. ex: '4545454545454545'
      *
      */
@@ -95,7 +95,7 @@ exports.page = async function ({ cursor, limit, after, before, isDelivered, user
      * @param cursor [string, default null]: cursor returned on the previous page function call
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020, 3, 10'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020, 3, 10'
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param isDelivered [bool, default null]: bool to filter successfully delivered events. ex: true or false
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
@@ -123,7 +123,7 @@ exports.update = async function (id, { isDelivered, user } = {}) {
      * If isDelivered is true, the event will no longer be returned on queries with isDelivered=false.
      *
      * Parameters (required):
-     * @param id [list of strings]: Event unique ids. ex: "5656565656565656"
+     * @param id [list of strings]: Event unique ids. ex: '5656565656565656'
      * @param isDelivered [bool]: If True and event hasn't been delivered already, event will be set as delivered. ex: true
      *
      * Parameters (optional):

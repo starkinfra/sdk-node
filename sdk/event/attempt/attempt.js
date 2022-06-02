@@ -12,11 +12,11 @@ class Attempt extends Resource {
      * It carries information meant to help you debug event reception issues.
      *
      * Attributes:
-     * @param id [string]: unique id that identifies the delivery attempt. ex: "5656565656565656"
+     * @param id [string]: unique id that identifies the delivery attempt. ex: '5656565656565656'
      * @param code [string]: delivery error code. ex: badHttpStatus, badConnection, timeout
-     * @param message [string]: delivery error full description. ex: "HTTP POST request returned status 404"
-     * @param eventId [string]: ID of the Event whose delivery failed. ex: "4848484848484848"
-     * @param webhookId [string]: ID of the Webhook that triggered this event. ex: "5656565656565656"
+     * @param message [string]: delivery error full description. ex: 'HTTP POST request returned status 404'
+     * @param eventId [string]: ID of the Event whose delivery failed. ex: '4848484848484848'
+     * @param webhookId [string]: ID of the Webhook that triggered this event. ex: '5656565656565656'
      * @param created [string]: datetime representing the moment when the attempt was made. ex: '2020-03-10 10:30:00.000'
      *
      */
@@ -94,7 +94,7 @@ exports.page = async function ({ cursor, resource, limit, after, before, eventId
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-03-10'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
      * @param eventIds [list of strings, default []]: list of Event ids to filter attempts. ex: ['5656565656565656', '4545454545454545']

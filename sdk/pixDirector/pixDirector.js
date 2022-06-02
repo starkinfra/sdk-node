@@ -14,17 +14,17 @@ class PixDirector extends Resource {
      * to the Stark Infra API and returns the list of created objects.
      *
      * Parameters (required):
-     * @param name [string]: name of the PixDirector. ex: "Edward Stark".
-     * @param taxId [string]: tax ID (CPF/CNPJ) of the PixDirector. ex: "03.300.300/0001-00"
-     * @param phone [string]: phone of the PixDirector. ex: "+551198989898"
-     * @param email [string]: email of the PixDirector. ex: "ned.stark@starkbank.com"
-     * @param password [string]: password of the PixDirector. ex: "12345678"
-     * @param teamEmail [string]: team email. ex: "pix.team@company.com"
-     * @param teamPhones [list of strings]: list of phones of the team. ex: ["+5511988889999", "+5511988889998"]
+     * @param name [string]: name of the PixDirector. ex: 'Edward Stark'.
+     * @param taxId [string]: tax ID (CPF/CNPJ) of the PixDirector. ex: '03.300.300/0001-00'
+     * @param phone [string]: phone of the PixDirector. ex: '+551198989898'
+     * @param email [string]: email of the PixDirector. ex: 'ned.stark@starkbank.com'
+     * @param password [string]: password of the PixDirector. ex: '12345678'
+     * @param teamEmail [string]: team email. ex: 'pix.team@company.com'
+     * @param teamPhones [list of strings]: list of phones of the team. ex: ['+5511988889999', '+5511988889998']
      *
      * Attributes (return-only):
-     * @param id [string]: unique id returned when the PixDirector is created. ex: "5656565656565656"
-     * @param status [string]: current PixDirector status. ex: "success"
+     * @param id [string]: unique id returned when the PixDirector is created. ex: '5656565656565656'
+     * @param status [string]: current PixDirector status. ex: 'success'
      */
     constructor({ name, taxId, phone, email, password, teamEmail, teamPhones, id = null, status = null }) {
         super(id);

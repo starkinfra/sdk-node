@@ -15,14 +15,14 @@ class PixStatement extends Resource {
      * Parameters (required):
      * @param before [string]: transactions that happened at this date are stored in the PixStatement, must be the same as before. ex: '2020-03-10'
      * @param after [string]: transactions that happened at this date are stored in the PixStatement, must be the same as after. ex: '2020-03-10'
-     * @param type [string]: types of entities to include in statement. Options: ["interchange", "interchangeTotal", "transaction"]
+     * @param type [string]: types of entities to include in statement. Options: ['interchange', 'interchangeTotal', 'transaction']
      *
      * Attributes (return-only):
-     * @param id [string]: unique id returned when the PixStatement is created. ex: "5656565656565656"
-     * @param status [string]: current PixStatement status. ex: "success" or "failed"
+     * @param id [string]: unique id returned when the PixStatement is created. ex: '5656565656565656'
+     * @param status [string]: current PixStatement status. ex: 'success' or 'failed'
      * @param transactionCount [integer]: number of transactions that happened during the day that the PixStatement was requested. ex 11
-     * @param created [string]: creation datetime for the PixStatement. ex: "2020-03-10 10:30:00.000"
-     * @param updated [string]: latest update datetime for the PixStatement. ex: "2020-03-10 10:30:00.000"
+     * @param created [string]: creation datetime for the PixStatement. ex: '2020-03-10 10:30:00.000'
+     * @param updated [string]: latest update datetime for the PixStatement. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({
@@ -115,7 +115,7 @@ exports.page = async function ({ cursor, limit, ids, user} = {}) {
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *

@@ -1,4 +1,4 @@
-const SubResource = require("../utils/subResource").SubResource;
+const SubResource = require('../utils/subResource').SubResource;
 
 
 class Certificate extends SubResource {

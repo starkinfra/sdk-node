@@ -1,6 +1,6 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const {generateExamplePixKeyJson} = require("./utils/pixKey");
+const {generateExamplePixKeyJson} = require('./utils/pixKey');
 
 starkinfra.user = require('./utils/user').exampleProject;
 

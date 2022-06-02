@@ -14,14 +14,14 @@ class IssuingInvoice extends Resource {
      * @param amount [integer]: amount in cents to be transferred. ex: 11234 (= R$ 112.34)
      *
      * Parameters (optional):
-     * @param taxId [string, default null]: payer tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"
-     * @param name [string, default null]: payer name. ex: "Iron Bank S.A."
+     * @param taxId [string, default null]: payer tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
+     * @param name [string, default null]: payer name. ex: 'Iron Bank S.A.'
      * @param tags [array of strings, default []]: array of strings for tagging
      *
      * Attributes (return-only):
-     * @param id [string]: unique id returned when the IssuingInvoice is created. ex: "5656565656565656"
-     * @param status [string]: current IssuingInvoice status. ex: "created", "paid", "canceled" or "overdue"
-     * @param issuingTransactionId [string]: ledger transaction ids linked to this IssuingInvoice. ex: "issuing-invoice/5656565656565656"
+     * @param id [string]: unique id returned when the IssuingInvoice is created. ex: '5656565656565656'
+     * @param status [string]: current IssuingInvoice status. ex: 'created', 'paid', 'canceled' or 'overdue'
+     * @param issuingTransactionId [string]: ledger transaction ids linked to this IssuingInvoice. ex: 'issuing-invoice/5656565656565656'
      * @param created [string]: creation datetime for the IssuingInvoice. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the IssuingInvoice. ex: '2020-03-10 10:30:00.000'
      *
@@ -98,10 +98,10 @@ exports.query = async function ({ status, after, before, tags, limit, user } = {
      *
      * Parameters (optional):
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
-     * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: "2020-04-03"
-     * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: "2020-04-03"
-     * @param status [string, default null]: filter for status of retrieved objects. ex: "created", "paid", "canceled" or "overdue"
-     * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]
+     * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
+     * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
+     * @param status [string, default null]: filter for status of retrieved objects. ex: 'created', 'paid', 'canceled' or 'overdue'
+     * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -128,11 +128,11 @@ exports.page = async function ({ cursor, status, after, before, tags, limit, use
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
-     * @param after [string, default null] date filter for objects created only after specified date. ex: "2020-04-03"
-     * @param before [string, default null] date filter for objects created only before specified date. ex: "2020-04-03"
-     * @param status [string, default null]: filter for status of retrieved objects. ex: "created", "paid", "canceled" or "overdue"
-     * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
+     * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
+     * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
+     * @param status [string, default null]: filter for status of retrieved objects. ex: 'created', 'paid', 'canceled' or 'overdue'
+     * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:

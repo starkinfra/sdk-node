@@ -1,6 +1,6 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const {generateExamplePixClaimJson, getPixClaimToPatch} = require("./utils/pixClaim");
+const {generateExamplePixClaimJson, getPixClaimToPatch} = require('./utils/pixClaim');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -62,12 +62,12 @@ describe('TestPixClaimPatch', function(){
     this.timeout(10000);
     it('test_success', async () => {
         let pixClaim = await getPixClaimToPatch()
-        assert(pixClaim.status === "delivered");
+        assert(pixClaim.status === 'delivered');
         let updatedPixClaim = await starkinfra.pixClaim.update(
             pixClaim.id,
-            "canceled",
+            'canceled',
             {
-                reason: "userRequested",
+                reason: 'userRequested',
             }
         );
         assert(updatedPixClaim);

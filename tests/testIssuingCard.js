@@ -1,6 +1,6 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const {generateExampleCardJson} = require("./utils/issuingCard");
+const {generateExampleCardJson} = require('./utils/issuingCard');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -58,7 +58,7 @@ describe('TestIssuingCardPostAndDelete', function() {
                 card = await starkinfra.issuingCard.update(cardId, {'displayName': 'Updated Name'})
                 assert(card.displayName === 'Updated Name');
                 card = await starkinfra.issuingCard.cancel(cardId);
-                assert(card.status === "canceled");
+                assert(card.status === 'canceled');
             }
         }
     });

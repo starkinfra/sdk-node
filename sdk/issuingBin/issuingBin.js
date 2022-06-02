@@ -8,16 +8,16 @@ class IssuingBin extends Resource {
      *
      * IssuingBin object
      *
-     * @description The IssuingBin object displays the information of BINs registered to your Workspace.
+     * @description The IssuingBin object displays information of BINs registered to your Workspace.
      *
      * Attributes (return-only):
-     * @param id [string]: unique BIN number registered within the card network. ex: "53810200"
-     * @param network [string]: card network flag. ex: "mastercard"
-     * @param settlement [string]: settlement type. ex: "credit"
-     * @param category [string]: purchase category. ex: "prepaid"
-     * @param client [string]: client type. ex: "business"
-     * @param created [string]: creation datetime for the IssuingBin. ex: "2020-03-10 10:30:00.000"
-     * @param updated [string]: latest update datetime for the IssuingBin. ex: "2020-03-10 10:30:00.000"
+     * @param id [string]: unique BIN number registered within the card network. ex: '53810200'
+     * @param network [string]: card network flag. ex: 'mastercard'
+     * @param settlement [string]: settlement type. ex: 'credit'
+     * @param category [string]: purchase category. ex: 'prepaid'
+     * @param client [string]: client type. ex: 'business'
+     * @param created [string]: creation datetime for the IssuingBin. ex: '2020-03-10 10:30:00.000'
+     * @param updated [string]: latest update datetime for the IssuingBin. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({ id, updated, created, network, settlement, category, client }) {
@@ -65,7 +65,7 @@ exports.page = async function ({ cursor, limit, user} = {}) {
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:

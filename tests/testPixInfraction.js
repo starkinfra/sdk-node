@@ -1,7 +1,7 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
 const endToEndId = require('./utils/endToEndId.js');
-const {getPixInfractionToPatch} = require("./utils/pixInfraction");
+const {getPixInfractionToPatch} = require('./utils/pixInfraction');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -102,8 +102,8 @@ describe('TestPixInfractionPatch', function() {
     it('test_success', async () => {
         let pixInfraction = await getPixInfractionToPatch();
         assert(pixInfraction.status === 'created');
-        pixInfraction = await starkinfra.pixInfraction.update(pixInfraction.id, "agreed")
-        assert(pixInfraction.status === "agreed");
+        pixInfraction = await starkinfra.pixInfraction.update(pixInfraction.id, 'agreed')
+        assert(pixInfraction.status === 'agreed');
     });
 });
 
@@ -113,7 +113,7 @@ generateExamplePixInfractionJson = async function(n=1) {
     for (let id of endToEndIds) {
         pixInfractions.push({
             referenceId: id,
-            type: "fraud",
+            type: 'fraud',
         })
     }
     return pixInfractions;

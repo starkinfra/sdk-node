@@ -1,6 +1,6 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const {generateExampleHolderJson} = require("./utils/issuingHolder");
+const {generateExampleHolderJson} = require('./utils/issuingHolder');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -55,7 +55,7 @@ describe('TestIssuingHolderPostAndDelete', function() {
             holder = await starkinfra.issuingHolder.update(holderId, {'name': 'Updated Name'})
             assert(holder.name === 'Updated Name');
             holder = await starkinfra.issuingHolder.cancel(holderId);
-            assert(holder.status === "canceled");
+            assert(holder.status === 'canceled');
         }
     });
 });

@@ -10,7 +10,7 @@ class Discount extends SubResource {
      *
      * Parameters (required):
      * @param percentage [integer]: discount percentage that will be applied. ex: 2.5
-     * @param due [string]: Date after when the discount will be overdue in UTC ISO format. ex: "2020-11-25T17:59:26.249976+00:00"
+     * @param due [string]: Date after when the discount will be overdue in UTC ISO format. ex: '2020-11-25T17:59:26.249976+00:00'
      *
      */
     constructor({ percentage, due }) {
