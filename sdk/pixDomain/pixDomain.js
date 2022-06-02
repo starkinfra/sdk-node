@@ -1,9 +1,9 @@
 const rest = require('../utils/rest.js');
-const api = require("../utils/api");
-const {Certificate} = require("./certificate");
+const api = require('../utils/api');
+const {Certificate} = require('./certificate');
 const certificateResource = require('./certificate.js').subResource;
-const {parseObjects} = require("../utils/parse");
-const SubResource = require("../utils/subResource").SubResource;
+const {parseObjects} = require('../utils/parse');
+const SubResource = require('../utils/subResource').SubResource;
 
 
 class PixDomain extends SubResource {

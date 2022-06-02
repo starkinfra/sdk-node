@@ -15,24 +15,24 @@ class PixInfraction extends Resource {
      * to the Stark Infra API and returns the created object.
      *
      * Parameters (required):
-     * @param referenceId [string]: endToEndId or returnId of the transaction being reported. ex: "E20018183202201201450u34sDGd19lz"
-     * @param type [string]: type of infraction report. Options: "fraud", "reversal", "reversalChargeback"
+     * @param referenceId [string]: endToEndId or returnId of the transaction being reported. ex: 'E20018183202201201450u34sDGd19lz'
+     * @param type [string]: type of infraction report. Options: 'fraud', 'reversal', 'reversalChargeback'
      *
      * Parameters (optional):
      * @param description [string, default null]: description for any details that can help with the infraction investigation.
      *
      * Attributes (return-only):
-     * @param id [string]: unique id returned when the PixInfraction is created. ex: "5656565656565656"
-     * @param creditedBankCode [string]: bankCode of the credited Pix participant in the reported transaction. ex: "20018183"
-     * @param debitedBankCode [string]: bankCode of the debited Pix participant in the reported transaction. ex: "20018183"
-     * @param agent [string]: Options: "reporter" if you created the PixInfraction, "reported" if you received the PixInfraction.
+     * @param id [string]: unique id returned when the PixInfraction is created. ex: '5656565656565656'
+     * @param creditedBankCode [string]: bankCode of the credited Pix participant in the reported transaction. ex: '20018183'
+     * @param debitedBankCode [string]: bankCode of the debited Pix participant in the reported transaction. ex: '20018183'
+     * @param agent [string]: Options: 'reporter' if you created the PixInfraction, 'reported' if you received the PixInfraction.
      * @param analysis [string]: analysis that led to the result.
      * @param bacenId [string]: central bank's unique UUID that identifies the infraction report.
-     * @param reportedBy [string]: agent that reported the PixInfraction. Options: "debited", "credited".
-     * @param result [string]: result after the analysis of the PixInfraction by the receiving party. Options: "agreed", "disagreed"
-     * @param status [string]: current PixInfraction status. Options: "created", "failed", "delivered", "closed", "canceled".
-     * @param created [string]: creation datetime for the PixInfraction. ex: "2020-03-10 10:30:00.000"
-     * @param updated [string]: latest update datetime for the PixInfraction. ex: "2020-03-10 10:30:00.000"
+     * @param reportedBy [string]: agent that reported the PixInfraction. Options: 'debited', 'credited'.
+     * @param result [string]: result after the analysis of the PixInfraction by the receiving party. Options: 'agreed', 'disagreed'
+     * @param status [string]: current PixInfraction status. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
+     * @param created [string]: creation datetime for the PixInfraction. ex: '2020-03-10 10:30:00.000'
+     * @param updated [string]: latest update datetime for the PixInfraction. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({
@@ -112,9 +112,9 @@ exports.query = async function ({ limit, after, before, status, ids, type, user 
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
      * @param after [string, default null]: date filter for objects created after a specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: "created", "failed", "delivered", "closed", "canceled".
-     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-     * @param type [list of strings, default null]: filter for the type of retrieved PixInfractions. Options: "fraud", "reversal", "reversalChargeback"
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
+     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+     * @param type [list of strings, default null]: filter for the type of retrieved PixInfractions. Options: 'fraud', 'reversal', 'reversalChargeback'
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -142,12 +142,12 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, type
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null]: date filter for objects created after a specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: "created", "failed", "delivered", "closed", "canceled".
-     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-     * @param type [list of strings, default null]: filter for the type of retrieved PixInfractions. Options: "fraud", "reversal", "reversalChargeback"
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
+     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+     * @param type [list of strings, default null]: filter for the type of retrieved PixInfractions. Options: 'fraud', 'reversal', 'reversalChargeback'
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -185,8 +185,8 @@ exports.update = async function ( id, result, { analysis, user } = {}) {
      *
      */
     let payload = {
-        "result": result,
-        "analysis": analysis,
+        'result': result,
+        'analysis': analysis,
     };
     return rest.patchId(resource, id, payload, user);
 };

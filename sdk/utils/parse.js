@@ -2,14 +2,14 @@ const starkinfra = require('../../index.js');
 const Ellipticcurve = require('starkbank-ecdsa');
 const rest = require('../utils/rest.js');
 const error = require('../error.js');
-const api = require("./api");
+const api = require('./api');
+
 
 exports.parseOptionalObjects = function (objects, resource, resourceClass) {
     if (objects == null)
-        return [];
+        return null;
     return exports.parseObjects(objects, resource, resourceClass);
 }
-
 
 exports.parseObjects = function (objects, resource, resourceClass) {
     let parsedObjects = [];
@@ -27,7 +27,7 @@ exports.parseObjects = function (objects, resource, resourceClass) {
 exports.parseAndVerify = async function (resource, content, signature, user = null) {
 
     let object = Object.assign(new resource['class'](api.lastName(resource['name'])), JSON.parse(content))
-    if (resource['name'] === "Event"){
+    if (resource['name'] === 'Event'){
         object = Object.assign(new resource['class'](), JSON.parse(content)['event']);
     }
 

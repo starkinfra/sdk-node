@@ -20,7 +20,7 @@ exports.futureDate = function (number) {
 exports.futureDateTime = function (number) {
     let date = new Date();
     date.setDate(date.getDate() + number);
-    return date.toISOString().replace("Z", "+00:00");
+    return date.toISOString().replace('Z', '+00:00');
 }
 
 exports.randomDatetimeBetween = function (after, before) {
@@ -33,7 +33,7 @@ exports.randomDatetimeBetween = function (after, before) {
     }
     let delta = Math.abs(before - after);
     let date = new Date(after.getTime() + this.randomInt(0, delta));
-    return date.toISOString().replace("Z", "+00:00");
+    return date.toISOString().replace('Z', '+00:00');
 }
 
 exports.randomDateBetweenTwoDates =  function (start, end) {

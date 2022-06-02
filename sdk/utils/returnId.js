@@ -1,6 +1,6 @@
-const {bacenId} = require("../../index");
+const {bacenId} = require('../../index');
 
 
 exports.create = function (bankCode) {
-    return "D" + bacenId.create(bankCode);
+    return 'D' + bacenId.create(bankCode);
 }

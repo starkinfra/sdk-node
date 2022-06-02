@@ -14,24 +14,24 @@ class PixClaim extends Resource {
      * to the Stark Infra API and returns the created object.
      *
      * Parameters (required):
-     * @param accountCreated [string]: opening Date or DateTime for the account claiming the PixKey. ex: "2022-01-01".
-     * @param accountNumber [string]: number of the account claiming the PixKey. ex: "76543".
-     * @param accountType [string]: type of the account claiming the PixKey. Options: "checking", "savings", "salary" or "payment".
-     * @param branchCode [string]: branch code of the account claiming the PixKey. ex: 1234".
-     * @param name [string]: holder's name of the account claiming the PixKey. ex: "Jamie Lannister".
-     * @param taxId [string]: holder's taxId of the account claiming the PixKey (CPF/CNPJ). ex: "012.345.678-90".
-     * @param keyId [string]: id of the registered Pix Key to be claimed. Allowed keyTypes are CPF, CNPJ, phone number or email. ex: "+5511989898989".
+     * @param accountCreated [string]: opening Date or DateTime for the account claiming the PixKey. ex: '2022-01-01'.
+     * @param accountNumber [string]: number of the account claiming the PixKey. ex: '76543'.
+     * @param accountType [string]: type of the account claiming the PixKey. Options: 'checking', 'savings', 'salary' or 'payment'.
+     * @param branchCode [string]: branch code of the account claiming the PixKey. ex: 1234'.
+     * @param name [string]: holder's name of the account claiming the PixKey. ex: 'Jamie Lannister'.
+     * @param taxId [string]: holder's taxId of the account claiming the PixKey (CPF/CNPJ). ex: '012.345.678-90'.
+     * @param keyId [string]: id of the registered Pix Key to be claimed. Allowed keyTypes are CPF, CNPJ, phone number or email. ex: '+5511989898989'.
      *
      * Attributes (return-only):
-     * @param id [string]: unique id returned when the PixClaim is created. ex: "5656565656565656"
-     * @param status [string]: current PixClaim status. Options: "created", "failed", "delivered", "confirmed", "success", "canceled"
-     * @param type [string]: type of Pix Claim. Options: "ownership", "portability".
-     * @param keyType [string]: keyType of the claimed PixKey. Options: "CPF", "CNPJ", "phone" or "email"
-     * @param agent [string]: Options: "claimer" if you requested the PixClaim or "claimed" if you received a PixClaim request.
-     * @param bankCode [string]: bankCode of the account linked to the PixKey being claimed. ex: "20018183".
-     * @param claimedBankCode [string]: bankCode of the account donating the PixKey. ex: "20018183".
-     * @param created [string]: creation datetime for the PixClaim. ex: "2020-03-10 10:30:00.000"
-     * @param updated [string]: latest update datetime for the PixClaim. ex: "2020-03-10 10:30:00.000"
+     * @param id [string]: unique id returned when the PixClaim is created. ex: '5656565656565656'
+     * @param status [string]: current PixClaim status. Options: 'created', 'failed', 'delivered', 'confirmed', 'success', 'canceled'
+     * @param type [string]: type of Pix Claim. Options: 'ownership', 'portability'.
+     * @param keyType [string]: keyType of the claimed PixKey. Options: 'CPF', 'CNPJ', 'phone' or 'email'
+     * @param agent [string]: Options: 'claimer' if you requested the PixClaim or 'claimed' if you received a PixClaim request.
+     * @param bankCode [string]: bankCode of the account linked to the PixKey being claimed. ex: '20018183'.
+     * @param claimedBankCode [string]: bankCode of the account donating the PixKey. ex: '20018183'.
+     * @param created [string]: creation datetime for the PixClaim. ex: '2020-03-10 10:30:00.000'
+     * @param updated [string]: latest update datetime for the PixClaim. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({
@@ -113,12 +113,12 @@ exports.query = async function ({ limit, after, before, status, ids, type, agent
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
      * @param after [string, default null]: date filter for objects created after a specified date. ex: '2020, 3, 10'
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020, 3, 10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: "created", "failed", "delivered", "confirmed", "success", "canceled"
-     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-     * @param type [strings, default null]: filter for the type of retrieved PixClaims. Options: "ownership" or "portability".
-     * @param agent [string, default null]: filter for the agent of retrieved PixClaims. Options: "claimer" or "claimed".
-     * @param keyType [string, default null]: filter for the PixKey type of retrieved PixClaims. Options: "cpf", "cnpj", "phone", "email" and "evp",
-     * @param keyId [string, default null]: filter PixClaims linked to a specific PixKey id. Example: "+5511989898989".
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'confirmed', 'success', 'canceled'
+     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+     * @param type [strings, default null]: filter for the type of retrieved PixClaims. Options: 'ownership' or 'portability'.
+     * @param agent [string, default null]: filter for the agent of retrieved PixClaims. Options: 'claimer' or 'claimed'.
+     * @param keyType [string, default null]: filter for the PixKey type of retrieved PixClaims. Options: 'cpf', 'cnpj', 'phone', 'email' and 'evp',
+     * @param keyId [string, default null]: filter PixClaims linked to a specific PixKey id. Example: '+5511989898989'.
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -149,15 +149,15 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, type
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call.
-     * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null]: date filter for objects created after a specified date. ex: '2020, 3, 10'
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020, 3, 10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: "created", "failed", "delivered", "confirmed", "success", "canceled"
-     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-     * @param type [strings, default null]: filter for the type of retrieved PixClaims. Options: "ownership" or "portability".
-     * @param agent [string, default null]: filter for the agent of retrieved PixClaims. Options: "claimer" or "claimed".
-     * @param keyType [string, default null]: filter for the PixKey type of retrieved PixClaims. Options: "cpf", "cnpj", "phone", "email" and "evp",
-     * @param keyId [string, default null]: filter PixClaims linked to a specific PixKey id. Example: "+5511989898989".
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'confirmed', 'success', 'canceled'
+     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+     * @param type [strings, default null]: filter for the type of retrieved PixClaims. Options: 'ownership' or 'portability'.
+     * @param agent [string, default null]: filter for the agent of retrieved PixClaims. Options: 'claimer' or 'claimed'.
+     * @param keyType [string, default null]: filter for the PixKey type of retrieved PixClaims. Options: 'cpf', 'cnpj', 'phone', 'email' and 'evp',
+     * @param keyId [string, default null]: filter PixClaims linked to a specific PixKey id. Example: '+5511989898989'.
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -188,10 +188,10 @@ exports.update = async function ( id, status, { reason, user } = {}) {
      *
      * Parameters (required):
      * @param id [string]: PixClaim id. ex: '5656565656565656'
-     * @param status [string]: patched status for Pix Claim. Options: "confirmed" and "canceled"
+     * @param status [string]: patched status for Pix Claim. Options: 'confirmed' and 'canceled'
      *
      * Parameters (optional):
-     * @param reason [string, default: "userRequested"]: reason why the PixClaim is being patched. Options: "fraud", "userRequested", "accountClosure".
+     * @param reason [string, default: 'userRequested']: reason why the PixClaim is being patched. Options: 'fraud', 'userRequested', 'accountClosure'.
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -199,8 +199,8 @@ exports.update = async function ( id, status, { reason, user } = {}) {
      *
      */
     let payload = {
-        "status": status,
-        "reason": reason,
+        'status': status,
+        'reason': reason,
     };
     return rest.patchId(resource, id, payload, user);
 };

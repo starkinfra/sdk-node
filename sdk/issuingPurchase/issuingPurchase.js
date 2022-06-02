@@ -11,31 +11,31 @@ class IssuingPurchase extends Resource {
      * @description Displays the IssuingPurchase objects created in your Workspace.
      *
      * Attributes (return-only):
-     * @param id [string]: unique id returned when IssuingPurchase is created. ex: "5656565656565656"
-     * @param holderName [string]: cardholder's name. ex: "Tony Stark"
-     * @param cardId [string]: unique id returned when IssuingCard is created. ex: "5656565656565656"
-     * @param cardEnding [string]: last 4 digits of the card number. ex: "1234"
+     * @param id [string]: unique id returned when IssuingPurchase is created. ex: '5656565656565656'
+     * @param holderName [string]: cardholder's name. ex: 'Tony Stark'
+     * @param cardId [string]: unique id returned when IssuingCard is created. ex: '5656565656565656'
+     * @param cardEnding [string]: last 4 digits of the card number. ex: '1234'
      * @param amount [integer]: IssuingPurchase value in cents. Minimum = 0. ex: 1234 (= R$ 12.34)
      * @param tax [integer]: IOF amount taxed for international purchases. ex: 1234 (= R$ 12.34)
      * @param issuerAmount [integer]: issuer amount. ex: 1234 (= R$ 12.34)
-     * @param issuerCurrencyCode [string]: issuer currency code. ex: "USD"
-     * @param issuerCurrencySymbol [string]: issuer currency symbol. ex: "$"
+     * @param issuerCurrencyCode [string]: issuer currency code. ex: 'USD'
+     * @param issuerCurrencySymbol [string]: issuer currency symbol. ex: '$'
      * @param merchantAmount [integer]: merchant amount. ex: 1234 (= R$ 12.34)
-     * @param merchantCurrencyCode [string]: merchant currency code. ex: "USD"
-     * @param merchantCurrencySymbol [string]: merchant currency symbol. ex: "$"
-     * @param merchantCategoryCode [string]: merchant category code. ex: "eatingPlacesRestaurants"
-     * @param merchantCountryCode [string]: merchant country code. ex: "USA"
-     * @param acquirerId [string]: acquirer ID. ex: "5656565656565656"
-     * @param merchantId [string]: merchant ID. ex: "5656565656565656"
-     * @param merchantName [string]: merchant name. ex: "Google Cloud Platform"
+     * @param merchantCurrencyCode [string]: merchant currency code. ex: 'USD'
+     * @param merchantCurrencySymbol [string]: merchant currency symbol. ex: '$'
+     * @param merchantCategoryCode [string]: merchant category code. ex: 'eatingPlacesRestaurants'
+     * @param merchantCountryCode [string]: merchant country code. ex: 'USA'
+     * @param acquirerId [string]: acquirer ID. ex: '5656565656565656'
+     * @param merchantId [string]: merchant ID. ex: '5656565656565656'
+     * @param merchantName [string]: merchant name. ex: 'Google Cloud Platform'
      * @param merchantFee [integer]: fee charged by the merchant to cover specific costs, such as ATM withdrawal logistics, etc. ex: 200 (= R$ 2.00)
-     * @param walletId [string]: virtual wallet ID. ex: "5656565656565656"
-     * @param methodCode [string]: method code. ex: "chip", "token", "server", "manual", "magstripe" or "contactless"
+     * @param walletId [string]: virtual wallet ID. ex: '5656565656565656'
+     * @param methodCode [string]: method code. ex: 'chip', 'token', 'server', 'manual', 'magstripe' or 'contactless'
      * @param score [float]: internal score calculated for the authenticity of the purchase. ex: 7.6
      * @param issuingTransactionIds [string]: ledger transaction ids linked to this Purchase
-     * @param endToEndId [string]: Unique id used to identify the transaction through all of its life cycle, even before the purchase is denied or accepted and gets its usual id. Example: endToEndId="679cd385-642b-49d0-96b7-89491e1249a5"
-     * @param status [string]: current IssuingCard status. ex: "approved", "canceled", "denied", "confirmed" or "voided"
-     * @param tags [string]: list of strings for tagging. ex: ["travel", "food"]
+     * @param endToEndId [string]: Unique id used to identify the transaction through all of its life cycle, even before the purchase is denied or accepted and gets its usual id. Example: endToEndId='679cd385-642b-49d0-96b7-89491e1249a5'
+     * @param status [string]: current IssuingCard status. ex: 'approved', 'canceled', 'denied', 'confirmed' or 'voided'
+     * @param tags [string]: list of strings for tagging. ex: ['travel', 'food']
      * @param created [string]: creation datetime for the IssuingPurchase. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the IssuingPurchase. ex: '2020-03-10 10:30:00.000'
      *
@@ -106,15 +106,15 @@ exports.query = async function ({ ids, cardIds, holderIds, endToEndIds, limit, t
      * @description Receive a generator of IssuingPurchase objects previously created in the Stark Infra API
      *
      * Parameters (optional):
-     * @param endToEndIds [list of strings, default []]: central bank's unique transaction ID. ex: "E79457883202101262140HHX553UPqeq"
-     * @param holderIds [list of strings, default []]: cardholder IDs. ex: ["5656565656565656", "4545454545454545"]
-     * @param cardIds [list of strings, default []]: card  IDs. ex: ["5656565656565656", "4545454545454545"]
-     * @param status [string, default null]: filter for status of retrieved objects. ex: "approved", "canceled", "denied", "confirmed" or "voided"
-     * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: "2020-04-03"
-     * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: "2020-04-03"
+     * @param endToEndIds [list of strings, default []]: central bank's unique transaction ID. ex: 'E79457883202101262140HHX553UPqeq'
+     * @param holderIds [list of strings, default []]: cardholder IDs. ex: ['5656565656565656', '4545454545454545']
+     * @param cardIds [list of strings, default []]: card  IDs. ex: ['5656565656565656', '4545454545454545']
+     * @param status [string, default null]: filter for status of retrieved objects. ex: 'approved', 'canceled', 'denied', 'confirmed' or 'voided'
+     * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
+     * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
      * @param ids [list of strings, default [], default null]: purchase IDs
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
-     * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]
+     * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -145,15 +145,15 @@ exports.page = async function ({ cursor, ids, cardIds, holderIds, endToEndIds, l
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param endToEndIds [list of strings, default []]: central bank's unique transaction ID. ex: "E79457883202101262140HHX553UPqeq"
-     * @param holderIds [list of strings, default []]: cardholder IDs. ex: ["5656565656565656", "4545454545454545"]
-     * @param cardIds [list of strings, default []]: card  IDs. ex: ["5656565656565656", "4545454545454545"]
-     * @param status [string, default null]: filter for status of retrieved objects. ex: "approved", "canceled", "denied", "confirmed" or "voided"
-     * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: "2020-04-03"
-     * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: "2020-04-03"
+     * @param endToEndIds [list of strings, default []]: central bank's unique transaction ID. ex: 'E79457883202101262140HHX553UPqeq'
+     * @param holderIds [list of strings, default []]: cardholder IDs. ex: ['5656565656565656', '4545454545454545']
+     * @param cardIds [list of strings, default []]: card  IDs. ex: ['5656565656565656', '4545454545454545']
+     * @param status [string, default null]: filter for status of retrieved objects. ex: 'approved', 'canceled', 'denied', 'confirmed' or 'voided'
+     * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
+     * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
      * @param ids [list of strings, default [], default null]: purchase IDs
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
-     * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ["tony", "stark"]
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
+     * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
