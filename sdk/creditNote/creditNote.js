@@ -2,9 +2,9 @@ const rest = require('../utils/rest.js');
 const check = require('../utils/check.js');
 const parse = require('../utils/parse.js');
 const {Signer} = require('./signer.js');
-const {Invoice} = require("./invoice/invoice.js");
+const {Invoice} = require('./invoice/invoice.js');
 const {Transfer} = require('./transfer.js');
-const {parseObjects} = require("../utils/parse");
+const {parseObjects} = require('../utils/parse');
 const invoiceResource = require('./invoice/invoice.js').resource;
 const signerResource = require('./signer.js').subResource;
 const transferResource = require('./transfer.js').resource;
@@ -30,6 +30,12 @@ class CreditNote extends Resource {
      * @param payment [CreditNote.Transfer object]: payment entity to be created and sent to the credit receiver. ex: payment=creditNote.Transfer()
      * @param signers [list of CreditNote.Signer objects or dictionaries]: The Signer object contains the name and email of the signer and the method of delivery. ex: signers=[{'name': 'Tony Stark', 'contact': 'tony@starkindustries.com', 'method': 'link'}]
      * @param externalId [string]: url safe string that must be unique among all your CreditNotes. ex: externalId='my-internal-id-123456'
+     * @param streetLine1 [string]: credit receiver main address. ex: "Av. Paulista, 200"
+     * @param streetLine2 [string]: credit receiver address complement. ex: "Apto. 123"
+     * @param district [string]: credit receiver address district / neighbourhood. ex: "Bela Vista"
+     * @param city [string]: credit receiver address city. ex: "Rio de Janeiro"
+     * @param stateCode [string]: credit receiver address state. ex: "GO"
+     * @param zipCode [string]: credit receiver address zip code. ex: "01311-200"
      *
      * Parameters (conditionally required):
      * @param paymentType [string]: payment type, inferred from the payment parameter if it is not a dictionary. ex: 'transfer'
@@ -42,10 +48,10 @@ class CreditNote extends Resource {
      * @param id [string]: unique id returned when the CreditNote is created. ex: '5656565656565656'
      * @param amount [integer]: CreditNote value in cents. ex: 1234 (= R$ 12.34)
      * @param expiration [integer]: time interval in seconds between due date and expiration date. ex 123456789
-     * @param documentId [string]: ID of the signed document to execute this CreditNote. ex: "4545454545454545"
-     * @param status [string]: current status of the CreditNote. ex: "canceled", "created", "expired", "failed", "processing", "signed", "success"
-     * @param transactionIds [list of strings]: ledger transaction ids linked to this CreditNote. ex: ["19827356981273"]
-     * @param workspaceId [string]: ID of the Workspace that generated this CreditNote. ex: "4545454545454545"
+     * @param documentId [string]: ID of the signed document to execute this CreditNote. ex: '4545454545454545'
+     * @param status [string]: current status of the CreditNote. ex: 'canceled', 'created', 'expired', 'failed', 'processing', 'signed', 'success'
+     * @param transactionIds [list of strings]: ledger transaction ids linked to this CreditNote. ex: ['19827356981273']
+     * @param workspaceId [string]: ID of the Workspace that generated this CreditNote. ex: '4545454545454545'
      * @param taxAmount [integer]: tax amount included in the CreditNote. ex: 100
      * @param interest [float]: yearly effective interest rate of the credit note, in percentage. ex: 12.5
      * @param created [string]: creation datetime for the CreditNote. ex: '2020-03-10 10:30:00.000'
@@ -53,8 +59,9 @@ class CreditNote extends Resource {
      */
     constructor({
                     templateId, name, taxId, nominalAmount, scheduled, invoices, payment, paymentType, signers,
-                    externalId, rebateAmount, tags, interest, expiration, amount, documentId, status, transactionIds,
-                    workspaceId, taxAmount, created, updated, id
+                    externalId, streetLine2, streetLine1, district, city, stateCode, zipCode, rebateAmount, tags,
+                    interest, expiration, amount, documentId, status, transactionIds, workspaceId, taxAmount, created,
+                    updated, id
                 }) {
         super(id);
         this.templateId = templateId;
@@ -65,6 +72,12 @@ class CreditNote extends Resource {
         this.invoices = parseObjects(invoices, invoiceResource, Invoice);
         this.signers = parseObjects(signers, signerResource, Signer);
         this.externalId = externalId;
+        this.streetLine1 = streetLine1;
+        this.streetLine2 = streetLine2;
+        this.district = district;
+        this.city = city;
+        this.stateCode = stateCode;
+        this.zipCode = zipCode;
         this.rebateAmount = rebateAmount;
         this.tags = tags;
         this.amount = amount;
@@ -190,7 +203,7 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null]: date filter for objects created or updated only after specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created or updated only before specified date. ex: '2020-03-10'
      * @param status [array of strings, default null]: filter for status of retrieved objects. ex: 'success' or 'failed'

@@ -16,7 +16,7 @@ class Webhook extends Resource {
          * @param subscriptions [list of strings]: list of any non-empty combination of the available services. ex: ['contract', 'credit-note', 'signer', 'issuing-card', 'issuing-invoice', 'issuing-purchase', 'pix-request.in', 'pix-request.out', 'pix-reversal.in', 'pix-reversal.out', 'pix-claim', 'pix-key', 'pix-chargeback', 'pix-infraction']
          *
          * Attributes:
-         * @param id [string, default null]: unique id returned when the webhook is created. ex: '5656565656565656'
+         * @param id [string]: unique id returned when the webhook is created. ex: '5656565656565656'
          *
          */
         super(id);
@@ -104,7 +104,7 @@ exports.page = async function ({ cursor = null, limit = null, user = null } = {}
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param user [Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:

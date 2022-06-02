@@ -9,8 +9,8 @@ class Description extends SubResource {
      * @description Used to define a description in the Invoice.
      *
      * Parameters (required):
-     * @param key [string]: key describing a part of the invoice value. ex: "Taxes"
-     * @param value [string]: value to which the key refers to. ex: "120"
+     * @param key [string]: key describing a part of the invoice value. ex: 'Taxes'
+     * @param value [string]: value to which the key refers to. ex: '120'
      *
      */
     constructor({ key, value }) {

@@ -1,7 +1,7 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const {bankCode} = require("./utils/user");
-const {generateExamplePixChargebackJson, getPixChargebackToPatch} = require("./utils/pixChargeback");
+const {bankCode} = require('./utils/user');
+const {generateExamplePixChargebackJson, getPixChargebackToPatch} = require('./utils/pixChargeback');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -70,6 +70,6 @@ describe('TestPixChargebackPatch', function(){
             'accepted',
             { reversalReferenceId: starkinfra.returnId.create(bankCode)}
         );
-        assert(updatedPixChargeback.result === "agreed");
+        assert(updatedPixChargeback.result === 'agreed');
     });
 });

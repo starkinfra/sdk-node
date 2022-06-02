@@ -1,7 +1,7 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
 const {templateId} = require('./utils/user');
-const {bacenId} = require("../index");
+const {bacenId} = require('../index');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -134,7 +134,7 @@ let exampleCreditNote = {
     name: 'Jamie Lannister',
     taxId: '012.345.678-90',
     nominalAmount: 100000,
-    scheduled: '2022-05-28',
+    scheduled: '2023-05-28',
     invoices: [
         new starkinfra.creditNote.Invoice({
             due: '2023-06-25',
@@ -159,5 +159,11 @@ let exampleCreditNote = {
             method: 'link'
         }
     ],
-    externalId: bacenId.create("12345678")
+    externalId: bacenId.create('12345678'),
+    streetLine1: "Rua ABC",
+    streetLine2: "Ap 123",
+    district: "Jardim Paulista",
+    city: "São Paulo",
+    stateCode: "SP",
+    zipCode: "01234-567"
 }

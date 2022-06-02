@@ -63,7 +63,7 @@ exports.query = async function ({ ids, limit, after, before, types, cardIds, use
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-03-10'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
-     * @param types [list of strings, default null]: filter retrieved objects by types. ex: ["registered", "paid"]
+     * @param types [list of strings, default null]: filter retrieved objects by types. ex: ['registered', 'paid']
      * @param cardIds [list of strings, default []]: list of IssuingCard ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
@@ -93,10 +93,10 @@ exports.page = async function ({ cursor, ids, limit, after, before, types, cardI
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
      * @param ids [list of string, default []]: list of Log ids to filter. ex: ['5656565656565656', '4545454545454545']
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-03-10'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
-     * @param types [list of strings, default null]: filter retrieved objects by types. ex: ["registered", "paid"]
+     * @param types [list of strings, default null]: filter retrieved objects by types. ex: ['registered', 'paid']
      * @param cardIds [list of strings, default []]: list of IssuingCard ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *

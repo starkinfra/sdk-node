@@ -1,7 +1,7 @@
 const SubResource = require('./subResource.js').SubResource
 
 
-function decamelize(str, separator="-") {
+function decamelize(str, separator='-') {
     return str
         .replace(/([a-z\d])([A-Z])/g, '$1' + separator + '$2')
         .replace(/([A-Z]+)([A-Z][a-z\d]+)/g, '$1' + separator + '$2')
@@ -24,10 +24,10 @@ exports.lastName = function (resource) {
 
 exports.lastPlural = function (resource) {
     lastName = exports.lastName(resource, true);
-    if (lastName.endsWith("s")) {
+    if (lastName.endsWith('s')) {
         return lastName;
     }
-    if (lastName.endsWith("y") && !lastName.endsWith("ey")) {
+    if (lastName.endsWith('y') && !lastName.endsWith('ey')) {
         return `${lastName.slice(0, -1)}ies`;
     }
     return `${lastName}s`;

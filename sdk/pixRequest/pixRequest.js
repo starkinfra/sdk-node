@@ -15,39 +15,39 @@ class PixRequest extends Resource {
      *
      * Parameters (required):
      * @param amount [integer]: amount in cents to be transferred. ex: 11234 (= R$ 112.34)
-     * @param externalId [string]: url safe string that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: "my-internal-id-123456"
-     * @param senderName [string]: sender's full name. ex: "Anthony Edward Stark"
-     * @param senderTaxId [string]: sender's tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"
-     * @param senderBranchCode [string]: sender's bank account branch code. Use '-' in case there is a verifier digit. ex: "1357-9"
-     * @param senderAccountNumber [string]: sender's bank account number. Use '-' before the verifier digit. ex: "876543-2"
-     * @param senderAccountType [string]: sender's bank account type. ex: "checking", "savings", "salary" or "payment"
-     * @param receiverName [string]: receiver's full name. ex: "Anthony Edward Stark"
-     * @param receiverTaxId [string]: receiver's tax ID (CPF or CNPJ) with or without formatting. ex: "01234567890" or "20.018.183/0001-80"
-     * @param receiverBankCode [string]: receiver's bank institution code in Brazil. ex: "20018183" or "341"
-     * @param receiverAccountNumber [string]: receiver's bank account number. Use '-' before the verifier digit. ex: "876543-2"
-     * @param receiverBranchCode [string]: receiver's bank account branch code. Use '-' in case there is a verifier digit. ex: "1357-9"
-     * @param receiverAccountType [string]: receiver's bank account type. ex: "checking", "savings", "salary" or "payment"
-     * @param endToEndId [string]: central bank's unique transaction ID. ex: "E79457883202101262140HHX553UPqeq"
+     * @param externalId [string]: url safe string that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: 'my-internal-id-123456'
+     * @param senderName [string]: sender's full name. ex: 'Anthony Edward Stark'
+     * @param senderTaxId [string]: sender's tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
+     * @param senderBranchCode [string]: sender's bank account branch code. Use '-' in case there is a verifier digit. ex: '1357-9'
+     * @param senderAccountNumber [string]: sender's bank account number. Use '-' before the verifier digit. ex: '876543-2'
+     * @param senderAccountType [string]: sender's bank account type. ex: 'checking', 'savings', 'salary' or 'payment'
+     * @param receiverName [string]: receiver's full name. ex: 'Anthony Edward Stark'
+     * @param receiverTaxId [string]: receiver's tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
+     * @param receiverBankCode [string]: receiver's bank institution code in Brazil. ex: '20018183' or '341'
+     * @param receiverAccountNumber [string]: receiver's bank account number. Use '-' before the verifier digit. ex: '876543-2'
+     * @param receiverBranchCode [string]: receiver's bank account branch code. Use '-' in case there is a verifier digit. ex: '1357-9'
+     * @param receiverAccountType [string]: receiver's bank account type. ex: 'checking', 'savings', 'salary' or 'payment'
+     * @param endToEndId [string]: central bank's unique transaction ID. ex: 'E79457883202101262140HHX553UPqeq'
      *
      * Parameters (optional):
-     * @param receiverKeyId [string, default null]: receiver's dict key. ex: "20.018.183/0001-80"
-     * @param description [string, default null]: optional description to override default description to be shown in the bank statement. ex: "Payment for service #1234"
-     * @param reconciliationId [string, default null]: Reconciliation ID linked to this payment. ex: "b77f5236-7ab9-4487-9f95-66ee6eaf1781"
-     * @param initiatorTaxId [string, default null]: Payment initiator's tax id (CPF/CNPJ). ex: "01234567890" or "20.018.183/0001-80"
+     * @param receiverKeyId [string, default null]: receiver's dict key. ex: '20.018.183/0001-80'
+     * @param description [string, default null]: optional description to override default description to be shown in the bank statement. ex: 'Payment for service #1234'
+     * @param reconciliationId [string, default null]: Reconciliation ID linked to this payment. ex: 'b77f5236-7ab9-4487-9f95-66ee6eaf1781'
+     * @param initiatorTaxId [string, default null]: Payment initiator's tax id (CPF/CNPJ). ex: '01234567890' or '20.018.183/0001-80'
      * @param cashAmount [integer, default null]: Amount to be withdrawal from the cashier in cents. ex: 1000 (= R$ 10.00)
-     * @param cashierBankCode [string, default null]: Cashier's bank code. ex: "00000000"
+     * @param cashierBankCode [string, default null]: Cashier's bank code. ex: '00000000'
      * @param cashierType [string, default null]: Cashier's type. ex: [merchant, other, participant]
-     * @param tags [array of strings, default null]: list of strings for reference when searching for PixRequests. ex: ["employees", "monthly"]
-     * @param method [string, default null]: execution  method for thr creation of the Pix. ex: "manual", "payerQrcode", "dynamicQrcode".
+     * @param tags [array of strings, default null]: list of strings for reference when searching for PixRequests. ex: ['employees', 'monthly']
+     * @param method [string, default null]: execution  method for thr creation of the Pix. ex: 'manual', 'payerQrcode', 'dynamicQrcode'.
      *
      * Attributes (return-only):
-     * @param id [string]: unique id returned when the PixRequest is created. ex: "5656565656565656"
+     * @param id [string]: unique id returned when the PixRequest is created. ex: '5656565656565656'
      * @param fee [integer]: fee charged when PixRequest is paid. ex: 200 (= R$ 2.00)
-     * @param status [string]: current PixRequest status. ex: "registered" or "paid"
-     * @param flow [string]: direction of money flow. ex: "in" or "out"
-     * @param senderBankCode [string]: sender's bank institution code in Brazil. If an ISPB (8 digits) is informed. ex: "20018183" or "341"
-     * @param created [string]: creation datetime for the PixRequest. ex: "2020-03-10 10:30:00.000"
-     * @param updated [string]: latest update datetime for the PixRequest. ex: "2020-03-10 10:30:00.000"
+     * @param status [string]: current PixRequest status. ex: 'registered' or 'paid'
+     * @param flow [string]: direction of money flow. ex: 'in' or 'out'
+     * @param senderBankCode [string]: sender's bank institution code in Brazil. If an ISPB (8 digits) is informed. ex: '20018183' or '341'
+     * @param created [string]: creation datetime for the PixRequest. ex: '2020-03-10 10:30:00.000'
+     * @param updated [string]: latest update datetime for the PixRequest. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({
@@ -147,8 +147,8 @@ exports.query = async function ({ limit, after, before, status, tags, ids, endTo
      * @param status [array of strings, default null]: filter for status of retrieved objects. ex: 'success' or 'failed'
      * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [array of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param endToEndIds [array of strings, default null]: central bank's unique transaction IDs. ex: ["E79457883202101262140HHX553UPqeq", "E79457883202101262140HHX553UPxzx"]
-     * @param externalIds [array of strings, default null]: url safe strings that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: ["my-internal-id-123456", "my-internal-id-654321"]
+     * @param endToEndIds [array of strings, default null]: central bank's unique transaction IDs. ex: ['E79457883202101262140HHX553UPqeq', 'E79457883202101262140HHX553UPxzx']
+     * @param externalIds [array of strings, default null]: url safe strings that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: ['my-internal-id-123456', 'my-internal-id-654321']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -184,8 +184,8 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
      * @param status [array of strings, default null]: filter for status of retrieved objects. ex: 'success' or 'failed'
      * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [array of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param endToEndIds [array of strings, default null]: central bank's unique transaction IDs. ex: ["E79457883202101262140HHX553UPqeq", "E79457883202101262140HHX553UPxzx"]
-     * @param externalIds [array of strings, default null]: url safe strings that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: ["my-internal-id-123456", "my-internal-id-654321"]
+     * @param endToEndIds [array of strings, default null]: central bank's unique transaction IDs. ex: ['E79457883202101262140HHX553UPqeq', 'E79457883202101262140HHX553UPxzx']
+     * @param externalIds [array of strings, default null]: url safe strings that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: ['my-internal-id-123456', 'my-internal-id-654321']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -217,7 +217,7 @@ exports.parse = async function ({content, signature, user} = {}) {
      *
      * Parameters (required):
      * @param content [string]: response content from request received at user endpoint (not parsed)
-     * @param signature [string]: base-64 digital signature received at response header "Digital-Signature"
+     * @param signature [string]: base-64 digital signature received at response header 'Digital-Signature'
      *
      * Parameters (optional):
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call

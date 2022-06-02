@@ -12,11 +12,11 @@ describe('TestPixDirectorPost', function() {
         let director = new starkinfra.PixDirector({
             name: 'Stark Sociedade de Crédito Direto S.A.',
             taxId: '39.908.427/0001-28',
-            phone: "+551141164616",
-            email: "bacen@starkbank.com",
+            phone: '+551141164616',
+            email: 'bacen@starkbank.com',
             password: pass,
-            teamEmail: "bacen@starkbank.com",
-            teamPhones: ["+551141164616"],
+            teamEmail: 'bacen@starkbank.com',
+            teamPhones: ['+551141164616'],
         });
         let createdDirector = await starkinfra.pixDirector.create(director);
         assert(createdDirector.name === director.name);

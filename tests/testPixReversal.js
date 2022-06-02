@@ -1,5 +1,6 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
+const {generateExamplePixReversalJson} = require('./utils/pixReversal');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -8,7 +9,7 @@ describe('TestPixReversalPost', function(){
     this.timeout(10000);
     it('test_success', async () => {
         let reversals = [];
-        reversals.push(new starkinfra.PixReversal(await getExample()));
+        reversals.push(new starkinfra.PixReversal(generateExamplePixReversalJson()));
         reversals = await starkinfra.pixReversal.create(reversals);
         for (let reversal of reversals) {
             assert(typeof reversal.id == 'string');

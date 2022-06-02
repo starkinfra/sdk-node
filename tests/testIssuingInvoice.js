@@ -1,6 +1,6 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const {generateExampleInvoiceJson} = require("./utils/issuingInvoice");
+const {generateExampleInvoiceJson} = require('./utils/issuingInvoice');
 
 starkinfra.user = require('./utils/user').exampleProject;
 

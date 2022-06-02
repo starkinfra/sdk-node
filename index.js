@@ -2,7 +2,7 @@ exports.version = '0.0.2';
 
 exports.cache = {};
 exports.user = null
-exports.language = "en-US"
+exports.language = 'en-US'
 
 // Modules
 exports.project = require('./sdk/user/project.js')

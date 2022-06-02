@@ -1,5 +1,5 @@
 const starkinfra = require('../../index.js');
-const {generateExampleRulesJson} = require("./rule");
+const {generateExampleRulesJson} = require('./rule');
 
 exports.generateExampleHolderJson = function (n = 1) {
     let holders = [];

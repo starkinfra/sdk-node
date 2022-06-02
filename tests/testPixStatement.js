@@ -69,7 +69,7 @@ describe('TestPixStatement PdfGet', function(){
         while (trigger) {
             [page, cursor] = await starkinfra.pixStatement.page({cursor: cursor, limit: 10});
             for await (let statement of page) {
-                if (statement.status === "success") {
+                if (statement.status === 'success') {
                     let csv = await starkinfra.pixStatement.csv(statement.id);
                     assert(Buffer.isBuffer(csv));
                     trigger = false;

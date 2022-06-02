@@ -9,7 +9,7 @@ describe('TestPixDomainQuery', function() {
     it('test_success', async () => {
         const domains = await starkinfra.pixDomain.query({});
         for await (let domain of domains) {
-            assert(typeof domain.name === "string");
+            assert(typeof domain.name === 'string');
         }
     });
 });

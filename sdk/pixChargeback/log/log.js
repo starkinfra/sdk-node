@@ -91,7 +91,7 @@ exports.page = async function ({ cursor, limit, after, before, types, chargeback
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-03-10'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
      * @param types [list of strings, default null]: filter retrieved objects by types. ex: 'success' or 'failed'

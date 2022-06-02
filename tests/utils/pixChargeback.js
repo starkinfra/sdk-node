@@ -1,5 +1,5 @@
 const starkinfra = require('../../index.js');
-const {bankCode} = require("./user");
+const {bankCode} = require('./user');
 
 exports.generateExamplePixChargebackJson = async function (n=1) {
     let pixRequests = await starkinfra.pixRequest.query({limit: n});

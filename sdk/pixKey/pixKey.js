@@ -15,25 +15,25 @@ class PixKey extends Resource {
      * to the Stark Infra API and returns the created object.
      *
      * Parameters (required):
-     * @param accountCreated [string]: opening Date or DateTime for the linked account. ex: "2022-01-01T12:00:00:00".
-     * @param accountNumber [string]: number of the linked account. ex: "76543".
-     * @param accountType [string]: type of the linked account. Options: "checking", "savings", "salary" or "payment".
-     * @param branchCode [string]: branch code of the linked account. ex: 1234".
-     * @param name [string]: holder's name of the linked account. ex: "Jamie Lannister".
-     * @param taxId [string]: holder's taxId (CPF/CNPJ) of the linked account. ex: "012.345.678-90".
+     * @param accountCreated [string]: opening Date or DateTime for the linked account. ex: '2022-01-01T12:00:00:00'.
+     * @param accountNumber [string]: number of the linked account. ex: '76543'.
+     * @param accountType [string]: type of the linked account. Options: 'checking', 'savings', 'salary' or 'payment'.
+     * @param branchCode [string]: branch code of the linked account. ex: 1234'.
+     * @param name [string]: holder's name of the linked account. ex: 'Jamie Lannister'.
+     * @param taxId [string]: holder's taxId (CPF/CNPJ) of the linked account. ex: '012.345.678-90'.
      *
      * Parameters (optional):
-     * @param id [string, default null]: id of the registered PixKey. Allowed types are: CPF, CNPJ, phone number or email. If this parameter is not passed, an EVP will be created. ex: "+5511989898989";
-     * @param tags [list of strings, default null]: list of strings for reference when searching for PixKeys. ex: ["employees", "monthly"]
+     * @param id [string, default null]: id of the registered PixKey. Allowed types are: CPF, CNPJ, phone number or email. If this parameter is not passed, an EVP will be created. ex: '+5511989898989';
+     * @param tags [list of strings, default null]: list of strings for reference when searching for PixKeys. ex: ['employees', 'monthly']
      *
      * Attributes (return-only):
-     * @param owned [string]: datetime when the key was owned by the holder. ex: "2022-01-01T12:00:00:00".
-     * @param ownerType [string]: type of the owner of the PixKey. Options: "business" or "individual".
-     * @param status [string]: current PixKey status. Options: "created", "registered", "canceled", "failed"
-     * @param bankCode [string]: bankCode of the account linked to the Pix Key. ex: "20018183".
-     * @param bankName [string]: name of the bank that holds the account linked to the PixKey. ex: "StarkBank"
-     * @param type [string]: type of the PixKey. Options: "cpf", "cnpj", "phone", "email" and "evp",
-     * @param created [string]: creation datetime for the PixKey. ex: "2022-01-01T12:00:00:00".
+     * @param owned [string]: datetime when the key was owned by the holder. ex: '2022-01-01T12:00:00:00'.
+     * @param ownerType [string]: type of the owner of the PixKey. Options: 'business' or 'individual'.
+     * @param status [string]: current PixKey status. Options: 'created', 'registered', 'canceled', 'failed'
+     * @param bankCode [string]: bankCode of the account linked to the Pix Key. ex: '20018183'.
+     * @param bankName [string]: name of the bank that holds the account linked to the PixKey. ex: 'StarkBank'
+     * @param type [string]: type of the PixKey. Options: 'cpf', 'cnpj', 'phone', 'email' and 'evp',
+     * @param created [string]: creation datetime for the PixKey. ex: '2022-01-01T12:00:00:00'.
      *
      */
     constructor({
@@ -92,10 +92,10 @@ exports.get = async function (id, payerId, { endToEndId, user } = {}) {
      *
      * Parameters (required):
      * @param id [string]: PixKey object unique id. ex: '5656565656565656'
-     * @param payerId [string]: tax id (CPF/CNPJ) of the individual or business requesting the PixKey information. This id is used by the Central Bank to limit request rates. ex: "20.018.183/0001-80".
+     * @param payerId [string]: tax id (CPF/CNPJ) of the individual or business requesting the PixKey information. This id is used by the Central Bank to limit request rates. ex: '20.018.183/0001-80'.
      *
      * Parameters (optional):
-     * @param endToEndId [string, default null]: central bank's unique transaction id. If the request results in the creation of a PixRequest, the same endToEndId should be used. If this parameter is not passed, one endToEndId will be automatically created. Example: "E00002649202201172211u34srod19le"
+     * @param endToEndId [string, default null]: central bank's unique transaction id. If the request results in the creation of a PixRequest, the same endToEndId should be used. If this parameter is not passed, one endToEndId will be automatically created. Example: 'E00002649202201172211u34srod19le'
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -116,9 +116,9 @@ exports.query = async function ({ limit, after, before, status, tags, ids, type,
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
      * @param after [string, default null]: date filter for objects created after a specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: "created", "failed", "delivered", "closed", "canceled".
-     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-     * @param type [string, default null]: filter for the type of retrieved PixKeys. Options: "cpf", "cnpj", "phone", "email" and "evp"
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
+     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+     * @param type [string, default null]: filter for the type of retrieved PixKeys. Options: 'cpf', 'cnpj', 'phone', 'email' and 'evp'
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -147,12 +147,12 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null]: date filter for objects created after a specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: "created", "failed", "delivered", "closed", "canceled".
-     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ["5656565656565656", "4545454545454545"]
-     * @param type [string, default null]: filter for the type of retrieved PixKeys. Options: "cpf", "cnpj", "phone", "email" and "evp"
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
+     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+     * @param type [string, default null]: filter for the type of retrieved PixKeys. Options: 'cpf', 'cnpj', 'phone', 'email' and 'evp'
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -181,26 +181,26 @@ exports.update = async function ( id, reason, { accountCreated, accountNumber, a
      *
      * Parameters (required):
      * @param id [string]: PixKey id. ex: '5656565656565656'
-     * @param reason [string]: reason why the PixKey is being patched. Options: "branchTransfer", "reconciliation" or "userRequested".
+     * @param reason [string]: reason why the PixKey is being patched. Options: 'branchTransfer', 'reconciliation' or 'userRequested'.
      *
      * Parameters (optional):
-     * @param accountCreated [string, default null]: opening Date or DateTime for the account to be linked. ex: "2022-01-01.
-     * @param accountNumber [string, default null]: number of the account to be linked. ex: "76543".
-     * @param accountType [string, default null]: type of the account to be linked. Options: "checking", "savings", "salary" or "payment".
-     * @param branchCode [string, default null]: branch code of the account to be linked. ex: 1234".
-     * @param name [string, default null]: holder's name of the account to be linked. ex: "Jamie Lannister".
+     * @param accountCreated [string, default null]: opening Date or DateTime for the account to be linked. ex: '2022-01-01.
+     * @param accountNumber [string, default null]: number of the account to be linked. ex: '76543'.
+     * @param accountType [string, default null]: type of the account to be linked. Options: 'checking', 'savings', 'salary' or 'payment'.
+     * @param branchCode [string, default null]: branch code of the account to be linked. ex: 1234'.
+     * @param name [string, default null]: holder's name of the account to be linked. ex: 'Jamie Lannister'.
      *
      * Return:
      * @returns PixKey with updated attributes
      *
      */
     let payload = {
-        "reason": reason,
-        "accountCreated": accountCreated,
-        "accountNumber": accountNumber,
-        "accountType": accountType,
-        "branchCode": branchCode,
-        "name": name,
+        'reason': reason,
+        'accountCreated': accountCreated,
+        'accountNumber': accountNumber,
+        'accountType': accountType,
+        'branchCode': branchCode,
+        'name': name,
     };
     return rest.patchId(resource, id, payload, user);
 };
