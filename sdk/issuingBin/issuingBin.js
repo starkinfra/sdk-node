@@ -17,17 +17,15 @@ class IssuingBin extends Resource {
      * @param category [string]: purchase category. ex: 'prepaid'
      * @param client [string]: client type. ex: 'business'
      * @param created [string]: creation datetime for the IssuingBin. ex: '2020-03-10 10:30:00.000'
-     * @param updated [string]: latest update datetime for the IssuingBin. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({ id, updated, created, network, settlement, category, client }) {
+    constructor({ id, created, network, settlement, category, client }) {
         super(id);
         this.network = network;
         this.settlement = settlement;
         this.category = category;
         this.client = client;
         this.created = check.datetime(created);
-        this.updated = check.datetime(updated);
     }
 }
 

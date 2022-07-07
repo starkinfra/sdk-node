@@ -4,6 +4,12 @@ exports.randomInt = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+exports.randomFloat = function(min, max, decimals=2) {
+    const str = (Math.random() * (max - min) + min).toFixed(decimals);
+  
+    return parseFloat(str);
+  }
+
 exports.pastDate = function (number) {
     let date = new Date();
     date.setDate(date.getDate() - number);

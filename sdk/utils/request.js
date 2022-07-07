@@ -50,7 +50,7 @@ function preProcess(path, method, payload, query, user, version) {
         'Access-Id': user.accessId(),
         'Access-Time': accessTime,
         'Access-Signature': Ecdsa.sign(message, user.privateKey()).toBase64(),
-        'User-Agent': 'Node-' + process.versions['node'] + '-SDK-' + pjson.version,
+        'User-Agent': 'Node-' + process.versions['node'] + '-SDK-Infra-' + pjson.version,
         'Content-Type': 'application/json',
         'Accept-Language': language
     };
