@@ -16,7 +16,7 @@ class IssuingWithdrawal extends Resource {
      * @param description [string]: IssuingWithdrawal description. ex: 'sending money back'
      *
      * Parameters (optional):
-     * @param tags [array of strings, default []]: array of strings for tagging
+     * @param tags [list of strings, default []]: list of strings for tagging
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when IssuingWithdrawal is created. ex: '5656565656565656'
@@ -103,7 +103,7 @@ exports.query = async function ({ externalIds, after, before, limit, tags, user 
      * @param externalIds [list of strings, default []]: external IDs. ex: ['5656565656565656', '4545454545454545']
      * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
      * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
-     * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
+     * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
      * Return:
@@ -134,7 +134,7 @@ exports.page = async function ({ cursor, externalIds, after, before, limit, tags
      * @param externalIds [list of strings, default []]: external IDs. ex: ['5656565656565656', '4545454545454545']
      * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
      * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
-     * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
+     * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
      * Return:

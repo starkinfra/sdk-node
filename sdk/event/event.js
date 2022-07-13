@@ -67,7 +67,7 @@ exports.query = async function ({ limit, after, before, isDelivered, user } = {}
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020, 3, 10'
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param isDelivered [bool, default null]: bool to filter successfully delivered events. ex: true or false
-     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call     \
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
      * Return:
      * @returns generator of Event objects with updated attributes

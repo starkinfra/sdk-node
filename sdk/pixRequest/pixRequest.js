@@ -37,7 +37,7 @@ class PixRequest extends Resource {
      * @param cashAmount [integer, default null]: Amount to be withdrawal from the cashier in cents. ex: 1000 (= R$ 10.00)
      * @param cashierBankCode [string, default null]: Cashier's bank code. ex: '00000000'
      * @param cashierType [string, default null]: Cashier's type. ex: [merchant, other, participant]
-     * @param tags [array of strings, default null]: list of strings for reference when searching for PixRequests. ex: ['employees', 'monthly']
+     * @param tags [list of strings, default null]: list of strings for reference when searching for PixRequests. ex: ['employees', 'monthly']
      * @param method [string, default null]: execution  method for thr creation of the Pix. ex: 'manual', 'payerQrcode', 'dynamicQrcode'.
      *
      * Attributes (return-only):
@@ -144,11 +144,11 @@ exports.query = async function ({ limit, after, before, status, tags, ids, endTo
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null]: date filter for objects created or updated only after specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created or updated only before specified date. ex: '2020-03-10'
-     * @param status [array of strings, default null]: filter for status of retrieved objects. ex: 'success' or 'failed'
-     * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
-     * @param ids [array of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param endToEndIds [array of strings, default null]: central bank's unique transaction IDs. ex: ['E79457883202101262140HHX553UPqeq', 'E79457883202101262140HHX553UPxzx']
-     * @param externalIds [array of strings, default null]: url safe strings that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: ['my-internal-id-123456', 'my-internal-id-654321']
+     * @param status [list of strings, default null]: filter for status of retrieved objects. ex: 'success' or 'failed'
+     * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
+     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+     * @param endToEndIds [list of strings, default null]: central bank's unique transaction IDs. ex: ['E79457883202101262140HHX553UPqeq', 'E79457883202101262140HHX553UPxzx']
+     * @param externalIds [list of strings, default null]: url safe strings that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: ['my-internal-id-123456', 'my-internal-id-654321']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -178,14 +178,14 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null]: date filter for objects created or updated only after specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created or updated only before specified date. ex: '2020-03-10'
-     * @param status [array of strings, default null]: filter for status of retrieved objects. ex: 'success' or 'failed'
-     * @param tags [array of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
-     * @param ids [array of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param endToEndIds [array of strings, default null]: central bank's unique transaction IDs. ex: ['E79457883202101262140HHX553UPqeq', 'E79457883202101262140HHX553UPxzx']
-     * @param externalIds [array of strings, default null]: url safe strings that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: ['my-internal-id-123456', 'my-internal-id-654321']
+     * @param status [list of strings, default null]: filter for status of retrieved objects. ex: 'success' or 'failed'
+     * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
+     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+     * @param endToEndIds [list of strings, default null]: central bank's unique transaction IDs. ex: ['E79457883202101262140HHX553UPqeq', 'E79457883202101262140HHX553UPxzx']
+     * @param externalIds [list of strings, default null]: url safe strings that must be unique among all your PixRequests. Duplicated external IDs will cause failures. By default, this parameter will block any PixRequests that repeats amount and receiver information on the same date. ex: ['my-internal-id-123456', 'my-internal-id-654321']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -227,4 +227,25 @@ exports.parse = async function ({content, signature, user} = {}) {
      *
      */
     return parse.parseAndVerify(resource, content, signature, user);
+};
+
+exports.response = async function ({status, reason} = {}) {
+    /**
+     *
+     * Helps you respond to a PixRequest authorization
+     *
+     * Parameters (required):
+     * @param status [string]: response to the authorization. ex: 'approved' or 'denied'
+     *
+     * Parameters (conditionally required):
+     * @param reason [string, default null]: denial reason. Options: 'invalidAccountNumber', 'blockedAccount', 'accountClosed', 'invalidAccountType', 'invalidTransactionType', 'taxIdMismatch', 'invalidTaxId', 'orderRejected', 'reversalTimeExpired', 'settlementFailed'
+     *
+     * Return:
+     * @returns Dumped JSON string that must be returned to us
+     *
+     */
+    return JSON.stringify({
+        'status': status,
+        'reason': reason,
+    });
 };

@@ -3,12 +3,12 @@ const check = require('../utils/check.js');
 const Resource = require('../utils/resource.js').Resource
 
 
-class IssuingBin extends Resource {
+class IssuingProduct extends Resource {
     /**
      *
-     * IssuingBin object
+     * IssuingProduct object
      *
-     * @description The IssuingBin object displays information of BINs registered to your Workspace.
+     * @description The IssuingProduct object displays information of BINs registered to your Workspace.
      *
      * Attributes (return-only):
      * @param id [string]: unique BIN number registered within the card network. ex: '53810200'
@@ -16,7 +16,7 @@ class IssuingBin extends Resource {
      * @param settlement [string]: settlement type. ex: 'credit'
      * @param category [string]: purchase category. ex: 'prepaid'
      * @param client [string]: client type. ex: 'business'
-     * @param created [string]: creation datetime for the IssuingBin. ex: '2020-03-10 10:30:00.000'
+     * @param created [string]: creation datetime for the IssuingProduct. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({ id, created, network, settlement, category, client }) {
@@ -29,22 +29,22 @@ class IssuingBin extends Resource {
     }
 }
 
-exports.IssuingBin = IssuingBin;
-let resource = {'class': exports.IssuingBin, 'name': 'IssuingBin'};
+exports.IssuingProduct = IssuingProduct;
+let resource = {'class': exports.IssuingProduct, 'name': 'IssuingProduct'};
 
 exports.query = async function ({ limit, user} = {}) {
     /**
      *
-     * Retrieve IssuingBins
+     * Retrieve IssuingProducts
      *
-     * @description Receive a generator of IssuingBin objects previously created in the Stark Infra API
+     * @description Receive a generator of IssuingProduct objects previously created in the Stark Infra API
      *
      * Parameters (optional):
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns generator of IssuingBin objects with updated attributes
+     * @returns generator of IssuingProduct objects with updated attributes
      *
      */
     let query = {
@@ -56,9 +56,9 @@ exports.query = async function ({ limit, user} = {}) {
 exports.page = async function ({ cursor, limit, user} = {}) {
     /**
      *
-     * Retrieve paged IssuingBins
+     * Retrieve paged IssuingProducts
      *
-     * @description Receive a list of up to 100 IssuingBin objects previously created in the Stark Infra API and the cursor to the next page.
+     * @description Receive a list of up to 100 IssuingProduct objects previously created in the Stark Infra API and the cursor to the next page.
      * Use this function instead of query if you want to manually page your statements.
      *
      * Parameters (optional):
@@ -67,7 +67,7 @@ exports.page = async function ({ cursor, limit, user} = {}) {
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns list of IssuingBin objects with updated attributes and cursor to retrieve the next page of IssuingBin objects
+     * @returns list of IssuingProduct objects with updated attributes and cursor to retrieve the next page of IssuingProduct objects
      *
      */
     let query = {

@@ -24,21 +24,21 @@ class IssuingHolder extends Resource {
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when IssuingHolder is created. ex: '5656565656565656'
-     * @param status [string]: current IssuingHolder status. ex: 'canceled' or 'active'
+     * @param status [string]: current IssuingHolder status. Options: 'canceled' or 'active'
      * @param created [string]: creation datetime for the IssuingHolder. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the IssuingHolder. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({
-                    id, externalId, name, rules, status, tags, taxId, updated, created
+                name, taxId, externalId, rules=null, tags=null, id=null, status=null, created=null, updated=null
                 }) {
         super(id);
-        this.externalId = externalId;
         this.name = name;
-        this.rules = parseObjects(rules, ruleResource, IssuingRule);
-        this.status = status;
-        this.tags = tags;
         this.taxId = taxId;
+        this.externalId = externalId;
+        this.rules = parseObjects(rules, ruleResource, IssuingRule);
+        this.tags = tags;
+        this.status = status;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
     }
@@ -88,7 +88,7 @@ exports.get = async function (id, {expand, user} = {}) {
     return rest.getId(resource, id, user, {'expand': expand});
 };
 
-exports.query = async function ({ limit, status, tags, ids, expand, after, before, user } = {}) {
+exports.query = async function ({ limit, after, before, status, tags, ids, expand, user } = {}) {
     /**
      *
      * Retrieve IssuingHolders
@@ -111,17 +111,17 @@ exports.query = async function ({ limit, status, tags, ids, expand, after, befor
      */
     let query = {
         limit: limit,
+        after: after,
+        before: before,
         status: status,
         tags: tags,
         ids: ids,
         expand: expand,
-        after: after,
-        before: before,
     };
     return rest.getList(resource, query, user);
 };
 
-exports.page = async function ({ cursor, limit, status, tags, ids, expand, after, before, user } = {}) {
+exports.page = async function ({ cursor, limit, after, before, status, tags, ids, expand, user } = {}) {
     /**
      *
      * Retrieve paged IssuingHolders
@@ -146,12 +146,12 @@ exports.page = async function ({ cursor, limit, status, tags, ids, expand, after
     let query = {
         cursor: cursor,
         limit: limit,
+        after: after,
+        before: before,
         status: status,
         tags: tags,
         ids: ids,
         expand: expand,
-        after: after,
-        before: before,
     };
     return rest.getPage(resource, query, user);
 };

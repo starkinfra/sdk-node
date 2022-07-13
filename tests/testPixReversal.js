@@ -165,3 +165,23 @@ describe('TestAuthorizationParse', function(){
         }
     });
 });
+
+describe("TestPixReversalResponse", function(){
+    this.timeout(10000);
+    it("test_approved", async () => {
+        const requests = await starkinfra.pixReversal.response({
+            status: 'approved',
+        });
+        assert(typeof requests === 'string');
+        console.log(requests);
+    });
+
+    it("test_denied", async () => {
+        const requests = await starkinfra.pixReversal.response({
+            status: 'denied',
+            reason: 'taxIdMismatch',
+        });
+        assert(typeof requests === 'string');
+        console.log(requests);
+    });
+});
