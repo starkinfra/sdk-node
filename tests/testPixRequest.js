@@ -166,6 +166,25 @@ describe("TestAuthorizationParse", function(){
     });
 });
 
+describe("TestPixRequestResponse", function(){
+    this.timeout(10000);
+    it("test_approved", async () => {
+        const requests = await starkinfra.pixRequest.response({
+            status: 'approved',
+        });
+        assert(typeof requests === 'string');
+        console.log(requests);
+    });
+
+    it("test_denied", async () => {
+        const requests = await starkinfra.pixRequest.response({
+            status: 'denied',
+            reason: 'taxIdMismatch',
+        });
+        assert(typeof requests === 'string');
+        console.log(requests);
+    });
+});
 
 let examplePixRequest = {
     amount: 1000,

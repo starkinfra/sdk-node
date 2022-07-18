@@ -13,6 +13,18 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- StaticBrcode resource
+- DynamicBrcode resource 
+- CardMethod sub-resource
+- MerchantCountry sub-resource
+- MerchantCategory sub-resource
+### Changed
+- resource name from IssuingBin to IssuingProduct
+- Creditnote\Signer sub-resource to CreditSigner resource
+### Removed 
+- IssuingAuthorization resource
+- bankCode attribute from PixReversal resource
 
 ## [0.1.0] - 2022-06-03
 ### Added

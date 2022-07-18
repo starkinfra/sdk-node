@@ -110,7 +110,7 @@ exports.query = async function ({ limit, after, before, status, ids, user } = {}
      *
      * Retrieve PixChargebacks
      *
-     * @description Receive a generator of PixChargebacks objects previously created in the Stark Infra API
+     * @description Receive a generator of PixChargeback objects previously created in the Stark Infra API
      *
      * Parameters (optional):
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35

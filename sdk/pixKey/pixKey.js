@@ -110,7 +110,7 @@ exports.query = async function ({ limit, after, before, status, tags, ids, type,
      *
      * Retrieve PixKeys
      *
-     * @description Receive a generator of PixKeys objects previously created in the Stark Infra API
+     * @description Receive a generator of PixKey objects previously created in the Stark Infra API
      *
      * Parameters (optional):
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
