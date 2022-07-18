@@ -106,7 +106,7 @@ exports.query = async function ({ limit, after, before, status, ids, type, user 
      *
      * Retrieve PixInfractions
      *
-     * @description Receive a generator of PixInfractions objects previously created in the Stark Infra API
+     * @description Receive a generator of PixInfraction objects previously created in the Stark Infra API
      *
      * Parameters (optional):
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35

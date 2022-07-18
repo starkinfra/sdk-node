@@ -38,7 +38,7 @@ exports.query = async function ({ search, user } = {}) {
      *
      * Retrieve MerchantCategories
      *
-     * @description Receive a generator of MerchantCategories objects previously created in the Stark Infra API
+     * @description Receive a generator of MerchantCategory objects previously created in the Stark Infra API
      *
      * Parameters (optional):
      * @param search [string, default null]: keyword to search for code, type, name or number

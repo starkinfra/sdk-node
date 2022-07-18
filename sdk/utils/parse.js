@@ -22,7 +22,6 @@ exports.parseObjects = function (objects, resource, resourceClass) {
 }
 
 exports.parseAndVerify = async function (resource, content, signature, user = null) {
-
     content = await exports.verify(content, signature, user);
     
     let object = Object.assign(new resource['class'](api.lastName(resource['name'])), content)
@@ -32,7 +31,6 @@ exports.parseAndVerify = async function (resource, content, signature, user = nu
 
     return object;
 }
-
 
 exports.verify = async function (content, signature, user = null) {
     try {

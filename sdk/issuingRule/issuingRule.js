@@ -1,11 +1,11 @@
 const {parseObjects} = require('../utils/parse');
 const {CardMethod} = require('../cardMethod/cardMethod.js');
-const cardMethodResource = require('../cardMethod/cardMethod').resource;
 const {MerchantCountry} = require('../merchantCountry/merchantCountry.js');
-const merchantCountryResource = require('../merchantCountry/merchantCountry').resource;
 const {MerchantCategory} = require('../merchantCategory/merchantCategory.js');
-const merchantCategoryResource = require('../merchantCategory/merchantCategory').resource;
 const Resource = require('../utils/resource.js').Resource
+const cardMethodResource = require('../cardMethod/cardMethod').resource;
+const merchantCountryResource = require('../merchantCountry/merchantCountry').resource;
+const merchantCategoryResource = require('../merchantCategory/merchantCategory').resource;
 
 
 class IssuingRule extends Resource {

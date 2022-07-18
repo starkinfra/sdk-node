@@ -24,14 +24,12 @@ class IssuingHolder extends Resource {
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when IssuingHolder is created. ex: '5656565656565656'
-     * @param status [string]: current IssuingHolder status. Options: 'canceled' or 'active'
+     * @param status [string]: current IssuingHolder status. Options: 'active', 'blocked', 'canceled'
      * @param created [string]: creation datetime for the IssuingHolder. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the IssuingHolder. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({
-                name, taxId, externalId, rules=null, tags=null, id=null, status=null, created=null, updated=null
-                }) {
+    constructor({ name, taxId, externalId, rules=null, tags=null, id=null, status=null, created=null, updated=null }) {
         super(id);
         this.name = name;
         this.taxId = taxId;
@@ -47,7 +45,7 @@ class IssuingHolder extends Resource {
 exports.IssuingHolder = IssuingHolder;
 let resource = {'class': exports.IssuingHolder, 'name': 'IssuingHolder'};
 
-exports.create = async function (holders, { user } = {}) {
+exports.create = async function (holders, { expand, user } = {}) {
     /**
      *
      * Create IssuingHolder
@@ -58,13 +56,14 @@ exports.create = async function (holders, { user } = {}) {
      * @param holders [list of IssuingHolder objects]: list of IssuingHolder objects to be created in the API
      *
      * Parameters (optional):
+     * @param expand [list of strings, default []]: fields to expand information. ex: ['rules']
      * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns list of IssuingHolder objects with updated attributes
      *
      */
-    return rest.post(resource, holders, null, user);
+    return rest.post(resource, holders, user, {'expand': expand});
 };
 
 exports.get = async function (id, {expand, user} = {}) {

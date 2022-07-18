@@ -8,7 +8,9 @@ class StaticBrcode extends Resource {
      * 
      * StaticBrcode object
      * 
-     * @description A StaticBrcode stores account information in the form of a PixKey and can be used to create 
+     * @description BR codes store information represented by Pix QR Codes, which are used to
+     * send or receive Pix transactions in a convenient way.
+     * A StaticBrcode stores account information in the form of a PixKey and can be used to create 
      * Pix transactions easily.
      * When you initialize a StaticBrcode, the entity will not be automatically
      * created in the Stark Infra API. The 'create' function sends the objects
@@ -149,7 +151,7 @@ exports.page = async function ({ cursor, limit, after, before, uuids, user } = {
 exports.parse = async function ({content, signature, user} = {}) {
     /**
      *
-     * Create single verified IssuingPurchase authorization request from a content string
+     * Create a single verified IssuingPurchase authorization request from a content string
      *
      * @description Use this method to parse and verify the authenticity of the authorization request received at the informed endpoint.
      * Authorization requests are posted to your registered endpoint whenever IssuingPurchases are received.

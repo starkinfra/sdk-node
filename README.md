@@ -1646,6 +1646,8 @@ const starkinfra = require('starkinfra');
 
 ### Create StaticBrcodes
 
+BR codes store information represented by Pix QR Codes, which are used to send 
+or receive Pix transactions in a convenient way.
 StaticBrcodes store account information via a BR code or an image (QR code)
 that represents a PixKey and a few extra fixed parameters, such as an amount 
 and a reconciliation ID. They can easily be used to receive Pix transactions.

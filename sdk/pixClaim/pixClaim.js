@@ -144,7 +144,7 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, type
      *
      * Retrieve paged PixClaims
      *
-     * @description Receive a list of up to 100 PixClaims objects previously created in the Stark Infra API and the cursor to the next page.
+     * @description Receive a list of up to 100 PixClaim objects previously created in the Stark Infra API and the cursor to the next page.
      * Use this function instead of query if you want to manually page your requests.
      *
      * Parameters (optional):

@@ -34,7 +34,7 @@ class IssuingCard extends Resource {
      * @param id [string]: unique id returned when IssuingCard is created. ex: '5656565656565656'
      * @param holderId [string]: cardholder unique id. ex: '5656565656565656'
      * @param type [string]: card type. ex: 'virtual'
-     * @param status [string]: current IssuingCard status. Options: 'canceled' or 'active'
+     * @param status [string]: current IssuingCard status. Options: 'active', 'blocked', 'canceled', 'expired'
      * @param number [string]: [EXPANDABLE] masked card number. ex: '1234 5678 1234 5678'
      * @param securityCode [string]: [EXPANDABLE] masked card verification value (cvv). Expand to unmask the value. ex: '123'.
      * @param expiration [string]: [EXPANDABLE] masked card expiration datetime. ex: '2020-03-10 10:30:00.000'

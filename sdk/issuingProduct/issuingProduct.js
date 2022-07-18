@@ -8,7 +8,7 @@ class IssuingProduct extends Resource {
      *
      * IssuingProduct object
      *
-     * @description The IssuingProduct object displays information of BINs registered to your Workspace.
+     * @description The IssuingProduct object displays information of available sub-issuer card products registered to your Workspace.
      *
      * Attributes (return-only):
      * @param id [string]: unique BIN number registered within the card network. ex: '53810200'

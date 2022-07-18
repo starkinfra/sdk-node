@@ -191,7 +191,7 @@ exports.page = async function ({ cursor, ids, cardIds, holderIds, endToEndIds, l
 exports.parse = async function ({content, signature, user} = {}) {
     /**
      *
-     * Create single verified IssuingPurchase authorization request from a content string
+     * Create a single verified IssuingPurchase authorization request from a content string
      *
      * @description Use this method to parse and verify the authenticity of the authorization request received at the informed endpoint.
      * Authorization requests are posted to your registered endpoint whenever IssuingPurchases are received.

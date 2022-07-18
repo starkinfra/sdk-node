@@ -162,7 +162,7 @@ exports.delete = async function (id, {user} = {}) {
 exports.parse = async function ({content, signature, user} = {}) {
     /**
      *
-     * Create single notification Event from a content string
+     * Create a single notification Event from a content string
      *
      * @description Create a single Event object received from event listening at subscribed user endpoint.
      * If the provided digital signature does not check out with the Stark public key, a

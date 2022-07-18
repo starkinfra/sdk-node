@@ -35,14 +35,14 @@ exports.query = async function ({ search, user } = {}) {
      *
      * Retrieve MerchantCategories
      *
-     * @description Receive a generator of MerchantCountries objects previously created in the Stark Infra API
+     * @description Receive a generator of MerchantCountry objects previously created in the Stark Infra API
      *
      * Parameters (optional):
      * @param search [string, default null]: keyword to search for code, name, number or shortCode
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
      * Return:
-     * @returns generator of MerchantCountries objects with updated attributes
+     * @returns generator of MerchantCountry objects with updated attributes
      *
      */
     return rest.getList(resource, search, user);

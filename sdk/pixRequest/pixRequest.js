@@ -209,7 +209,7 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
 exports.parse = async function ({content, signature, user} = {}) {
     /**
      *
-     * Create single verified PixRequest object from a content string
+     * Create a single verified PixRequest object from a content string
      *
      * @description Create a single PixRequest object from a content string received from a handler listening at
      * the request url. If the provided digital signature does not check out with the Stark public key, a

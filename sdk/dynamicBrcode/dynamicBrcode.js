@@ -30,7 +30,7 @@ class DynamicBrcode extends Resource {
      * 
      * Attributes (return-only):
      * @param id [string]: id returned on creation, this is the BR code. ex: '00020126360014br.gov.bcb.pix0114+552840092118152040000530398654040.095802BR5915Jamie Lannister6009Sao Paulo620705038566304FC6C'
-     * @param uuid [string]: unique uuid returned when a DynamicBrcode is created. ex: '97756273400d42ce9086404fe10ea0d6'
+     * @param uuid [string]: unique UUID returned when a DynamicBrcode is created. ex: '97756273400d42ce9086404fe10ea0d6'
      * @param url [string]: url link to the BR code image. ex: 'https://brcode-h.development.starkinfra.com/static-qrcode/97756273400d42ce9086404fe10ea0d6.png'
      * @param updated [string]: latest update datetime for the DynamicBrcode. ex: '2020-03-10 10:30:00.000'
      * @param created [string]: creation datetime for the DynamicBrcode. ex: '2020-03-10 10:30:00.000'
@@ -80,7 +80,7 @@ exports.get = async function (uuid, {user} = {}) {
      * @description Receive a single DynamicBrcode object previously created in the Stark Infra API by passing its id
      *
      * Parameters (required):
-     * @param uuid [string]: object's unique uuid. ex: '97756273400d42ce9086404fe10ea0d6'
+     * @param uuid [string]: object's unique UUID. ex: '97756273400d42ce9086404fe10ea0d6'
      *
      * Parameters (optional):
      * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
@@ -103,7 +103,7 @@ exports.query = async function ({ limit, after, before, uuids, externalId, user 
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-03-10'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
-     * @param uuids [list of strings, default null]: list of uuids to filter retrieved objects. ex: ['97756273400d42ce9086404fe10ea0d6', 'e3da0b6d56fa4045b9b295b2be82436e']
+     * @param uuids [list of strings, default null]: list of UUIDs to filter retrieved objects. ex: ['97756273400d42ce9086404fe10ea0d6', 'e3da0b6d56fa4045b9b295b2be82436e']
      * @param externalIds [list of strings, default null]: list of externalIds to filter retrieved objects. ex: ["my_external_id1", "my_external_id2"]
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call     
      *
@@ -135,7 +135,7 @@ exports.page = async function ({ cursor, limit, after, before, uuids, externalId
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-03-10'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-03-10'
-     * @param uuids [list of strings, default null]: list of uuids to filter retrieved objects. ex: ['97756273400d42ce9086404fe10ea0d6', 'e3da0b6d56fa4045b9b295b2be82436e']
+     * @param uuids [list of strings, default null]: list of UUIDs to filter retrieved objects. ex: ['97756273400d42ce9086404fe10ea0d6', 'e3da0b6d56fa4045b9b295b2be82436e']
      * @param externalIds [list of strings, default null]: list of externalIds to filter retrieved objects. ex: ["my_external_id1", "my_external_id2"]
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
@@ -224,8 +224,8 @@ exports.responseDue = async function ({
 };
 
 exports.responseInstant = async function ({ 
-        version, created, keyId, status, reconciliationId, amount, cashierType, cashierBankCode, cashAmount, expiration, senderName, 
-        senderTaxId, amountType, description 
+        version, created, keyId, status, reconciliationId, amount, cashierType, cashierBankCode, 
+        cashAmount, expiration, senderName, senderTaxId, amountType, description 
     } = {}) {
     /**
      *
@@ -289,14 +289,14 @@ exports.verify = async function ({uuid, signature, user} = {}) {
      * a stark.exception.InvalidSignatureException will be raised.
      * 
      * Parameters (required):
-     * @param uuid [string]: unique uuid returned when a DynamicBrcode is created. ex: '4e2eab725ddd495f9c98ffd97440702d'
+     * @param uuid [string]: unique UUID returned when a DynamicBrcode is created. ex: '4e2eab725ddd495f9c98ffd97440702d'
      * @param signature [string]: base-64 digital signature received at response header 'Digital-Signature'
      *
      * Parameters (optional):
      * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @return Verified Brcode's uuid.
+     * @return Verified Brcode's UUID.
      *
      */
     return parse.verify(uuid, signature, user);

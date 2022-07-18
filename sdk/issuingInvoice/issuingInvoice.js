@@ -105,7 +105,7 @@ exports.query = async function ({ status, after, before, tags, limit, user } = {
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns generator of IssuingInvoices objects with updated attributes
+     * @returns generator of IssuingInvoice objects with updated attributes
      *
      */
     let query = {
