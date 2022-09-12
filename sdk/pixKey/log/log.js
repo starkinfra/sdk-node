@@ -19,8 +19,11 @@ class Log extends Resource {
      * @param key [PixKey]: PixKey entity to which the log refers to.
      *
      */
-    constructor({ created, type, errors, key, id }) {
+    constructor({ 
+                    id=null, created=null, type=null, errors=null, key=null 
+                }) {
         super(id);
+        
         this.created = check.datetime(created);
         this.type = type;
         this.errors = errors;

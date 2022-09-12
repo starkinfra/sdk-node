@@ -10,5 +10,4 @@ exports.query = creditNote.query;
 exports.get = creditNote.get;
 exports.page = creditNote.page;
 exports.cancel = creditNote.cancel;
-exports.parse = creditNote.parse;
 exports.CreditNote = creditNote.CreditNote;

@@ -13,7 +13,9 @@ class Description extends SubResource {
      * @param value [string]: value to which the key refers to. ex: '120'
      *
      */
-    constructor({ key, value }) {
+    constructor({ 
+                    key, value 
+                }) {
         super();
 
         this.key = key;

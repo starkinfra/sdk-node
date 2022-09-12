@@ -20,8 +20,11 @@ class Attempt extends Resource {
      * @param created [string]: datetime representing the moment when the attempt was made. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({ id, code, message, webhookId, eventId, created }) {
+    constructor({ 
+                    id=null, code=null, message=null, webhookId=null, eventId=null, created=null
+                }) {
         super(id);
+        
         this.code = code;
         this.message = message;
         this.webhookId = webhookId;

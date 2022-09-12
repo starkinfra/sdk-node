@@ -16,17 +16,19 @@ class Log extends Resource {
      * @param created [string]: creation datetime for the log. ex: '2020-03-10 10:30:00.000'
      * @param type [string]: type of the PixClaim event which triggered the log creation. ex: 'created' or 'failed'
      * @param errors [list of strings]: list of errors linked to this PixClaim event
-     * @param agent [string]: agent that modified the PixClaim resulting in the Log. Options: 'claimer', 'claimed'.
      * @param reason [string]: reason why the PixClaim was modified, resulting in the Log. Options: 'fraud', 'userRequested', 'accountClosure', 'defaultOperation', 'reconciliation'.
      * @param claim [PixClaim]: PixClaim entity to which the log refers to.
      *
      */
-    constructor({ id, created, type, errors, agent, reason, claim }) {
+    constructor({ 
+                    id=null, created=null, type=null, errors=null, reason=null, 
+                    claim=null
+                }) {
         super(id);
+        
         this.created = check.datetime(created);
         this.type = type;
         this.errors = errors;
-        this.agent = agent;
         this.reason = reason;
         this.claim = claim;
     }

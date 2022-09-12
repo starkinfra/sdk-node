@@ -19,8 +19,11 @@ class Log extends Resource {
      * @param chargeback [PixChargebacks]: PixChargebacks entity to which the log refers to.
      *
      */
-    constructor({ created, type, errors, chargeback, id }) {
+    constructor({ 
+                    id=null, created=null, type=null, errors=null, chargeback=null
+                }) {
         super(id);
+        
         this.created = check.datetime(created);
         this.type = type;
         this.errors = errors;

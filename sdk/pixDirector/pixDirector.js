@@ -1,9 +1,8 @@
 const rest = require('../utils/rest.js');
-const check = require('../utils/check.js');
-const Resource = require('../utils/resource.js').Resource
+const SubResource = require('../utils/subResource.js').SubResource
 
 
-class PixDirector extends Resource {
+class PixDirector extends SubResource {
     /**
      *
      * PixDirector object
@@ -23,11 +22,13 @@ class PixDirector extends Resource {
      * @param teamPhones [list of strings]: list of phones of the team. ex: ['+5511988889999', '+5511988889998']
      *
      * Attributes (return-only):
-     * @param id [string]: unique id returned when the PixDirector is created. ex: '5656565656565656'
      * @param status [string]: current PixDirector status. ex: 'success'
      */
-    constructor({ name, taxId, phone, email, password, teamEmail, teamPhones, id = null, status = null }) {
-        super(id);
+    constructor({ 
+                    name, taxId, phone, email, password, teamEmail, teamPhones, 
+                    status = null 
+                }) {
+        super();
 
         this.email = email;
         this.name = name;
@@ -41,7 +42,7 @@ class PixDirector extends Resource {
 }
 
 exports.PixDirector = PixDirector;
-let resource = {'class': exports.PixDirector, 'name': 'PixDirector'};
+let subResource = {'class': exports.PixDirector, 'name': 'PixDirector'};
 
 exports.create = async function (statement, {user} = {}) {
     /**
@@ -60,5 +61,5 @@ exports.create = async function (statement, {user} = {}) {
      * @returns PixDirector objects with updated attributes
      *
      */
-    return rest.postSingle(resource, statement, user);
+    return rest.postSingle(subResource, statement, user);
 };

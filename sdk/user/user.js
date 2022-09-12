@@ -5,7 +5,9 @@ const check = require('../utils/check.js')
 
 class User extends Resource {
 
-    constructor({id, privateKey, environment}) {
+    constructor({
+                    id, privateKey, environment
+                }) {
         super(id);
         this.pem = check.key(privateKey);
         this.environment = check.environment(environment);

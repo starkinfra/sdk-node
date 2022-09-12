@@ -20,8 +20,12 @@ class IssuingTransaction extends Resource {
      * @param created [string]: creation datetime for the IssuingTransaction. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({ id, amount, balance, description, source, tags, created }) {
+    constructor({ 
+                    id=null, amount=null, balance=null, description=null, 
+                    source=null, tags=null, created=null
+                }) {
         super(id);
+        
         this.amount = amount;
         this.balance = balance;
         this.description = description;

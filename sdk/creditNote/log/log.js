@@ -20,8 +20,11 @@ class Log extends Resource {
      * @param note [CreditNote]: CreditNote entity to which the log refers to.
      *
      */
-    constructor({ created, type, errors, note, id }) {
+    constructor({ 
+                    id=null, created=null, type=null, errors=null, note=null
+                }) {
         super(id);
+        
         this.created = check.datetime(created);
         this.type = type;
         this.errors = errors;

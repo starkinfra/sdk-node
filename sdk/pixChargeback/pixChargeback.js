@@ -22,26 +22,27 @@ class PixChargeback extends Resource {
      *
      * Parameters (optional):
      * @param description [string, default null]: description for the PixChargeback.
+     * @param tags [list of strings, default []]: list of strings for tagging. ex: ['travel', 'food']
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the PixChargeback is created. ex: '5656565656565656'
      * @param analysis [string]: analysis that led to the result.
-     * @param bacenId [string]: central bank's unique UUID that identifies the PixChargeback.
      * @param senderBankCode [string]: bankCode of the Pix participant that created the PixChargeback. ex: '20018183'
      * @param receiverBankCode [string]: bankCode of the Pix participant that received the PixChargeback. ex: '20018183'
      * @param rejectionReason [string]: reason for the rejection of the Pix chargeback. Options: 'noBalance', 'accountClosed', 'unableToReverse'
-     * @param reversalReferenceId [string]: return id of the reversal transaction. ex: 'D20018183202202030109X3OoBHG74wo'.
+     * @param reversalReferenceId [string]: returnId or endToEndId of the reversal transaction. ex: 'D20018183202202030109X3OoBHG74wo'.
      * @param result [string]: result after the analysis of the PixChargeback by the receiving party. Options: 'rejected', 'accepted', 'partiallyAccepted'
+     * @param flow [string]: direction of the Pix Chargeback. Options: 'in' for received chargebacks, 'out' for chargebacks you requested
      * @param status [string]: current PixChargeback status. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
      * @param created [string]: creation datetime for the PixChargeback. ex: '2022-01-01T12:00:00:00'.
      * @param updated [string]: latest update datetime for the PixChargeback. ex: '2022-01-01T12:00:00:00'.
      *
      */
-    constructor({
-                    amount, referenceId, reason, description = null, analysis = null, bacenId = null,
-                    senderBankCode = null, receiverBankCode = null, rejectionReason = null,
-                    reversalReferenceId = null, id = null, result = null, status = null,
-                    created = null, updated = null
+    constructor({ 
+                    amount, referenceId, reason, description = null, tags = null, 
+                    id = null,  analysis = null, senderBankCode = null, receiverBankCode = null, 
+                    rejectionReason = null, reversalReferenceId = null, result = null, 
+                    flow = null, status = null, created = null, updated = null 
                 }) {
         super(id);
 
@@ -49,13 +50,14 @@ class PixChargeback extends Resource {
         this.referenceId = referenceId;
         this.reason = reason;
         this.description = description;
+        this.tags = tags;
         this.analysis = analysis;
-        this.bacenId = bacenId;
         this.senderBankCode = senderBankCode;
         this.receiverBankCode = receiverBankCode;
         this.rejectionReason = rejectionReason;
         this.reversalReferenceId = reversalReferenceId;
         this.result = result;
+        this.flow = flow;
         this.status = status;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
@@ -105,12 +107,12 @@ exports.get = async function (id, { user } = {}) {
     return rest.getId(resource, id, user);
 };
 
-exports.query = async function ({ limit, after, before, status, ids, user } = {}) {
+exports.query = async function ({ limit, after, before, status, ids, flow, tags, user } = {}) {
     /**
      *
      * Retrieve PixChargebacks
      *
-     * @description Receive a generator of PixChargebacks objects previously created in the Stark Infra API
+     * @description Receive a generator of PixChargeback objects previously created in the Stark Infra API
      *
      * Parameters (optional):
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
@@ -118,6 +120,8 @@ exports.query = async function ({ limit, after, before, status, ids, user } = {}
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
      * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+     * @param flow [string, default null]: direction of the Pix Chargeback. Options: 'in' for received chargebacks, 'out' for chargebacks you requested
+     * @param tags [list of strings, default null]: filter for tags of retrieved objects. ex: ['travel', 'food']
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -130,11 +134,13 @@ exports.query = async function ({ limit, after, before, status, ids, user } = {}
         before: check.date(before),
         status: status,
         ids: ids,
+        flow: flow,
+        tags: tags
     };
     return rest.getList(resource, query, user);
 };
 
-exports.page = async function ({ cursor, limit, after, before, status, ids, user } = {}) {
+exports.page = async function ({ cursor, limit, after, before, status, ids, flow, tags, user } = {}) {
     /**
      *
      * Retrieve paged PixChargebacks
@@ -149,6 +155,8 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, user
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
      * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
+     * @param flow [string, default null]: direction of the Pix Chargeback. Options: 'in' for received chargebacks, 'out' for chargebacks you requested
+     * @param tags [list of strings, default null]: filter for tags of retrieved objects. ex: ['travel', 'food']
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -162,6 +170,8 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, user
         before: check.date(before),
         status: status,
         ids: ids,
+        flow: flow,
+        tags: tags
     };
     return rest.getPage(resource, query, user);
 };

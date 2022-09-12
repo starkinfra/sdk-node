@@ -1,4 +1,11 @@
+const {parseObjects} = require('../utils/parse');
+const {CardMethod} = require('../cardMethod/cardMethod.js');
+const {MerchantCountry} = require('../merchantCountry/merchantCountry.js');
+const {MerchantCategory} = require('../merchantCategory/merchantCategory.js');
 const Resource = require('../utils/resource.js').Resource
+const cardMethodResource = require('../cardMethod/cardMethod').subResource;
+const merchantCountryResource = require('../merchantCountry/merchantCountry').subResource;
+const merchantCategoryResource = require('../merchantCategory/merchantCategory').subResource;
 
 
 class IssuingRule extends Resource {
@@ -14,8 +21,8 @@ class IssuingRule extends Resource {
      *
      * Parameters (optional):
      * @param id [string, default null]: unique id returned when Rule is created. ex: '5656565656565656'
-     * @param interval [string, default 'lifetime']: interval after which the rule amount counter will be reset to 0. ex: 'instant', 'day', 'week', 'month', 'year' or 'lifetime'
-     * @param currencyCode [string, default 'BRL']: code of the currency that the rule amount refers to. ex: 'BRL' or 'USD'
+     * @param interval [string, default 'lifetime']: interval after which the rule amount counter will be reset to 0. Options: 'instant', 'day', 'week', 'month', 'year' or 'lifetime'
+     * @param currencyCode [string, default 'BRL']: code of the currency that the rule amount refers to. Options: 'BRL' or 'USD'
      * @param categories [list of strings, default []]: merchant categories accepted by the rule. ex: ['eatingPlacesRestaurants', 'travelAgenciesTourOperators']
      * @param countries [list of strings, default []]: countries accepted by the rule. ex: ['BRA', 'USA']
      * @param methods [list of strings, default []]: card purchase methods accepted by the rule. ex: ['chip', 'token', 'server', 'manual', 'magstripe', 'contactless']
@@ -26,18 +33,23 @@ class IssuingRule extends Resource {
      * @param currencyName [string]: currency name. ex: 'Brazilian Real'
      *
      */
-    constructor({ id, name, interval, amount, currencyCode, counterAmount, currencyName, currencySymbol, categories, countries, methods }) {
+    constructor({ 
+                    name, amount, id=null, interval=null, currencyCode=null, 
+                    categories=null, countries=null, methods=null, counterAmount=null, 
+                    currencySymbol=null, currencyName=null
+                }) {
         super(id);
+        
         this.name = name;
-        this.interval = interval;
         this.amount = amount;
+        this.interval = interval;
         this.currencyCode = currencyCode;
+        this.categories = parseObjects(categories, merchantCategoryResource, MerchantCategory);
+        this.countries = parseObjects(countries, merchantCountryResource, MerchantCountry);
+        this.methods = parseObjects(methods, cardMethodResource, CardMethod);
         this.counterAmount = counterAmount;
-        this.currencyName = currencyName;
         this.currencySymbol = currencySymbol;
-        this.categories = categories;
-        this.countries = countries;
-        this.methods = methods;
+        this.currencyName = currencyName;
     }
 }
 

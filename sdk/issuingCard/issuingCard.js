@@ -34,7 +34,7 @@ class IssuingCard extends Resource {
      * @param id [string]: unique id returned when IssuingCard is created. ex: '5656565656565656'
      * @param holderId [string]: cardholder unique id. ex: '5656565656565656'
      * @param type [string]: card type. ex: 'virtual'
-     * @param status [string]: current IssuingCard status. ex: 'canceled' or 'active'
+     * @param status [string]: current IssuingCard status. Options: 'active', 'blocked', 'canceled', 'expired'
      * @param number [string]: [EXPANDABLE] masked card number. ex: '1234 5678 1234 5678'
      * @param securityCode [string]: [EXPANDABLE] masked card verification value (cvv). Expand to unmask the value. ex: '123'.
      * @param expiration [string]: [EXPANDABLE] masked card expiration datetime. ex: '2020-03-10 10:30:00.000'
@@ -42,28 +42,31 @@ class IssuingCard extends Resource {
      * @param updated [string]: latest update datetime for the IssuingCard. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({
-                    holderTaxId, holderName, holderExternalId, id, holderId, type, displayName, 
-                    status, rules, binId, streetLine1, streetLine2, district, city, stateCode, 
-                    zipCode, tags, created, updated, number, securityCode, expiration
+    constructor({ 
+                    holderName, holderTaxId, holderExternalId, displayName=null, 
+                    rules=null, binId=null, tags=null, streetLine1=null, streetLine2=null, 
+                    district=null, city=null, stateCode=null, zipCode=null, id=null, 
+                    holderId=null, type=null, status=null, number=null, securityCode=null, 
+                    expiration=null, created=null, updated=null 
                 }) {
         super(id);
-        this.holderTaxId = holderTaxId;
+        
         this.holderName = holderName;
+        this.holderTaxId = holderTaxId;
         this.holderExternalId = holderExternalId;
-        this.holderId = holderId;
-        this.type = type;
         this.displayName = displayName;
-        this.status = status;
         this.rules = parseObjects(rules, ruleResource, IssuingRule);
         this.binId = binId;
+        this.tags = tags;
         this.streetLine1 = streetLine1;
         this.streetLine2 = streetLine2;
         this.district = district;
         this.city = city;
         this.stateCode = stateCode;
         this.zipCode = zipCode;
-        this.tags = tags;
+        this.holderId = holderId;
+        this.type = type;
+        this.status = status;
         this.number = number;
         this.securityCode = securityCode;
         this.expiration = check.datetime(expiration);
@@ -134,7 +137,7 @@ exports.query = async function ({ status, types, holderIds, after, before, tags,
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param expand [list of strings, default []]: fields to expand information. ex: ['rules', 'securityCode', 'number', 'expiration']
-     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call     \
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
      * Return:
      * @returns generator of IssuingCard objects with updated attributes

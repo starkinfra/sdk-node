@@ -29,8 +29,8 @@ exports.generateInvoicePreview = (n=1, amount=random.randomInt(1, 100000)) => {
     return [...Array(n)].map((item, index) => generateInvoices(days=(index + 1) * 30, Math.round(amount / n)))
 }
 
-exports.generateSacPreview = () => {
-    return new starkinfra.CreditNotePreview({
+function generateSacPreview() {
+    return new starkinfra.creditPreview.CreditNotePreview({
         taxId: TaxIdGenerator.taxId(),
         type: "sac",
         nominalAmount: random.randomInt(1, 100000),
@@ -43,8 +43,8 @@ exports.generateSacPreview = () => {
     })
 }
 
-exports.generatePricePreview = () => {
-    return new starkinfra.CreditNotePreview({
+function generatePricePreview() {
+    return new starkinfra.creditPreview.CreditNotePreview({
         taxId: TaxIdGenerator.taxId(),
         type: "price",
         nominalAmount: random.randomInt(1, 100000),
@@ -57,8 +57,8 @@ exports.generatePricePreview = () => {
     })
 }
 
-exports.generateAmericanPreview = () => {
-    return new starkinfra.CreditNotePreview({
+function generateAmericanPreview() {
+    return new starkinfra.creditPreview.CreditNotePreview({
         taxId: TaxIdGenerator.taxId(),
         type: "american",
         nominalAmount: random.randomInt(1, 100000),
@@ -71,8 +71,8 @@ exports.generateAmericanPreview = () => {
     })
 }
 
-exports.generateBulletPreview = () => {
-    return new starkinfra.CreditNotePreview({
+function generateBulletPreview() {
+    return new starkinfra.creditPreview.CreditNotePreview({
         taxId: TaxIdGenerator.taxId(),
         type: "bullet",
         nominalAmount: random.randomInt(1, 100000),
@@ -83,9 +83,9 @@ exports.generateBulletPreview = () => {
     })
 }
 
-exports.generateCustomPreview = () => {
+function generateCustomPreview() {
     var amount = random.randomInt(1, 100000)
-    return new starkinfra.CreditNotePreview({
+    return new starkinfra.creditPreview.CreditNotePreview({
         taxId: TaxIdGenerator.taxId(),
         type: "custom",
         nominalAmount: amount,
@@ -95,7 +95,7 @@ exports.generateCustomPreview = () => {
     })
 }
 
-exports.generateRandomPreview = () => {
+function generateRandomPreview() {
     return choice([
         generateSacPreview,
         generatePricePreview,
@@ -105,7 +105,7 @@ exports.generateRandomPreview = () => {
     ]).call()
 }
 
-exports.getPreviewExample = (type) => {
+exports.getCreditNotePreviewExample = (type) => {
     return type ? generatorsByType[type].call() : generateRandomPreview()
 }
 

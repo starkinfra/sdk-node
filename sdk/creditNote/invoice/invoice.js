@@ -46,10 +46,11 @@ class Invoice extends Resource {
      */
     constructor({
                     amount, due = null, expiration = null, tags = null,
-                    descriptions = null, id = null, name = null, taxId = null, pdf = null, 
-                    link = null, fine = null, interest = null, nominalAmount = null, fineAmount = null, 
-                    interestAmount = null, discountAmount = null, discounts = null, brcode = null,
-                    status = null, fee = null, transactionIds = null, created = null, updated = null
+                    descriptions = null, id = null, name = null, taxId = null, 
+                    pdf = null, link = null, fine = null, interest = null, nominalAmount = null, 
+                    fineAmount = null, interestAmount = null, discountAmount = null, 
+                    discounts = null, brcode = null, status = null, fee = null, 
+                    transactionIds = null, created = null, updated = null
                 }) {
         super(id);
 

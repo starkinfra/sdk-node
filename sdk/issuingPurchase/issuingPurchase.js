@@ -1,5 +1,7 @@
 const rest = require('../utils/rest.js');
+const parse = require('../utils/parse.js');
 const check = require('../utils/check.js');
+const api = require('../utils/api.js');
 const Resource = require('../utils/resource.js').Resource
 
 
@@ -15,6 +17,7 @@ class IssuingPurchase extends Resource {
      * @param holderName [string]: cardholder's name. ex: 'Tony Stark'
      * @param cardId [string]: unique id returned when IssuingCard is created. ex: '5656565656565656'
      * @param cardEnding [string]: last 4 digits of the card number. ex: '1234'
+     * @param purpose [string]: purchase purpose. ex: "purchase"
      * @param amount [integer]: IssuingPurchase value in cents. Minimum = 0. ex: 1234 (= R$ 12.34)
      * @param tax [integer]: IOF amount taxed for international purchases. ex: 1234 (= R$ 12.34)
      * @param issuerAmount [integer]: issuer amount. ex: 1234 (= R$ 12.34)
@@ -30,25 +33,41 @@ class IssuingPurchase extends Resource {
      * @param merchantName [string]: merchant name. ex: 'Google Cloud Platform'
      * @param merchantFee [integer]: fee charged by the merchant to cover specific costs, such as ATM withdrawal logistics, etc. ex: 200 (= R$ 2.00)
      * @param walletId [string]: virtual wallet ID. ex: '5656565656565656'
-     * @param methodCode [string]: method code. ex: 'chip', 'token', 'server', 'manual', 'magstripe' or 'contactless'
+     * @param methodCode [string]: method code. Options: 'chip', 'token', 'server', 'manual', 'magstripe' or 'contactless'
      * @param score [float]: internal score calculated for the authenticity of the purchase. ex: 7.6
+     * @param endToEndId [string]: Unique id used to identify the transaction through all of its life cycle, even before the purchase is denied or accepted and gets its usual id. ex: '679cd385-642b-49d0-96b7-89491e1249a5'
+     * @param tags [list of string]: list of strings for tagging. ex: ['travel', 'food']
+     * @param zipCode [string]: zip code of the merchant location. ex: "02101234"
+     * 
+     * Attributes (IssuingPurchase only):
      * @param issuingTransactionIds [string]: ledger transaction ids linked to this Purchase
-     * @param endToEndId [string]: Unique id used to identify the transaction through all of its life cycle, even before the purchase is denied or accepted and gets its usual id. Example: endToEndId='679cd385-642b-49d0-96b7-89491e1249a5'
-     * @param status [string]: current IssuingCard status. ex: 'approved', 'canceled', 'denied', 'confirmed' or 'voided'
-     * @param tags [string]: list of strings for tagging. ex: ['travel', 'food']
+     * @param status [string]: current IssuingCard status. Options: 'approved', 'canceled', 'denied', 'confirmed' or 'voided'
      * @param created [string]: creation datetime for the IssuingPurchase. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the IssuingPurchase. ex: '2020-03-10 10:30:00.000'
+     * 
+     * Attributes (Authorization request only):
+     * @param isPartialAllowed [bool]: true if the the merchant allows partial purchases. ex: false
+     * @param cardTags [list of strings]: tags of the IssuingCard responsible for this purchase. ex: ["travel", "food"]
+     * @param holderTags [list of strings]: tags of the IssuingHolder responsible for this purchase. ex: ["technology", "john snow"]
      *
      */
-    constructor({ id, holderName, cardId, cardEnding, amount, tax, issuerAmount, issuerCurrencyCode, 
-                    issuerCurrencySymbol, merchantAmount, merchantCurrencyCode, merchantCurrencySymbol, 
-                    merchantCategoryCode, merchantCountryCode, acquirerId, merchantId, merchantName, merchantFee,
-                    walletId, methodCode, score, issuingTransactionIds, endToEndId, status, tags, created, updated
+    constructor({ 
+                    id=null, holderName=null, cardId=null, cardEnding=null, purpose=null, 
+                    amount=null, tax=null, issuerAmount=null, issuerCurrencyCode=null, 
+                    issuerCurrencySymbol=null, merchantAmount=null, merchantCurrencyCode=null, 
+                    merchantCurrencySymbol=null, merchantCategoryCode=null, merchantCountryCode=null, 
+                    acquirerId=null, merchantId=null, merchantName=null, merchantFee=null, 
+                    walletId=null, methodCode=null, score=null, endToEndId=null, 
+                    tags=null, zipCode=null, issuingTransactionIds=null, status=null, 
+                    created=null, updated=null, isPartialAllowed=null, cardTags=null, 
+                    holderTags=null 
                 }) {
         super(id);
+
         this.holderName = holderName;
         this.cardId = cardId;
         this.cardEnding = cardEnding;
+        this.purpose = purpose;
         this.amount = amount;
         this.tax = tax;
         this.issuerAmount = issuerAmount;
@@ -66,12 +85,16 @@ class IssuingPurchase extends Resource {
         this.walletId = walletId;
         this.methodCode = methodCode;
         this.score = score;
-        this.issuingTransactionIds = issuingTransactionIds;
         this.endToEndId = endToEndId;
-        this.status = status;
         this.tags = tags;
-        this.created = check.datetime(created);
+        this.zipCode = zipCode;
+        this.issuingTransactionIds = issuingTransactionIds;
+        this.status = status;
         this.updated = check.datetime(updated);
+        this.created = check.datetime(created);
+        this.isPartialAllowed = isPartialAllowed;
+        this.cardTags = cardTags;
+        this.holderTags = holderTags;
     }
 }
 
@@ -173,4 +196,62 @@ exports.page = async function ({ cursor, ids, cardIds, holderIds, endToEndIds, l
         before: before,
     };
     return rest.getPage(resource, query, user);
+};
+
+exports.parse = async function (content, signature, {user} = {}) {
+    /**
+     *
+     * Create a single verified IssuingPurchase authorization request from a content string
+     *
+     * @description Use this method to parse and verify the authenticity of the authorization request received at the informed endpoint.
+     * Authorization requests are posted to your registered endpoint whenever IssuingPurchases are received.
+     * They present IssuingPurchase data that must be analyzed and answered with approval or declination.
+     * If the provided digital signature does not check out with the StarkInfra public key, a starkinfra.error.InvalidSignatureError will be raised.
+     * If the authorization request is not answered within 2 seconds or is not answered with an HTTP status code 200 the IssuingPurchase will go through the pre-configured stand-in validation.
+     *
+     * Parameters (required):
+     * @param content [string]: response content from request received at user endpoint (not parsed)
+     * @param signature [string]: base-64 digital signature received at response header 'Digital-Signature'
+     *
+     * Parameters (optional):
+     * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @return Parsed IssuingPurchase object
+     *
+     */
+    return parse.parseAndVerify(resource, content, signature, user);
+};
+
+exports.response = async function ({
+                                        status, amount=null, reason=null, tags=null
+                                    }) {
+    /**
+     *
+     * Helps you respond IssuingPurchase requests
+     *
+     * Parameters (required):
+     * @param status [string]: sub-issuer response to the authorization. Options: 'approved' or 'denied'
+     * 
+     * Parameters (conditionally required):
+     * @param reason [string]: denial reason. Options: 'other', 'blocked', 'lostCard', 'stolenCard', 'invalidPin', 'invalidCard', 'cardExpired', 'issuerError', 'concurrency', 'standInDenial', 'subIssuerError', 'invalidPurpose', 'invalidZipCode', 'invalidWalletId', 'inconsistentCard', 'settlementFailed', 'cardRuleMismatch', 'invalidExpiration', 'prepaidInstallment', 'holderRuleMismatch', 'insufficientBalance', 'tooManyTransactions', 'invalidSecurityCode', 'invalidPaymentMethod', 'confirmationDeadline', 'withdrawalAmountLimit', 'insufficientCardLimit', 'insufficientHolderLimit'
+     * 
+     * Parameters (optional):
+     * @param amount [integer, default null]: amount in cents that was authorized. ex: 1234 (= R$ 12.34)
+     * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
+     *
+     * Return:
+     * @return Dumped JSON string that must be returned to us on the IssuingPurchase request
+     *
+     */
+    let response = {
+        'authorization': {
+            'status': status,
+            'amount': amount,
+            'reason': reason,
+            'tags': tags,
+        }
+    };
+    api.removeNullKeys(response);
+    return JSON.stringify(response);
 };

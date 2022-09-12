@@ -31,9 +31,12 @@ class Organization extends User {
     * @param pem [string]: private key in pem format. ex: '-----BEGIN PUBLIC KEY-----\nMFYwEAYHKoZIzj0CAQYFK4EEAAoDQgAEyTIHK6jYuik6ktM9FIF3yCEYzpLjO5X/\ntqDioGM+R2RyW0QEo+1DG8BrUf4UXHSvCjtQ0yLppygz23z0yPZYfw==\n-----END PUBLIC KEY-----'
     * 
      */
-    constructor({id, privateKey, environment, workspaceId=null}) {
+    constructor({
+                    id, privateKey, environment, workspaceId=null, pem=null
+                }) {
         super({id, privateKey, environment});
         this.workspaceId = workspaceId
+        this.pem = pem;
     }
 
     accessId() {

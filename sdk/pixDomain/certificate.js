@@ -12,7 +12,9 @@ class Certificate extends SubResource {
      * @param content [string]: certificate of the Pix participant in PEM format.
      *
      */
-    constructor({ content }) {
+    constructor({ 
+                    content=null
+                }) {
         super();
         this.content = content;
     }

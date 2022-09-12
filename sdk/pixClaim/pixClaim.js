@@ -8,10 +8,9 @@ class PixClaim extends Resource {
      *
      * PixClaim object
      *
-     * @description PixClaims intend to transfer a PixKey from one account to another.
-     * When you initialize a PixClaim, the entity will not be automatically
-     * created in the Stark Infra API. The 'create' function sends the objects
-     * to the Stark Infra API and returns the created object.
+     * @description A Pix Claim is a request to transfer a Pix Key from an account hosted at another
+     * Pix participant to an account under your bank code. Pix Claims must always be requested by the claimer.
+     * The 'create' function sends the objects to the Stark Infra API and returns the created object.
      *
      * Parameters (required):
      * @param accountCreated [string]: opening Date or DateTime for the account claiming the PixKey. ex: '2022-01-01'.
@@ -21,23 +20,27 @@ class PixClaim extends Resource {
      * @param name [string]: holder's name of the account claiming the PixKey. ex: 'Jamie Lannister'.
      * @param taxId [string]: holder's taxId of the account claiming the PixKey (CPF/CNPJ). ex: '012.345.678-90'.
      * @param keyId [string]: id of the registered Pix Key to be claimed. Allowed keyTypes are CPF, CNPJ, phone number or email. ex: '+5511989898989'.
+     * 
+     * Parameters (optional):
+     * @param tags [list of strings, default []]: list of strings for tagging. ex: ['travel', 'food']
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the PixClaim is created. ex: '5656565656565656'
      * @param status [string]: current PixClaim status. Options: 'created', 'failed', 'delivered', 'confirmed', 'success', 'canceled'
      * @param type [string]: type of Pix Claim. Options: 'ownership', 'portability'.
      * @param keyType [string]: keyType of the claimed PixKey. Options: 'CPF', 'CNPJ', 'phone' or 'email'
-     * @param agent [string]: Options: 'claimer' if you requested the PixClaim or 'claimed' if you received a PixClaim request.
-     * @param bankCode [string]: bankCode of the account linked to the PixKey being claimed. ex: '20018183'.
+     * @param flow [string]: direction of the Pix Claim. Options: 'in' if you received the PixClaim or 'out' if you created the PixClaim.
+     * @param claimerBankCode [string]: bankCode of the Pix participant that created the PixClaim. ex: '20018183'.
      * @param claimedBankCode [string]: bankCode of the account donating the PixKey. ex: '20018183'.
      * @param created [string]: creation datetime for the PixClaim. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the PixClaim. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({
-                    accountCreated, accountNumber, accountType, branchCode, name, taxId, id = null, keyId = null, status = null,
-                    type = null, keyType = null, agent = null, bankCode = null, claimedBankCode = null,
-                    created = null, updated = null
+    constructor({ 
+                    accountCreated, accountNumber, accountType, branchCode, name, 
+                    taxId, keyId = null, tags = null, id = null, status = null, 
+                    type = null, keyType = null, flow = null, claimerBankCode = null, 
+                    claimedBankCode = null, created = null, updated = null
                 }) {
         super(id);
 
@@ -48,11 +51,12 @@ class PixClaim extends Resource {
         this.name = name;
         this.taxId = taxId;
         this.keyId = keyId;
+        this.tags = tags;
         this.status = status;
         this.type = type;
         this.keyType = keyType;
-        this.agent = agent;
-        this.bankCode = bankCode;
+        this.flow = flow;
+        this.claimerBankCode = claimerBankCode;
         this.claimedBankCode = claimedBankCode;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
@@ -67,7 +71,8 @@ exports.create = async function (claim, {user} = {}) {
      *
      * Create a PixClaim object
      *
-     * @description Create a PixClaim to request the transfer of a PixKey to an account hosted at other Pix participants in the Stark Infra API.
+     * @description Create a Pix Claim to request the transfer of a Pix Key from an account
+     * hosted at another Pix participant to an account under your bank code.
      *
      * Parameters (required):
      * @param claim [PixClaim object]: PixClaim object to be created in the API.
@@ -102,7 +107,7 @@ exports.get = async function (id, {user} = {}) {
     return rest.getId(resource, id, user);
 };
 
-exports.query = async function ({ limit, after, before, status, ids, type, agent, keyType, keyId, user } = {}) {
+exports.query = async function ({ limit, after, before, status, ids, type, keyType, keyId, flow, tags, user } = {}) {
     /**
      *
      * Retrieve PixClaims
@@ -116,9 +121,10 @@ exports.query = async function ({ limit, after, before, status, ids, type, agent
      * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'confirmed', 'success', 'canceled'
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param type [strings, default null]: filter for the type of retrieved PixClaims. Options: 'ownership' or 'portability'.
-     * @param agent [string, default null]: filter for the agent of retrieved PixClaims. Options: 'claimer' or 'claimed'.
      * @param keyType [string, default null]: filter for the PixKey type of retrieved PixClaims. Options: 'cpf', 'cnpj', 'phone', 'email' and 'evp',
      * @param keyId [string, default null]: filter PixClaims linked to a specific PixKey id. Example: '+5511989898989'.
+     * @param flow [string, default null]: direction of the Pix Claim. Options: 'in' if you received the PixClaim or 'out' if you created the PixClaim.
+     * @param tags [list of strings, default null]: list of strings to filter retrieved objects. ex: ['travel', 'food']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -132,19 +138,20 @@ exports.query = async function ({ limit, after, before, status, ids, type, agent
         status: status,
         ids: ids,
         type: type,
-        agent: agent,
         keyType: keyType,
         keyId: keyId,
+        flow: flow,
+        tags: tags
     };
     return rest.getList(resource, query, user);
 };
 
-exports.page = async function ({ cursor, limit, after, before, status, ids, type, agent, keyType, keyId, user } = {}) {
+exports.page = async function ({ cursor, limit, after, before, status, ids, type, keyType, keyId, flow, tags, user } = {}) {
     /**
      *
      * Retrieve paged PixClaims
      *
-     * @description Receive a list of up to 100 PixClaims objects previously created in the Stark Infra API and the cursor to the next page.
+     * @description Receive a list of up to 100 PixClaim objects previously created in the Stark Infra API and the cursor to the next page.
      * Use this function instead of query if you want to manually page your requests.
      *
      * Parameters (optional):
@@ -155,9 +162,10 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, type
      * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'confirmed', 'success', 'canceled'
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param type [strings, default null]: filter for the type of retrieved PixClaims. Options: 'ownership' or 'portability'.
-     * @param agent [string, default null]: filter for the agent of retrieved PixClaims. Options: 'claimer' or 'claimed'.
      * @param keyType [string, default null]: filter for the PixKey type of retrieved PixClaims. Options: 'cpf', 'cnpj', 'phone', 'email' and 'evp',
      * @param keyId [string, default null]: filter PixClaims linked to a specific PixKey id. Example: '+5511989898989'.
+     * @param flow [string, default null]: direction of the Pix Claim. Options: 'in' if you received the PixClaim or 'out' if you created the PixClaim.
+     * @param tags [list of strings, default null]: list of strings to filter retrieved objects. ex: ['travel', 'food']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -172,9 +180,10 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, type
         status: status,
         ids: ids,
         type: type,
-        agent: agent,
         keyType: keyType,
         keyId: keyId,
+        flow: flow,
+        tags: tags
     };
     return rest.getPage(resource, query, user);
 };

@@ -25,10 +25,12 @@ class PixStatement extends Resource {
      * @param updated [string]: latest update datetime for the PixStatement. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({
-                    before, after, type, id, status, transactionCount, created, updated
+    constructor({ 
+                    before, after, type, id=null, status = null, transactionCount = null, 
+                    created = null, updated = null 
                 }) {
         super(id);
+        
         this.before = check.date(before);
         this.after = check.date(after);
         this.type = type;
