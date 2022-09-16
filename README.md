@@ -43,6 +43,7 @@ This SDK version is compatible with the Stark Infra API v2.
     - [PixDomain](#query-pixdomains): View registered SPI participants certificates
   - [Credit Note](#credit-note)
     - [CreditNote](#create-creditnotes): Create credit notes
+    - [CreditNotePreview](#preview-creditnotes): Preview credit notes
   - [Webhook](#webhook):
     - [Webhook](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
   - [Webhook Events](#webhook-events):
@@ -1761,6 +1762,86 @@ const starkinfra = require('starkinfra');
     console.log(log);
 })();
 ```
+
+### Preview CreditNotes
+You can create a Credit Note Previews to preview a CCB contract
+based on a specific table type:
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let previews = await starkinfra.creditNotePreview.create([
+        /* SAC Type */
+        new starkinfra.CreditNotePreview({      
+            initialAmount: 2478,
+            initialDue: '2022-07-22',
+            nominalAmount: 90583,
+            nominalInterest: 3.7,
+            rebateAmount: 23,
+            scheduled: '2022-06-28',
+            taxId: '477.954.506-44',
+            type: 'sac'
+        }),
+        /* PRICE Type */
+        new starkinfra.CreditNotePreview({
+            initialAmount: 4449,
+            initialDue: '2022-07-16',
+            interval: 'year',
+            nominalAmount: 96084,
+            nominalInterest: 3.1,
+            rebateAmount: 239,
+            scheduled: '2022-07-02',
+            taxId: '81.882.684/0001-02',
+            type: 'price'
+        }),
+        /* American Type */
+        new starkinfra.CreditNotePreview({
+            count: 8,
+            initialDue: '2022-07-18',
+            nominalAmount: 6161,
+            nominalInterest: 3.2,
+            scheduled: '2022-07-03',
+            taxId: '59.352.830/0001-20',
+            type: 'american'
+        }),
+        /* Bullet Type */
+        new starkinfra.CreditNotePreview({
+            initialDue: '2022-07-13',
+            nominalAmount: 86237,
+            nominalInterest: 2.6,
+            scheduled: '2022-07-03',
+            taxId: '37.293.955/0001-94',
+            type: 'bullet'
+        }),
+        /* Custom Type */
+        new starkinfra.CreditNotePreview({
+            invoices: [
+                new starkinfra.creditnote.Invoice({
+                    amount: 4833,
+                    due: '2022-08-19'
+                }),
+                new starkinfra.creditnote.Invoice({
+                    amount: 4833,
+                    due: '2022-09-25'
+                })
+            ],
+            nominalAmount: 29000,
+            rebateAmount: 900,
+            scheduled: '2022-07-31',
+            taxId: '36.084.400/0001-70',
+            type: 'custom'
+        })
+    ])
+
+    for(preview in previews) {
+        console.log(preview)
+    }
+})
+```
+
+**Note**: Instead of using dictionary objects, you can also pass each invoice element in the native CreditNotePreview object format
+
 
 ## Webhook
 
