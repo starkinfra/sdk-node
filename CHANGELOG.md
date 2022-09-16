@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [0.2.0] - 2022-09-16
 ### Added
 - StaticBrcode resource
 - DynamicBrcode resource 
@@ -53,14 +55,11 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ## [0.1.0] - 2022-06-03
 ### Added
 - CreditNotePreview sub-resource
+- credit receiver's billing address on CreditNote
 ### Removed
 - updated attribute from IssuingBin resource
 ### Changed
 - fine and interest attributes to return only on CreditNote.Invoice sub-resource
-
-## [0.1.0] - 2022-06-03
-### Added
-- credit receiver's billing address on CreditNote
 
 ## [0.0.2] - 2022-05-23
 ### Added
