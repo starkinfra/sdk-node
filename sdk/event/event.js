@@ -22,8 +22,12 @@ class Event extends Resource {
      * @param workspaceId [string]: ID of the Workspace that generated this event. Mostly used when multiple Workspaces have Webhooks registered to the same endpoint. ex: '4545454545454545'
      *
      */
-    constructor({created, isDelivered, subscription, log, id, workspaceId} = {}) {
+    constructor({
+                    id=null, log=null, created=null, isDelivered=null, 
+                    subscription=null, workspaceId=null
+                } = {}) {
         super(id);
+        
         this.log = log;
         this.created = check.datetime(created);
         this.isDelivered = isDelivered;
@@ -67,7 +71,7 @@ exports.query = async function ({ limit, after, before, isDelivered, user } = {}
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020, 3, 10'
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param isDelivered [bool, default null]: bool to filter successfully delivered events. ex: true or false
-     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call     \
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
      * Return:
      * @returns generator of Event objects with updated attributes
@@ -162,11 +166,11 @@ exports.delete = async function (id, {user} = {}) {
 exports.parse = async function ({content, signature, user} = {}) {
     /**
      *
-     * Create single notification Event from a content string
+     * Create a single notification Event from a content string
      *
      * @description Create a single Event object received from event listening at subscribed user endpoint.
      * If the provided digital signature does not check out with the Stark public key, a
-     * stark.exception.InvalidSignatureException will be raised.
+     * starkinfra.error.InvalidSignatureError will be raised.
      *
      * Parameters (required):
      * @param content [string]: response content from request received at user endpoint (not parsed)

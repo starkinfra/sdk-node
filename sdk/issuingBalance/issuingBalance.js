@@ -22,6 +22,7 @@ class IssuingBalance extends Resource {
      */
     constructor(id, amount, currency, updated) {
         super(id);
+        
         this.amount = amount;
         this.currency = currency;
         this.updated = check.datetime(updated);

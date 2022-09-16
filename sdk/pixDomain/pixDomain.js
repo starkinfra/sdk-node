@@ -19,8 +19,11 @@ class PixDomain extends SubResource {
      * @param name [string]: current active domain (URL) of the Pix participant.
      *
      */
-    constructor({ certificates, name }) {
+    constructor({ 
+                    certificates=null, name=null
+                }) {
         super();
+        
         this.certificates = parseObjects(certificates, certificateResource, Certificate);
         this.name = name;
     }

@@ -20,8 +20,11 @@ class Log extends Resource {
      * @param purchase [IssuingPurchase]: IssuingPurchase entity to which the log refers to.
      *
      */
-    constructor({ id, created, type, errors, purchase }) {
+    constructor({ 
+                    id=null, created=null, type=null, errors=null, purchase=null
+                }) {
         super(id);
+        
         this.created = check.datetime(created);
         this.type = type;
         this.errors = errors;

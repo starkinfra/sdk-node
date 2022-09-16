@@ -1,4 +1,3 @@
-const check = require('../utils/check.js');
 const SubResource = require('../utils/subResource').SubResource;
 
 
@@ -15,7 +14,9 @@ class Signer extends SubResource {
      * @param method [string]: delivery method for the contract. ex: 'link'
      *
      */
-    constructor({ name, contact, method }) {
+    constructor({ 
+                    name, contact, method 
+                }) {
         super();
 
         this.name = name;
