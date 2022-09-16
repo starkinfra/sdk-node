@@ -5,13 +5,10 @@ const error = require('../error.js');
 const api = require('./api');
 
 
-exports.parseOptionalObjects = function (objects, resource, resourceClass) {
+exports.parseObjects = function (objects, resource, resourceClass) {
     if (objects == null)
         return null;
-    return exports.parseObjects(objects, resource, resourceClass);
-}
 
-exports.parseObjects = function (objects, resource, resourceClass) {
     let parsedObjects = [];
     for (let object of objects) {
         if (object instanceof resourceClass) {
