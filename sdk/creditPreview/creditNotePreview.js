@@ -1,11 +1,10 @@
-const rest = require('../utils/rest.js');
 const check = require('../utils/check.js');
-const Resource = require('../utils/resource.js').Resource
+const SubResource = require('../utils/subResource.js').SubResource
 const Invoice = require('../creditNote/invoice/invoice.js').Invoice;
 const parseObjects = require('../utils/parse').parseObjects;
 const invoiceResource = require('../creditNote/invoice/invoice.js').resource;
 
-class CreditNotePreview extends Resource {
+class CreditNotePreview extends SubResource {
     /**
      * 
      * CreditNotePreview object
@@ -37,21 +36,24 @@ class CreditNotePreview extends Resource {
      * @param taxAmount [integer]: tax amount included in the CreditNote. ex: 100
      * @param interest [float]: yearly effective interest rate of the credit note, in percentage. ex: 12.5
      */
-    constructor({type, nominalAmount, scheduled, taxId, invoices, nominalInterest, 
-                initialDue, count, initialAmount, interval, rebateAmount, amount, 
-                taxAmount, interest}) {
+    constructor({ 
+                    type, nominalAmount, scheduled, taxId, invoices=null, nominalInterest=null,  
+                    initialDue=null, count=null, initialAmount=null, interval=null, 
+                    rebateAmount=null, amount=null, taxAmount=null, interest=null
+                }) {
         super();
+
         this.type = type;
         this.nominalAmount = nominalAmount;
         this.scheduled = check.datetimeOrDate(scheduled);
         this.taxId = taxId;
         this.invoices = parseObjects(invoices, invoiceResource, Invoice);
         this.nominalInterest = nominalInterest;
-        this.initialDue = initialDue;
+        this.initialDue = check.datetime(initialDue);
         this.count = count;
         this.initialAmount = initialAmount;
         this.interval = interval;
-        this.rebateAmount = check.datetimeOrDate(rebateAmount);
+        this.rebateAmount = rebateAmount;
         this.amount = amount;
         this.taxAmount = taxAmount;
         this.interest = interest;
@@ -59,24 +61,4 @@ class CreditNotePreview extends Resource {
 }
 
 exports.CreditNotePreview = CreditNotePreview;
-let resource = {'class': exports.CreditNotePreview, 'name': 'CreditNotePreview'};
-
-exports.create = async function(requests, {user}={}) {
-    /**
-     * 
-     * Create CreditNotePreviews
-     * 
-     * @description Send a list of CreditNotePreview objects for creation at the Stark Infra API
-     *
-     * Parameters (required):
-     * @param previews [list of CreditNotePreview objects]: list of CreditNotePreview objects to be created in the API
-     *
-     * Parameters (optional):
-     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
-     *
-     * Return:
-     * @param list of CreditNotePreview objects with updated attributes
-     */
-
-    return rest.post(resource, requests, user);
-}
+exports.subResource = {'class': exports.CreditNotePreview, 'name': 'CreditNotePreview'};

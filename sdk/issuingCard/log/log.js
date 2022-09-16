@@ -19,7 +19,9 @@ class Log extends Resource {
      * @param card [IssuingCard]: IssuingCard entity to which the log refers to.
      *
      */
-    constructor({ id, created, type, card }) {
+    constructor({ 
+                    id=null, created=null, type=null, card=null
+                }) {
         super(id);
         this.created = check.datetime(created);
         this.type = type;

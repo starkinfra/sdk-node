@@ -21,34 +21,37 @@ This SDK version is compatible with the Stark Infra API v2.
 - [Resource listing and manual pagination](#resource-listing-and-manual-pagination)
 - [Testing in Sandbox](#testing-in-sandbox)
 - [Usage](#usage)
-  - [Issuing](#issuing)
-    - [BINs](#query-issuingbins): View available sub-issuer BINs (a.k.a. card number ranges)
-    - [Holders](#create-issuingholders): Manage cardholders
-    - [Cards](#create-issuingcards): Create virtual and/or physical cards
-    - [Purchases](#process-purchase-authorizations): Authorize and view your past purchases
-    - [Invoices](#create-issuinginvoices): Add money to your issuing balance
-    - [Withdrawals](#create-issuingwithdrawals): Send money back to your Workspace from your issuing balance
-    - [Balance](#get-your-issuingbalance): View your issuing balance
-    - [Transactions](#query-issuingtransactions): View the transactions that have affected your issuing balance
-  - [Pix](#pix)
-    - [PixRequests](#create-pixrequests): Create Pix transactions
-    - [PixReversals](#create-pixreversals): Reverse Pix transactions
-    - [PixBalance](#get-your-pixbalance): View your account balance
-    - [PixStatement](#create-a-pixstatement): Request your account statement
-    - [PixKey](#create-a-pixkey): Create a Pix Key
-    - [PixClaim](#create-a-pixclaim): Claim a Pix Key
-    - [PixDirector](#create-a-pixdirector): Create a Pix Director
-    - [PixInfraction](#create-pixinfractions): Create Pix Infraction reports
-    - [PixChargeback](#create-pixchargebacks): Create Pix Chargeback requests
-    - [PixDomain](#query-pixdomains): View registered SPI participants certificates
-  - [Credit Note](#credit-note)
-    - [CreditNote](#create-creditnotes): Create credit notes
-    - [CreditNotePreview](#preview-creditnotes): Preview credit notes
-  - [Webhook](#webhook):
-    - [Webhook](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
-  - [Webhook Events](#webhook-events):
-    - [WebhookEvents](#process-webhook-events): Manage Webhook events
-    - [WebhookEventAttempts](#query-failed-webhook-event-delivery-attempts-information): Query failed webhook event deliveries
+    - [Issuing](#issuing)
+        - [Products](#query-issuingproducts): View available sub-issuer Products (a.k.a. card number ranges)
+        - [Holders](#create-issuingholders): Manage cardholders
+        - [Cards](#create-issuingcards): Create virtual and/or physical cards
+        - [Purchases](#process-purchase-authorizations): Authorize and view your past purchases
+        - [Invoices](#create-issuinginvoices): Add money to your issuing balance
+        - [Withdrawals](#create-issuingwithdrawals): Send money back to your Workspace from your issuing balance
+        - [Balance](#get-your-issuingbalance): View your issuing balance
+        - [Transactions](#query-issuingtransactions): View the transactions that have affected your issuing balance
+    - [Pix](#pix)
+        - [PixRequests](#create-pixrequests): Create Pix transactions
+        - [PixReversals](#create-pixreversals): Reverse Pix transactions
+        - [PixBalance](#get-your-pixbalance): View your account balance
+        - [PixStatement](#create-a-pixstatement): Request your account statement
+        - [PixKey](#create-a-pixkey): Create a Pix Key
+        - [PixClaim](#create-a-pixclaim): Claim a Pix Key
+        - [PixDirector](#create-a-pixdirector): Create a Pix Director
+        - [PixInfraction](#create-pixinfractions): Create Pix Infraction reports
+        - [PixChargeback](#create-pixchargebacks): Create Pix Chargeback requests
+        - [PixDomain](#query-pixdomains): View registered SPI participants certificates
+        - [StaticBrcode](#create-staticbrcodes): Create static Pix BR codes
+        - [DynamicBrcode](#create-dynamicbrcodes): Create dynamic Pix BR codes
+        - [BrcodePreview](#create-brcodepreviews): Read data from BR Codes before 
+    - [Credit Note](#credit-note)
+        - [CreditNote](#create-creditnotes): Create credit notes
+    - [Credit Preview](#credit-preview)
+        - [CreditNotePreview](#create-creditnotepreviews): Create credit note previews
+    - [Webhook](#webhook):
+        - [Webhook](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
+        - [WebhookEvents](#process-webhook-events): Manage Webhook events
+        - [WebhookEventAttempts](#query-failed-webhook-event-delivery-attempts-information): Query failed webhook event deliveries
 - [Handling errors](#handling-errors)
 - [Help and Feedback](#help-and-feedback)
 
@@ -326,16 +329,16 @@ Here are a few examples on how to use the SDK. If you have any doubts, use the b
 
 ## Issuing
 
-### Query IssuingBINs
+### Query IssuingProducts
 
-To take a look at the sub-issuer BINs available to you, just run the following:
+To take a look at the sub-issuer card products available to you, just run the following:
 
 ```javascript
 await (async() => {
-    let bins = await starkinfra.issuingBin.query();
+    let products = await starkinfra.issuingProduct.query();
 
-    for await (let bin of bins) {
-        console.log(bin);
+    for await (let product of products) {
+        console.log(product);
     }
 })();
 ```
@@ -1285,7 +1288,7 @@ const starkinfra = require('starkinfra');
         status: 'registered',
         ids: ['5729405850615808'],
         type: 'ownership',
-        agent: 'claimed',
+        flow: 'in',
         keyType: 'phone',
         keyId: '+5511989898989'
     });
@@ -1642,6 +1645,278 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
+### Create StaticBrcodes
+
+StaticBrcodes store account information via a BR code or an image (QR code)
+that represents a PixKey and a few extra fixed parameters, such as an amount 
+and a reconciliation ID. They can easily be used to receive Pix transactions.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let brcodes = await starkinfra.staticBrcode.create([
+        new starkinfra.StaticBrcode({
+            name: 'Jamie Lannister',
+            keyId: '+5511988887777',
+            amount: 100,
+            reconciliationId: '123',
+            city: 'São Paulo'
+        })
+    ]);
+
+    for await (let brcode of brcodes) {
+        console.log(brcode);
+    }
+})();
+```
+
+### Query StaticBrcodes
+
+You can query multiple StaticBrcodes according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let brcodes = await starkinfra.staticBrcode.query({
+        limit: 1,
+        after: '2022-06-01',
+        before: '2022-06-30',
+        uuids: ['5ddde28043a245c2848b08cf315effa2']
+    });
+    
+    for await (let brcode of brcodes) {
+        console.log(brcode);
+    }
+})();
+```
+
+### Get a StaticBrcode
+
+After its creation, information on a StaticBrcode may be retrieved by its UUID.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let brcode = await starkinfra.staticBrcode.get('5ddde28043a245c2848b08cf315effa2');
+    
+    console.log(brcode);
+})();
+```
+
+### Create DynamicBrcodes
+
+BR codes store information represented by Pix QR Codes, which are used to send 
+or receive Pix transactions in a convenient way.
+DynamicBrcodes represent charges with information that can change at any time,
+since all data needed for the payment is requested dynamically to an URL stored
+in the BR Code. Stark Infra will receive the GET request and forward it to your
+registered endpoint with a GET request containing the UUID of the BR code for
+identification.
+
+```javascript
+const starkinfra = require('starkinfra')
+
+(async() => {
+    let brcodes = await starkinfra.dynamicBrcode.create([
+        new starkinfra.DynamicBrcode({
+            name: "Jamie Lannister",
+            city: "Rio de Janeiro",
+            externalId: "my_unique_id_05",
+            type: "instant"
+        })
+    ]);
+
+    for (let brcode of brcodes) {
+        console.log(brcode);
+    }
+})();
+```
+
+### Query DynamicBrcodes
+
+You can query multiple DynamicBrcodes according to filters.
+
+```javascript
+const starkinfra = require('starkinfra')
+
+(async() => {
+    let brcodes = await starkinfra.dynamicBrcode.query({
+        limit: 1,
+        after: '2022-07-01',
+        before: '2022-07-30',
+        uuids: ['47bfcd05713f4b3aa6a94a24f295de55']
+    });
+    
+    for await (let brcode of brcodes) {
+        console.log(brcode);
+    }
+})();
+```
+
+### Get a DynamicBrcode
+
+After its creation, information on a DynamicBrcode may be retrieved by its UUID.
+
+```javascript
+const starkinfra = require('starkinfra')
+
+(async() => {
+    let brcode = await starkinfra.dynamicBrcode.get('47bfcd05713f4b3aa6a94a24f295de55');
+    
+    console.log(brcode);
+})();
+```
+
+### Verify a DynamicBrcode read
+
+When a DynamicBrcode is read by your user, a GET request will be made to the your regitered URL to 
+retrieve additional information needed to complete the transaction.
+Use this method to verify the authenticity of a GET request received at your registered endpoint.
+If the provided digital signature does not check out with the StarkInfra public key, a starkinfra.error.InvalidSignatureError will be raised.
+
+```javascript
+const starkinfra = require('starkinfra');
+const express = require('express')
+const app = express()
+
+app.use(express.raw({type: '*/*'}));
+
+const port = 3000
+app.get('/', async (req, res) => {
+    let uuid = await starkinfra.dynamicBrcode.verify({
+        uuid: getUuid(req.url), // you should implement this method to extract the uuid from the request's URL
+        signature: req.headers["Digital-Signature"],
+    });
+})
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+```
+
+### Answer to a Due DynamicBrcode read
+
+When a Due DynamicBrcode is read by your user, a GET request containing 
+the BR code UUID will be made to your registered URL to retrieve additional 
+information needed to complete the transaction.
+
+The GET request must be answered in the following format within 5 seconds 
+and with an HTTP status code 200.
+
+```javascript
+const starkinfra = require('starkinfra');
+const express = require('express')
+const app = express()
+
+app.use(express.raw({type: '*/*'}));
+
+const port = 3000
+app.get('/', async (req, res) => {
+    try {
+        let uuid = await starkinfra.dynamicBrcode.verify({
+            uuid: getUuid(req.url), // you should implement this method to extract the uuid from the request's URL
+            signature: req.headers["Digital-Signature"],
+        });
+
+        invoice = await get_my_invoice(uuid) // you should implement this method to get the information of the BR code from its uuid
+
+        res.send(
+            starkinfra.dynamicbrcode.responseDue({ // this optional method just helps you build the response JSON
+                version: invoice.version,
+                created: invoice.created,
+                due: invoice.due,
+                keyId: invoice.keyId,
+                status: invoice.status,
+                reconciliationId: invoice.reconciliationId,
+                amount: invoice.amount,
+                senderName: invoice.senderName,
+                receiverName: invoice.receiverName,
+                receiverStreetLine: invoice.receiverStreetLine,
+                receiverCity: invoice.receiverCity,
+                receiverStateCode: invoice.receiverStateCode,
+                receiverZipCode: invoice.receiverZipCode
+            })
+        );
+    }
+    catch (err) {
+        console.log(err)
+        res.status(400).end()
+    }
+})
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+```
+
+### Answer to an Instant DynamicBrcode read
+
+When an Instant DynamicBrcode is read by your user, a GET request 
+containing the BR code UUID will be made to your registered URL to retrieve 
+additional information needed to complete the transaction.
+
+The get request must be answered in the following format 
+within 5 seconds and with an HTTP status code 200.
+
+```javascript
+const starkinfra = require('starkinfra');
+const express = require('express')
+const app = express()
+
+app.use(express.raw({type: '*/*'}));
+
+const port = 3000
+app.get('/', async (req, res) => {
+    try {
+        let uuid = await starkinfra.dynamicBrcode.verify({
+            uuid: getUuid(req.url), // you should implement this method to extract the uuid from the request's URL
+            signature: req.headers["Digital-Signature"],
+        });
+
+        invoice = await get_my_invoice(uuid) // you should implement this method to get the information of the BR code from its uuid
+
+        res.send(
+            starkinfra.dynamicbrcode.responseInstant({ // this optional method just helps you build the response JSON
+                version: invoice.version,
+                created: invoice.created,
+                keyId: invoice.keyId,
+                status: invoice.status,
+                reconciliationId: invoice.reconciliationId,
+                amount: invoice.amount,
+                cashierType: invoice.cashierType,
+                cashierBankCode: invoice.cashierBankCode,
+                cashAmount: invoice.cashAmount
+            })
+        );
+    }
+    catch (err) {
+        console.log(err)
+        res.status(400).end()
+    }
+})
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+```
+
+## Create BrcodePreviews
+You can create BrcodePreviews to preview BR Codes before paying them.
+
+```javascript
+const starkinfra = require('starkinfra')
+
+(async () => {
+    let previews = await starkinfra.brcodePreview.create([
+        new starkinfra.BrcodePreview({
+            id: "00020126420014br.gov.bcb.pix0120nedstark@hotmail.com52040000530398654075000.005802BR5909Ned Stark6014Rio de Janeiro621605126674869738606304FF71"
+        }),
+        new starkinfra.BrcodePreview({
+            id: "00020126430014br.gov.bcb.pix0121aryastark@hotmail.com5204000053039865406100.005802BR5910Arya Stark6014Rio de Janeiro6216051262678188104863042BA4"
+        }),
+    ])
+
+    for (let preview of previews) {
+        console.log(preview);
+    }
+})();
+
+```
+
 ## Credit Note
 
 ### Create CreditNotes
@@ -1763,81 +2038,93 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
-### Preview CreditNotes
-You can create a Credit Note Previews to preview a CCB contract
-based on a specific table type:
+## Credit Preview
+You can preview different types of credits before creating them (Currently we only have CreditNote previews):
+
+### Create CreditNotePreviews
+You can preview a CreditNote before creation of the CCB contract:
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let previews = await starkinfra.creditNotePreview.create([
-        /* SAC Type */
-        new starkinfra.CreditNotePreview({      
-            initialAmount: 2478,
-            initialDue: '2022-07-22',
-            nominalAmount: 90583,
-            nominalInterest: 3.7,
-            rebateAmount: 23,
-            scheduled: '2022-06-28',
-            taxId: '477.954.506-44',
-            type: 'sac'
+    let previews = await starkinfra.creditPreview.create([
+        new starkinfra.CreditPreview({
+            type: "credit-note",
+            credit: new starkinfra.creditPreview.CreditNotePreview({
+                initialAmount: 2478,
+                initialDue: "2022-10-22",
+                nominalAmount: 90583,
+                nominalInterest: 3.7,
+                rebateAmount: 23,
+                scheduled: "2022-09-28",
+                taxId: "477.954.506-44",
+                type: "sac"
+            })
         }),
-        /* PRICE Type */
-        new starkinfra.CreditNotePreview({
-            initialAmount: 4449,
-            initialDue: '2022-07-16',
-            interval: 'year',
-            nominalAmount: 96084,
-            nominalInterest: 3.1,
-            rebateAmount: 239,
-            scheduled: '2022-07-02',
-            taxId: '81.882.684/0001-02',
-            type: 'price'
+        new starkinfra.CreditPreview({
+            type: "credit-note",
+            credit:  new starkinfra.creditPreview.CreditNotePreview({
+                initialAmount: 4449,
+                initialDue: "2022-10-16",
+                interval: "year",
+                nominalAmount: 96084,
+                nominalInterest: 3.1,
+                rebateAmount: 239,
+                scheduled: "2022-09-02",
+                taxId: "81.882.684/0001-02",
+                type: "price"
+            })
         }),
-        /* American Type */
-        new starkinfra.CreditNotePreview({
-            count: 8,
-            initialDue: '2022-07-18',
-            nominalAmount: 6161,
-            nominalInterest: 3.2,
-            scheduled: '2022-07-03',
-            taxId: '59.352.830/0001-20',
-            type: 'american'
+        new starkinfra.CreditPreview({
+            type: "credit-note",
+            credit:  new starkinfra.creditPreview.CreditNotePreview({
+                count: 8,
+                initialDue: "2022-10-18",
+                nominalAmount: 6161,
+                nominalInterest: 3.2,
+                scheduled: "2022-09-03",
+                taxId: "59.352.830/0001-20",
+                type: "american"
+            })
         }),
-        /* Bullet Type */
-        new starkinfra.CreditNotePreview({
-            initialDue: '2022-07-13',
-            nominalAmount: 86237,
-            nominalInterest: 2.6,
-            scheduled: '2022-07-03',
-            taxId: '37.293.955/0001-94',
-            type: 'bullet'
+        new starkinfra.CreditPreview({
+            type: "credit-note",
+            credit:  new starkinfra.creditPreview.CreditNotePreview({
+                initialDue: "2022-10-13",
+                nominalAmount: 86237,
+                nominalInterest: 2.6,
+                scheduled: "2022-09-03",
+                taxId: "37.293.955/0001-94",
+                type: "bullet"
+            })
         }),
-        /* Custom Type */
-        new starkinfra.CreditNotePreview({
-            invoices: [
-                new starkinfra.creditnote.Invoice({
-                    amount: 4833,
-                    due: '2022-08-19'
-                }),
-                new starkinfra.creditnote.Invoice({
-                    amount: 4833,
-                    due: '2022-09-25'
-                })
-            ],
-            nominalAmount: 29000,
-            rebateAmount: 900,
-            scheduled: '2022-07-31',
-            taxId: '36.084.400/0001-70',
-            type: 'custom'
+        new starkinfra.CreditPreview({
+            type: "credit-note",
+            credit:  new starkinfra.creditPreview.CreditNotePreview({
+                invoices: [
+                    new starkinfra.creditNote.Invoice({
+                        amount: 14500,
+                        due: "2022-09-19"
+                    }),
+                    new starkinfra.creditNote.Invoice({
+                        amount: 14500,
+                        due: "2022-10-25"
+                    }),
+                ],
+                nominalAmount: 29000,
+                rebateAmount: 900,
+                scheduled: "2022-09-22",
+                taxId: "36.084.400/0001-70",
+                type: "custom"
+            })
         })
     ])
 
-    for(preview in previews) {
+    for (preview of previews) {
         console.log(preview)
     }
-})
+})()
 ```
 
 **Note**: Instead of using dictionary objects, you can also pass each invoice element in the native CreditNotePreview object format
@@ -1907,8 +2194,6 @@ const starkinfra = require('starkinfra');
     console.log(webhook);
 })();
 ```
-
-## Webhook Events
 
 ### Process Webhook events
 

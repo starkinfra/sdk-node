@@ -13,6 +13,42 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- StaticBrcode resource
+- DynamicBrcode resource 
+- CardMethod sub-resource
+- MerchantCountry sub-resource
+- MerchantCategory sub-resource
+- CreditPreview sub-resource
+- BrcodePreview resource
+- code attribute to IssuingProduct resource
+- expand parameter to create method in IssuingHolder resource
+- default to fee, externalId and tags parameters to parse method in PixRequest and PixReversal resources
+- tags parameter to PixClaim, PixInfraction, Pix Chargeback resources
+- flow parameter to PixClaim resource
+- flow parameter to query and page methods in PixClaim resource
+- tags parameter to query and page methods in PixChargeback, PixClaim and PixInfraction resources
+- zipCode, purpose, purchase, isPartialAllowed, cardTags and holderTags attributes to IssuingPurchase resource
+- brcode, link and due attributes to IssuingInvoice resource
+### Fixed
+- JSON body returned from response method of PixRequest resource
+- JSON body returned from response method of PixReversal resource
+### Changed
+- resource name from IssuingBin to IssuingProduct
+- settlement parameter to fundingType in Issuing Product resource
+- client parameter to holderType in Issuing Product resource
+- CreditNotePreview sub-resource to creditPreview.CreditNotePreview sub-resource
+- agent parameter to flow in PixInfraction and PixChargeback resources
+- bankCode parameter to claimerBankCode in PixClaim resource
+- agent parameter to flow on query and page methods in PixInfraction and PixChargeback resources
+- creditnote.Signer sub-resource to CreditSigner resource
+- PixDirector resource to sub-resource
+### Removed 
+- IssuingAuthorization resource
+- bankCode attribute from PixReversal resource
+- category parameter from IssuingProduct resource
+- bacenId parameter from PixChargeback and PixInfraction resources
+- agent parameter from PixClaim.Log resource
 
 ## [0.1.0] - 2022-06-03
 ### Added

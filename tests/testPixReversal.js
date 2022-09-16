@@ -126,10 +126,7 @@ describe('TestAuthorizationParse', function(){
         content = '';
         valid_signature = '';
 
-        let request = await starkinfra.pixReversal.parse({
-            content: content,
-            signature: valid_signature
-        });
+        let request = await starkinfra.pixReversal.parse(content, valid_signature);
         assert(request.amount === 1)
     });
 
@@ -138,10 +135,7 @@ describe('TestAuthorizationParse', function(){
         invalid_signature = 'MEYCIQCmFCAn2Z+6qEHmf8paI08Ee5ZJ9+KvLWSS3ddp8+RF3AIhALlK7ltfRvMCXhjS7cy8SPlcSlpQtjBxmhN6ClFC0Tv5';
 
         try {
-            await starkinfra.pixReversal.parse({
-                content: content,
-                signature: invalid_signature
-            });
+            await starkinfra.pixReversal.parse(content, invalid_signature);
             throw new Error('Oops, signature was accepted!');
         } catch (e) {
             if (!(e instanceof starkinfra.error.InvalidSignatureError))
@@ -154,14 +148,31 @@ describe('TestAuthorizationParse', function(){
         malformed_signature = 'something is definitely wrong';
 
         try {
-            await starkinfra.pixReversal.parse({
-                content: content,
-                signature: malformed_signature
-            });
+            await starkinfra.pixReversal.parse(content, malformed_signature);
             throw new Error('Oops, signature was accepted!');
         } catch (e) {
             if (!(e instanceof starkinfra.error.InvalidSignatureError))
                 throw e;
         }
+    });
+});
+
+describe("TestPixReversalResponse", function(){
+    this.timeout(10000);
+    it("test_approved", async () => {
+        const requests = await starkinfra.pixReversal.response({
+            'status': 'approved'
+        });
+        assert(typeof requests === 'string');
+        console.log(requests);
+    });
+
+    it("test_denied", async () => {
+        const requests = await starkinfra.pixReversal.response({
+            'status': 'denied',
+            'reason': 'taxIdMismatch',
+        });
+        assert(typeof requests === 'string');
+        console.log(requests);
     });
 });

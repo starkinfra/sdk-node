@@ -19,7 +19,9 @@ class Log extends Resource {
      * @param holder [IssuingHolder]: IssuingHolder entity to which the log refers to.
      *
      */
-    constructor({ id, created, type, holder }) {
+    constructor({ 
+                    id=null, created=null, type=null, holder=null
+                }) {
         super(id);
         this.created = check.datetime(created);
         this.type = type;

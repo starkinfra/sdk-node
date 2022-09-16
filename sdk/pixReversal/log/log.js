@@ -20,8 +20,11 @@ class Log extends Resource {
      * @param reversal [PixReversal]: PixReversal entity to which the log refers to.
      *
      */
-    constructor({ created, type, errors, reversal, id }) {
+    constructor({
+                    id=null, created=null, type=null, errors=null, reversal=null
+                }) {
         super(id);
+        
         this.created = check.datetime(created);
         this.type = type;
         this.errors = errors;

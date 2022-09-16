@@ -19,8 +19,11 @@ class Log extends Resource {
      * @param infraction [PixInfraction]: PixInfraction entity to which the log refers to.
      *
      */
-    constructor({ created, type, errors, infraction, id }) {
+    constructor({ 
+                    id=null, created=null, type=null, errors=null, infraction=null 
+                }) {
         super(id);
+        
         this.created = check.datetime(created);
         this.type = type;
         this.errors = errors;

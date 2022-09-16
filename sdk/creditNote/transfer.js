@@ -33,10 +33,11 @@ class Transfer extends Resource {
      * @param updated [string]: latest update datetime for the CreditNote. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({
-                    taxId, name, bankCode, branchCode, accountNumber, amount = null, accountType = null,
-                    externalId = null, scheduled = null, description = null, tags = null, fee = null,
-                    status = null, transactionIds = null, created = null, updated = null, id = null
+    constructor({ 
+                    taxId, name, bankCode, branchCode, accountNumber, amount = null, 
+                    accountType = null, externalId = null, scheduled = null, description = null, 
+                    tags = null, fee = null, status = null, transactionIds = null, 
+                    created = null, updated = null, id = null 
                 }) {
         super(id);
 

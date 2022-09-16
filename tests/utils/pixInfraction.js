@@ -13,7 +13,7 @@ exports.getPixInfractionToPatch = async function () {
         })
         for await (let infraction of infractions) {
             console.log(infraction)
-            if (infraction.agent !== 'reported') {
+            if (infraction.flow !== 'in') {
                 pixInfractions.push(infraction);
             }
         }

@@ -26,7 +26,7 @@ exports.getPixClaimToPatch = async function () {
             cursor: cursor
         })
         for await (let claim of claims) {
-            if (claim.agent === 'claimer') {
+            if (claim.flow === 'out') {
                 pixClaims.push(claim);
             }
         }

@@ -19,8 +19,11 @@ class Log extends Resource {
      * @param request [IssuingInvoice]: IssuingInvoice entity to which the log refers to.
      *
      */
-    constructor({ id, created, type, invoice }) {
+    constructor({ 
+                    id=null, created=null, type=null, invoice=null
+                }) {
         super(id);
+        
         this.created = check.datetime(created);
         this.type = type;
         this.invoice = invoice;
