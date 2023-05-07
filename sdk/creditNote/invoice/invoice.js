@@ -32,9 +32,9 @@ class Invoice extends Resource {
      * @param fine [float, default 2.0]: Invoice fine for overdue payment in %. ex: 2.5
      * @param interest [float, default 1.0]: Invoice monthly interest for overdue payment in %. ex: 5.2
      * @param nominalAmount [integer]: Invoice emission value in cents (will change if invoice is updated, but not if it's paid). ex: 400000
-     * @param fineAmount [integer]: Invoice fine value calculated over nominal_amount. ex: 20000
-     * @param interestAmount [integer]: Invoice interest value calculated over nominal_amount. ex: 10000
-     * @param discountAmount [integer]: Invoice discount value calculated over nominal_amount. ex: 3000
+     * @param fineAmount [integer]: Invoice fine value calculated over nominalAmount. ex: 20000
+     * @param interestAmount [integer]: Invoice interest value calculated over nominalAmount. ex: 10000
+     * @param discountAmount [integer]: Invoice discount value calculated over nominalAmount. ex: 3000
      * @param discounts [list of invoice.Discount objects]: list of invoice.Discount objects
      * @param brcode [string]: BR Code for the Invoice payment. ex: '00020101021226800014br.gov.bcb.pix2558invoice.starkbank.com/f5333103-3279-4db2-8389-5efe335ba93d5204000053039865802BR5913Arya Stark6009Sao Paulo6220051656565656565656566304A9A0'
      * @param status [string]: current Invoice status. ex: 'registered' or 'paid'

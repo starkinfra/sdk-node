@@ -21,7 +21,7 @@ class IssuingCard extends Resource {
      * Parameters (optional):
      * @param displayName [string, default null]: card displayed name. ex: 'ANTHONY STARK'
      * @param rules [list of IssuingRule, default []]: [EXPANDABLE] list of card spending rules.
-     * @param binId [string, default null]: BIN ID to which the card is bound. ex: '53810200'
+     * @param productId [string, default null]: BIN ID to which the card is bound. ex: '53810200'
      * @param tags [list of strings, default []]: list of strings for tagging. ex: ['travel', 'food']
      * @param streetLine1 [string, default sub-issuer street line 1]: cardholder main address. ex: 'Av. Paulista, 200'
      * @param streetLine2 [string, default sub-issuer street line 2]: cardholder address complement. ex: 'Apto. 123'
@@ -44,7 +44,7 @@ class IssuingCard extends Resource {
      */
     constructor({ 
                     holderName, holderTaxId, holderExternalId, displayName=null, 
-                    rules=null, binId=null, tags=null, streetLine1=null, streetLine2=null, 
+                    rules=null, productId=null, tags=null, streetLine1=null, streetLine2=null, 
                     district=null, city=null, stateCode=null, zipCode=null, id=null, 
                     holderId=null, type=null, status=null, number=null, securityCode=null, 
                     expiration=null, created=null, updated=null 
@@ -56,7 +56,7 @@ class IssuingCard extends Resource {
         this.holderExternalId = holderExternalId;
         this.displayName = displayName;
         this.rules = parseObjects(rules, ruleResource, IssuingRule);
-        this.binId = binId;
+        this.productId = productId;
         this.tags = tags;
         this.streetLine1 = streetLine1;
         this.streetLine2 = streetLine2;
@@ -131,8 +131,8 @@ exports.query = async function ({ status, types, holderIds, after, before, tags,
      * @param status [string, default null]: filter for status of retrieved objects. ex: 'active', 'blocked', 'expired' or 'canceled'
      * @param types [list of strings, default null]: card type. ex: ['virtual']
      * @param holderIds [list of strings]: cardholder IDs. ex: ['5656565656565656', '4545454545454545']
-     * @param after [datetime.date or string, default null] date filter for objects created only after specified date. ex: datetime.date(2020, 3, 10)
-     * @param before [datetime.date or string, default null] date filter for objects created only before specified date. ex: datetime.date(2020, 3, 10)
+     * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
+     * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
@@ -170,8 +170,8 @@ exports.page = async function ({ cursor, status, types, holderIds, after, before
      * @param status [string, default null]: filter for status of retrieved objects. ex: 'paid' or 'registered'
      * @param types [list of strings, default null]: card type. ex: ['virtual']
      * @param holderIds [list of strings, default null]: cardholder IDs. ex: ['5656565656565656', '4545454545454545']
-     * @param after [datetime.date or string, default null] date filter for objects created only after specified date. ex: datetime.date(2020, 3, 10)
-     * @param before [datetime.date or string, default null] date filter for objects created only before specified date. ex: datetime.date(2020, 3, 10)
+     * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
+     * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
@@ -197,7 +197,7 @@ exports.page = async function ({ cursor, status, types, holderIds, after, before
     return rest.getPage(resource, query, user);
 };
 
-exports.update = async function (id, { status, displayName, rules, tags, user }) {
+exports.update = async function (id, { status, displayName, rules, tags, pin, user }) {
     /**
      *
      * Update IssuingCard entity
@@ -211,7 +211,8 @@ exports.update = async function (id, { status, displayName, rules, tags, user })
      * @param status [string]: You may block the IssuingCard by passing 'blocked' or activate by passing 'active' in the status
      * @param displayName [string, default null]: card displayed name
      * @param rules [list of dictionaries, default null]: list of dictionaries with 'amount': int, 'currencyCode': string, 'id': string, 'interval': string, 'name': string pairs.
-     * @param tags [list of strings]: list of strings for tagging
+     * @param tags [list of strings, default null]: list of strings for tagging
+     * @param pin [string, default null]: You may unlock your physical card by passing its PIN. This is also the PIN you use to authorize a purchase.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
      * Return:
@@ -223,6 +224,7 @@ exports.update = async function (id, { status, displayName, rules, tags, user })
         displayName: displayName,
         rules: rules,
         tags: tags,
+        pin: pin
     };
     return rest.patchId(resource, id, payload, user);
 };

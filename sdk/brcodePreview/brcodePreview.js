@@ -13,6 +13,10 @@ class BrcodePreview extends Resource {
      * 
      * Parameters (required):
      * @param id [string]: BR Code from a Pix payment. This is also de information directly encoded in a QR Code. ex: "00020126580014br.gov.bcb.pix0136a629532e-7693-4846-852d-1bbff817b5a8520400005303986540510.005802BR5908T'Challa6009Sao Paulo62090505123456304B14A"
+     * @param payerId [string]: tax id (CPF/CNPJ) of the individual or business requesting the PixKey information. This id is used by the Central Bank to limit request rates. ex: "20.018.183/0001-80"
+     * 
+     * Parameters (optional):
+     * @param endToEndId [string]: central bank's unique transaction ID. ex: "E79457883202101262140HHX553UPqeq"
      * 
      * Attributes (return-only):
      * @param accountNumber [string]: Payment receiver account number. ex: "1234567"
@@ -38,7 +42,7 @@ class BrcodePreview extends Resource {
      * 
      */
     constructor({
-                    id, accountNumber=null, accountType=null, amount=null, 
+                    id, payerId, endToEndId=null, accountNumber=null, accountType=null, amount=null, 
                     amountType=null, bankCode=null, branchCode=null, cashAmount=null, 
                     cashierBankCode=null, cashierType=null, discountAmount=null,
                     fineAmount=null, interestAmount=null, keyId=null, name=null, 
@@ -46,7 +50,9 @@ class BrcodePreview extends Resource {
                     scheduled=null, status=null, taxId=null
                 }) {
         super(id);
-        
+
+        this.payerId = payerId
+        this.endToEndId = endToEndId
         this.accountNumber = accountNumber
         this.accountType = accountType
         this.amount = amount

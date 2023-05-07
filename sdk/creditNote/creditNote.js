@@ -23,7 +23,6 @@ class CreditNote extends Resource {
      * @param templateId [string]: ID of the contract template on which the credit note will be based. ex: '0123456789101112'
      * @param name [string]: credit receiver's full name. ex: 'Anthony Edward Stark'
      * @param taxId [string]: credit receiver's tax ID (CPF or CNPJ). ex: '20.018.183/0001-80'
-     * @param nominalAmount [integer]: amount in cents transferred to the credit receiver, before deductions. ex: 11234 (= R$ 112.34)
      * @param scheduled [string]: date for the payment execution. ex: '2020-03-10'
      * @param invoices [list of CreditNote.Invoice objects or dictionaries]: list of Invoice objects to be created and sent to the credit receiver.
      * @param payment [CreditNote.Transfer object]: payment entity to be created and sent to the credit receiver. ex: creditNote.Transfer()
@@ -37,6 +36,8 @@ class CreditNote extends Resource {
      * @param zipCode [string]: credit receiver address zip code. ex: "01311-200"
      *
      * Parameters (conditionally required):
+     * @param nominalAmount [integer]: CreditNote value in cents. The nominalAmount parameter is required when amount is not sent. ex: 1234 (= R$ 12.34)
+     * @param amount [integer]: amount in cents transferred to the credit receiver, before deductions. The amount parameter is required when nominalAmount is not sent. ex: 1234 (= R$ 12.34)
      * @param paymentType [string]: payment type, inferred from the payment parameter if it is not a dictionary. ex: 'transfer'
      *
      * Parameters (optional):
@@ -46,7 +47,6 @@ class CreditNote extends Resource {
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the CreditNote is created. ex: '5656565656565656'
-     * @param amount [integer]: CreditNote value in cents. ex: 1234 (= R$ 12.34)
      * @param documentId [string]: ID of the signed document to execute this CreditNote. ex: '4545454545454545'
      * @param status [string]: current status of the CreditNote. Options: 'canceled', 'created', 'expired', 'failed', 'processing', 'signed', 'success'
      * @param transactionIds [list of strings]: ledger transaction ids linked to this CreditNote. ex: ['19827356981273']
@@ -58,10 +58,10 @@ class CreditNote extends Resource {
      * @param updated [string]: latest update datetime for the CreditNote. ex: '2020-03-10 10:30:00.000'
      */
     constructor({
-                    templateId, name, taxId, nominalAmount, scheduled, invoices, 
-                    payment, signers, externalId, streetLine1, streetLine2, district, 
-                    city, stateCode, zipCode, paymentType=null, rebateAmount=null, 
-                    tags=null, expiration=null, id=null, amount=null, documentId=null, 
+                    templateId, name, taxId, scheduled, invoices, payment, signers, 
+                    externalId, streetLine1, streetLine2, district, city, stateCode, 
+                    zipCode, paymentType=null, nominalAmount = null, amount=null, 
+                    rebateAmount=null, tags=null, expiration=null, id=null, documentId=null, 
                     status=null, transactionIds=null, workspaceId=null, taxAmount=null, 
                     nominalInterest=null, interest=null, created=null, updated=null
                 }) {
@@ -70,7 +70,6 @@ class CreditNote extends Resource {
         this.templateId = templateId;
         this.name = name;
         this.taxId = taxId;
-        this.nominalAmount = nominalAmount;
         this.scheduled = scheduled;
         this.invoices = parseObjects(invoices, invoiceResource, Invoice);
         this.signers = parseObjects(signers, creditSignerResource, CreditSigner);
@@ -81,10 +80,11 @@ class CreditNote extends Resource {
         this.city = city;
         this.stateCode = stateCode;
         this.zipCode = zipCode;
+        this.nominalAmount = nominalAmount;
+        this.amount = amount;
         this.rebateAmount = rebateAmount;
         this.tags = tags;
         this.expiration = expiration;
-        this.amount = amount;
         this.documentId = documentId;
         this.status = status;
         this.transactionIds = transactionIds;

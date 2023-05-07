@@ -109,8 +109,8 @@ exports.query = async function ({ status, after, before, tags, limit, user } = {
      *
      * Parameters (optional):
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
-     * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
-     * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
+     * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
+     * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
      * @param status [string, default null]: filter for status of retrieved objects. ex: 'created', 'paid', 'canceled' or 'overdue'
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call

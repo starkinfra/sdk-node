@@ -65,7 +65,7 @@ describe('TestCreditNoteLogQueryParams', function(){
     });
 });
 
-describe('TestCreditNoteLogQueryParams', function(){
+describe('TestCreditNoteLogPageParams', function(){
     this.timeout(10000);
     it('test_success', async () => {
         let cursor = null;

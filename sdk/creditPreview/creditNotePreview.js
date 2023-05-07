@@ -16,7 +16,7 @@ class CreditNotePreview extends SubResource {
      * 
      * Parameters (required):
      * @param type [string]: table type that defines the amortization system. Options: "sac", "price", "american", "bullet", "custom"
-     * @param nominalAmount [integer]: amount in cents transferred to the credit receiver, before deductions. ex: nominal_amount=11234 (= R$ 112.34)
+     * @param nominalAmount [integer]: amount in cents transferred to the credit receiver, before deductions. ex: nominalAmount=11234 (= R$ 112.34)
      * @param scheduled [string]: date of transfer execution. ex: scheduled='2020-03-10'
      * @param taxId [string]: credit receiver's tax ID (CPF or CNPJ). ex: "20.018.183/0001-80"
      *

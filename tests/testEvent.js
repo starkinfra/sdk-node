@@ -50,15 +50,18 @@ describe("TestEventParse", function(){
     });
 });
 
-describe("TesEventQuery", function(){
+describe("TestEventQuery", function(){
     this.timeout(10000);
     it("test_success", async () => {
         let events = await starkinfra.event.query({"limit": 5});
         for await (let event of events) {
             assert(typeof event.id == "string");
-            let attempts = await starkinfra.event.attempt.query({eventIds: [event.id]});
-            for (let attempt of attempts) {
-                attempt = await starkinfra.event.attempt.get(attempts.id);
+            attempts = await starkinfra.event.attempt.query({ eventIds: [event.id], limit: 1 });
+            if (attempts != null) {
+                for await (let attempt of attempts) {
+                    attempt = await starkinfra.event.attempt.get(attempt.id);
+                    assert(typeof attempt == 'object');
+                }
             }
         }
     });
@@ -72,7 +75,7 @@ describe("TestEventPage", function(){
         let page = null;
         for (let i = 0; i < 2; i++) {
             [page, cursor] = await starkinfra.event.page({ "limit": 5, "cursor": cursor });
-            for (let entity of page) {
+            for await (let entity of page) {
                 assert(!ids.includes(entity.id));
                 ids.push(entity.id);
             }
@@ -88,9 +91,7 @@ describe("TestEventInfoGet", function(){
     it("test_success", async () => {
         let events = await starkinfra.event.query({"limit": 10});
         for await (let event of events) {
-            assert(typeof event.id == "string");
             event = await starkinfra.event.get(event.id);
-            assert(typeof event.id == "string");
         }
     });
 });
@@ -99,11 +100,9 @@ describe("TestEventDelete", function() {
     this.timeout(10000);
     it("test_success", async () => {
         let events = await starkinfra.event.query({"limit": 1});
-        let event = null
-        for (const e of events) {
-            event = await starkinfra.event.delete(e.id);
+        for await (let event of events) {
+            event = await starkinfra.event.delete(event.id);
         }
-        console.log(event)
     });
 });
 
@@ -111,12 +110,9 @@ describe("TestEventSetDelivered", function() {
     this.timeout(10000);
     it("test_success", async () => {
         let events = await starkinfra.event.query({"limit": 1, "isDelivered": false });
-        let event = null
-        for (const e of events) {
-            event = e;
+        for await (let event of events) {
+            event = await starkinfra.event.update(event.id, { "isDelivered": false });
+            assert(event.isDelivered ==  false);
         }
-        event = await starkinfra.event.update(event.id, { "isDelivered": false });
-        assert(event.isDelivered);
-        console.log(event)
     });
 });

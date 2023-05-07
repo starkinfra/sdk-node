@@ -7,12 +7,11 @@ exports.getPixInfractionToPatch = async function () {
     let cursor = null;
     while (pixInfractions < 1) {
         [infractions, cursor] = await starkinfra.pixInfraction.page({
-            status: 'created',
+            status: 'delivered',
             limit: 5,
             cursor: cursor
         })
         for await (let infraction of infractions) {
-            console.log(infraction)
             if (infraction.flow !== 'in') {
                 pixInfractions.push(infraction);
             }

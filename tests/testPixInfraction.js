@@ -14,7 +14,6 @@ describe('TestPixInfractionPostAndDelete', function(){
         for (let infraction of infractionReports) {
             let canceledPixInfraction = await starkinfra.pixInfraction.cancel(infraction.id);
             assert(canceledPixInfraction.status === 'canceled');
-            console.log(infraction.id);
         }
     });
 });
@@ -101,7 +100,7 @@ describe('TestPixInfractionPatch', function() {
     this.timeout(10000);
     it('test_success', async () => {
         let pixInfraction = await getPixInfractionToPatch();
-        assert(pixInfraction.status === 'created');
+        assert(pixInfraction.status === 'delivered');
         pixInfraction = await starkinfra.pixInfraction.update(pixInfraction.id, 'agreed')
         assert(pixInfraction.status === 'agreed');
     });

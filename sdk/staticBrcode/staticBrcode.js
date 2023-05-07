@@ -23,6 +23,8 @@ class StaticBrcode extends Resource {
      * Parameters (optional):
      * @param amount [integer, default 0]: positive integer that represents the amount in cents of the resulting Pix transaction. ex: 1234 (= R$ 12.34)
      * @param reconciliationId [string, default null]: id to be used for conciliation of the resulting Pix transaction. This id must have up to 25 alphanumeric characters ex: "ah27s53agj6493hjds6836v49"
+     * @param cashierBankCode [string, default null]: Cashier's bank code. ex: "20018183".
+     * @param description [string, default null]: optional description to override default description to be shown in the bank statement. ex: "Payment for service #1234"
      * @param tags [list of strings, default []]: list of strings for tagging. ex: ["travel", "food"]
      * 
      * Attributes (return-only):
@@ -35,7 +37,8 @@ class StaticBrcode extends Resource {
      */
     constructor({   
                     name, keyId, city, amount=null, reconciliationId=null, 
-                    tags=null, id=null, uuid=null, url=null, updated=null, 
+                    cashierBankCode=null, description=null, tags=null, 
+                    id=null, uuid=null, url=null, updated=null, 
                     created=null
                 }) {
         super(id);
@@ -45,6 +48,8 @@ class StaticBrcode extends Resource {
         this.city = city;
         this.amount = amount;
         this.reconciliationId = reconciliationId;
+        this.cashierBankCode = cashierBankCode;
+        this.description = description;
         this.tags = tags;
         this.uuid = uuid;
         this.url = url;

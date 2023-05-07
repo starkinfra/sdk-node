@@ -105,8 +105,8 @@ exports.query = async function ({ externalIds, after, before, limit, tags, user 
      * Parameters (optional):
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param externalIds [list of strings, default []]: external IDs. ex: ['5656565656565656', '4545454545454545']
-     * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
-     * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
+     * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
+     * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
@@ -136,8 +136,8 @@ exports.page = async function ({ cursor, externalIds, after, before, limit, tags
      * @param cursor [string, default null]: cursor returned on the previous page function call
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param externalIds [list of strings, default []]: external IDs. ex: ['5656565656565656', '4545454545454545']
-     * @param after [DateTime or string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
-     * @param before [DateTime or string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
+     * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
+     * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *

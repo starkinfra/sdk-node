@@ -52,7 +52,6 @@ describe('TestPixKeyGet', function(){
         let keys = await starkinfra.pixKey.query({'limit': 1});
         for await (let key of keys) {
             assert(typeof key.id == 'string');
-            console.log(key);
             key = await starkinfra.pixKey.get(key.id, '012.345.678-90');
             assert(typeof key.id == 'string');
         }
@@ -64,7 +63,6 @@ describe('TestPixKeyPatch', function(){
     it('test_success', async () => {
         let keys = await starkinfra.pixKey.query({'limit': 1, 'status': 'registered', 'type': 'phone'});
         for await (let key of keys) {
-            console.log(key);
             assert(key.status === 'registered');
             let branchCode = String(Math.floor(Math.random() * (9999 - 1000 + 1) + 1000));
             let updatedPixKey = await starkinfra.pixKey.update(key.id, 'userRequested', {branchCode: branchCode});

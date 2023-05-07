@@ -13,6 +13,20 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- CreditHolmes resource
+- IndividualDocument resource
+- IndividualIdentity resource
+- IssuingRestock resource
+- IssuingStock resource
+- IssuingDesign resource
+- IssuingEmbossingRequest resource
+- IssuingEmbossingKit resource
+- pin attribute to update method in IssuingCard resource
+- payerId and endToEndId parameter to BrcodePreview resource
+- cashier_bank_code and description parameter to StaticBrcode resource
+### Changed
+- change nominalAmount and amount parameter to conditionally required to CreditNote resource
 
 ## [0.2.0] - 2022-09-16
 ### Added
