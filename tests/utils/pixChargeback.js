@@ -2,7 +2,7 @@ const starkinfra = require('../../index.js');
 const {bankCode} = require('./user');
 
 exports.generateExamplePixChargebackJson = async function (n=1) {
-    let pixRequests = await starkinfra.pixRequest.query({limit: n});
+    let pixRequests = await starkinfra.pixRequest.query({limit: n, status: "success"});
     let chargebacks = [];
     for await (const request of pixRequests) {
         chargebacks.push(new starkinfra.PixChargeback({
@@ -15,17 +15,16 @@ exports.generateExamplePixChargebackJson = async function (n=1) {
 };
 
 exports.getPixChargebackToPatch = async function () {
-    const pixChargebacks = [];
+    let pixChargebacks = [];
     let reversals = null;
     let cursor = null;
     while (pixChargebacks < 3) {
         [reversals, cursor] = await starkinfra.pixChargeback.page({
-            status: 'delivered',
+            status: "delivered",
             limit: 5,
             cursor: cursor
         })
         for await (let reversal of reversals) {
-            console.log(reversal)
             if (reversal.senderBankCode !== bankCode) {
                 pixChargebacks.push(reversal);
             }

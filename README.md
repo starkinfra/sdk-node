@@ -25,6 +25,11 @@ This SDK version is compatible with the Stark Infra API v2.
         - [Products](#query-issuingproducts): View available sub-issuer Products (a.k.a. card number ranges)
         - [Holders](#create-issuingholders): Manage cardholders
         - [Cards](#create-issuingcards): Create virtual and/or physical cards
+        - [Design](#query-issuingdesigns): View your current card or package designs
+        - [EmbossingKit](#query-issuingembossingkits): View your current embossing kits
+        - [Stock](#query-issuingstocks): View your current stock of a certain IssuingDesign linked to an Embosser on the workspace
+        - [Restock](#create-issuingrestocks): Create restock orders of a specific IssuingStock object
+        - [EmbossingRequest](#create-issuingembossingrequests): Create embossing requests
         - [Purchases](#process-purchase-authorizations): Authorize and view your past purchases
         - [Invoices](#create-issuinginvoices): Add money to your issuing balance
         - [Withdrawals](#create-issuingwithdrawals): Send money back to your Workspace from your issuing balance
@@ -44,10 +49,13 @@ This SDK version is compatible with the Stark Infra API v2.
         - [StaticBrcode](#create-staticbrcodes): Create static Pix BR codes
         - [DynamicBrcode](#create-dynamicbrcodes): Create dynamic Pix BR codes
         - [BrcodePreview](#create-brcodepreviews): Read data from BR Codes before 
-    - [Credit Note](#credit-note)
+    - [Lending](#lending)
         - [CreditNote](#create-creditnotes): Create credit notes
-    - [Credit Preview](#credit-preview)
-        - [CreditNotePreview](#create-creditnotepreviews): Create credit note previews
+        - [CreditPreview](#create-creditpreviews): Create credit previews
+        - [CreditHolmes](#create-creditholmes): Create credit holmes debt verification
+    - [Identity](#identity)
+        - [IndividualIdentity](#create-individualidentities): Create individual identities
+        - [IndividualDocument](#create-individualdocuments): Create individual documents
     - [Webhook](#webhook):
         - [Webhook](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
         - [WebhookEvents](#process-webhook-events): Manage Webhook events
@@ -448,7 +456,7 @@ You can issue cards with specific spending rules.
 ```javascript
 await (async() => {
     let cards = await starkinfra.issuingCard.create([
-        new starkinfra.issuingCard({
+        new starkinfra.IssuingCard({
             'holderName': 'Developers',
             'holderTaxId': '012.345.678-90',
             'holderExternalId': '1234',
@@ -543,6 +551,277 @@ You can get a single log by its id.
 ```javascript
 await (async() => {
     let log = await starkinfra.issuingCard.log.get('5155165527080960');
+  
+    console.log(log);
+})();
+```
+
+### Query IssuingDesigns
+
+You can get a list of available designs given some filters.
+
+```javascript
+await (async() => {
+    let design = await starkinfra.issuingDesign.query({
+        limit: 1
+    });
+  
+    for await (let design of designs) {
+        console.log(design);
+    }
+})();
+```
+
+### Get an IssuingDesign
+
+Information on a design may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let design = await starkinfra.issuingDesign.get('5747368922185728');
+  
+    console.log(design);
+})();
+```
+
+### Query IssuingEmbossingKits
+
+You can get a list of created embossing kits given some filters.
+
+```javascript
+await (async() => {
+    let kits = await starkinfra.issuingEmbossingKit.query({
+        'after': '2022-11-01',
+        'before': '2022-12-01'
+    });
+  
+    for await (let kit of kits) {
+        console.log(kit);
+    }
+})();
+```
+
+### Get an IssuingEmbossingKit
+
+After its creation, information on an embossing kit may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let kit = await starkinfra.issuingEmbossingKit.get('5155165527080960');
+  
+    console.log(kit);
+})();
+```
+
+### Query IssuingStocks
+
+You can get a list of available stocks given some filters.
+
+```javascript
+await (async() => {
+    let stocks = await starkinfra.issuingStock.query({
+        'after': '2023-01-01',
+        'before': '2023-03-01'
+    });
+  
+    for await (let stock of stocks) {
+        console.log(stock);
+    }
+})();
+```
+
+### Get an IssuingStock
+
+Information on a stock may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let stock = await starkinfra.issuingStock.get('5792731695677440');
+  
+    console.log(stock);
+})();
+```
+
+### Query IssuingStock logs
+
+Logs are pretty important to understand the life cycle of a stock.
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.issuingStock.log.query({'limit': 150});
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get an IssuingStock log
+
+You can get a single log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.issuingStock.log.get('5809977331548160');
+  
+    console.log(log);
+})();
+```
+
+### Create IssuingRestocks
+
+You can order restocks for a specific IssuingStock.
+
+```javascript
+await (async() => {
+    let restocks = await starkinfra.issuingRestock.create([
+        new starkinfra.issuingRestock({
+            'count': 100,
+            'stockId': "5136459887542272"
+        })
+    ]);
+  
+    for await (let restock of restocks) {
+        console.log(restock);
+    }
+})();
+```
+
+### Query IssuingRestocks
+
+You can get a list of created restocks given some filters.
+
+```javascript
+await (async() => {
+    let restocks = await starkinfra.issuingRestock.query({
+        'after': '2023-01-01',
+        'before': '2023-03-01'
+    });
+  
+    for await (let restock of restocks) {
+        console.log(restock);
+    }
+})();
+```
+
+### Get an IssuingRestock
+
+After its creation, information on a restock may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let restock = await starkinfra.issuingRestock.get('5664445921492992');
+    
+    console.log(restock);
+})();
+```
+
+### Query IssuingRestock logs
+
+Logs are pretty important to understand the life cycle of a restock.
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.issuingRestock.log.query({'limit': 150});
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get an IssuingRestock log
+
+You can get a single log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.issuingRestock.log.get('6310318875607040');
+  
+    console.log(log);
+})();
+```
+
+### Create IssuingEmbossingRequests
+
+You can create a request to emboss a physical card.
+
+```javascript
+await (async() => {
+    let requests = await starkinfra.issuingEmbossingRequest.create([
+        new starkinfra.issuingEmbossingRequest({
+            'kitId': "5648359658356736", 
+            'cardId': "5714424132272128", 
+            'displayName1': "Antonio Stark", 
+            'shippingCity': "Sao Paulo",
+            'shippingCountryCode': "BRA",
+            'shippingDistrict': "Bela Vista",
+            'shippingService': "loggi",
+            'shippingStateCode': "SP",
+            'shippingStreetLine1': "Av. Paulista, 200",
+            'shippingStreetLine2': "10 andar",
+            'shippingTrackingNumber': "My_custom_tracking_number",
+            'shippingZipCode': "12345-678",
+            'embosserId': "5746980898734080"
+        })
+    ]);
+  
+    for await (let request of requests) {
+        console.log(request);
+    }
+})();
+```
+
+### Query IssuingEmbossingRequests
+
+You can get a list of created embossing requests given some filters.
+
+```javascript
+await (async() => {
+    let requests = await starkinfra.issuingEmbossingRequest.query({
+        'after': '2023-01-01',
+        'before': '2023-03-01'
+    });
+  
+    for await (let request of requests) {
+        console.log(request);
+    }
+})();
+```
+
+### Get an IssuingEmbossingRequest
+
+After its creation, information on an embossing request may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let card = await starkinfra.issuingEmbossingRequest.get('5191752558313472');
+  
+    console.log(card);
+})();
+```
+
+### Query IssuingEmbossingRequest logs
+
+Logs are pretty important to understand the life cycle of an embossing request.
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.issuingEmbossingRequest.log.query({'limit': 150});
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get an IssuingEmbossingRequest log
+
+You can get a single log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.issuingEmbossingRequest.log.get('5191752558313472');
   
     console.log(log);
 })();
@@ -1903,10 +2182,12 @@ const starkinfra = require('starkinfra')
 (async () => {
     let previews = await starkinfra.brcodePreview.create([
         new starkinfra.BrcodePreview({
-            id: "00020126420014br.gov.bcb.pix0120nedstark@hotmail.com52040000530398654075000.005802BR5909Ned Stark6014Rio de Janeiro621605126674869738606304FF71"
+            id: "00020126420014br.gov.bcb.pix0120nedstark@hotmail.com52040000530398654075000.005802BR5909Ned Stark6014Rio de Janeiro621605126674869738606304FF71",
+            payerId: "20.018.183/0001-80"
         }),
         new starkinfra.BrcodePreview({
-            id: "00020126430014br.gov.bcb.pix0121aryastark@hotmail.com5204000053039865406100.005802BR5910Arya Stark6014Rio de Janeiro6216051262678188104863042BA4"
+            id: "00020126430014br.gov.bcb.pix0121aryastark@hotmail.com5204000053039865406100.005802BR5910Arya Stark6014Rio de Janeiro6216051262678188104863042BA4",
+            payerId: "20.018.183/0001-80"
         }),
     ])
 
@@ -1914,10 +2195,22 @@ const starkinfra = require('starkinfra')
         console.log(preview);
     }
 })();
-
 ```
 
-## Credit Note
+## Lending
+If you want to establish a lending operation, you can use Stark Infra to
+create a CCB contract. This will enable your business to lend money without
+requiring a banking license, as long as you use a Credit Fund 
+or Securitization company.
+
+The required steps to initiate the operation are:
+ 1. Have funds in your Credit Fund or Securitization account
+ 2. Request the creation of an [Identity Check](#create-individualidentities)
+for the credit receiver (make sure you have their documents and express authorization)
+ 3. (Optional) Create a [Credit Simulation](#create-creditpreviews) 
+with the desired installment plan to display information for the credit receiver
+ 4. Create a [Credit Note](#create-creditnotes)
+with the desired installment plan
 
 ### Create CreditNotes
 You can create a Credit Note to generate a CCB contract:
@@ -2129,6 +2422,413 @@ const starkinfra = require('starkinfra');
 
 **Note**: Instead of using dictionary objects, you can also pass each invoice element in the native CreditNotePreview object format
 
+### Create CreditPreviews
+
+You can preview a credit operation before creating them (Currently we only have CreditNote / CCB previews):
+
+```javascript
+await (async() => {
+    let previews = await starkinfra.creditPreview.create([
+        new starkinfra.CreditPreview({
+            'type': 'credit-note',
+            'credit': new starkinfra.creditPreview.CreditNotePreview ({
+                'initialAmount': 2478,
+                'initialDue': '2022-07-22',
+                'nominalAmount': 90583,
+                'nominalInterest': 3.7,
+                'rebateAmount': 23,
+                'scheduled': '2022-06-28',
+                'taxId': "477.954.506-44",
+                'type': "sac"
+            })
+        }),
+        new starkinfra.CreditPreview({
+            'type': 'credit-note',
+            'credit': new starkinfra.creditPreview.CreditNotePreview ({
+                'initialAmount': 4449,
+                'initialDue': '2022-07-16',
+                'interval': 'year',
+                'nominalAmount': 96084,
+                'nominalInterest': 3.1,
+                'rebateAmount': 239,
+                'scheduled': '2022-07-02',
+                'taxId': '81.882.684/0001-02',
+                'type': 'price',
+            })
+        }),
+        new starkinfra.CreditPreview({
+            'type': 'credit-note',
+            'credit': new starkinfra.creditPreview.CreditNotePreview ({
+                'count': 8,
+                'initialDue': '2022-07-18',
+                'nominalAmount': 6161,
+                'nominalInterest': 3.2,
+                'scheduled': '2022-07-03',
+                'taxId': '59.352.830/0001-20',
+                'type': 'american'
+            })
+        }),
+        new starkinfra.CreditPreview({
+            'type': 'credit-note',
+            'credit': new starkinfra.creditPreview.CreditNotePreview ({
+                'initialDue': '2022-07-13',
+                'nominalAmount': 86237,
+                'nominalInterest': 2.6,
+                'scheduled': '2022-07-03',
+                'taxId': '37.293.955/0001-94',
+                'type': 'bullet'
+            })
+        }),
+        new starkinfra.CreditPreview({
+            'type': 'credit-note',
+            'credit': new starkinfra.creditPreview.CreditNotePreview ({
+                'invoices': [
+                    new starkinfra.creditNote.Invoice({
+                        'amount': 14500,
+                        'due': '2022-08-19'
+                    }),
+                    new starkinfra.creditNote.Invoice({
+                        'amount': 14500,
+                        'due': '2022-09-25'
+                    })
+                ],
+                'nominalAmount': 29000,
+                'rebateAmount': 900,
+                'scheduled': '2022-07-31',
+                'taxId': "36.084.400/0001-70",
+                'type': "custom"
+            })
+        })
+    ]);
+  
+    for await (let preview of previews) {
+        console.log(preview);
+    }
+})();
+```
+
+**Note**: Instead of using CreditPreview objects, you can also pass each element in dictionary format
+
+### Create CreditHolmes
+
+Before you request a credit operation, you may want to check previous credit operations
+the credit receiver has taken.
+
+For that, open up a CreditHolmes investigation to receive information on all debts and credit
+operations registered for that individual or company inside the Central Bank's SCR.
+
+```javascript
+await (async() => {
+    let holmes = await starkinfra.creditHolmes.create([
+        new starkinfra.CreditHolmes({
+            'taxId': "123.456.789-00",
+            'competence': "2022-09"
+        }),
+        new starkinfra.CreditHolmes({
+            'taxId': "123.456.789-00",
+            'competence': "2022-08"
+        }),
+        new starkinfra.CreditHolmes({
+            'taxId': "123.456.789-00",
+            'competence': "2022-07"
+        })
+    ]);
+  
+    for await (let sherlock of holmes) {
+        console.log(sherlock);
+    }
+})();
+```
+
+### Query CreditHolmes
+
+You can query multiple credit holmes according to filters.
+
+```javascript
+await (async() => {
+    let holmes = await starkinfra.creditHolmes.query({
+        'after': '2022-06-01',
+        'before': '2022-10-30',
+        'status': 'success'
+    });
+  
+    for await (let sherlock of holmes) {
+        console.log(sherlock);
+    }
+})();
+```
+
+### Get a CreditHolmes
+
+After its creation, information on a credit holmes may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let holmes = await starkinfra.creditHolmes.get('5657818854064128');
+  
+    console.log(holmes);
+})();
+```
+
+### Query CreditHolmes logs
+
+You can query credit holmes logs to better understand their life cycles. 
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.creditHolmes.log.query({
+        'limit': 50,
+        'ids': ["5729405850615808"],
+        'after': '2022-01-01',
+        'before': '2022-01-20',
+        'types': ["created"]
+    });
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a CreditHolmes log
+
+You can also get a specific log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.creditHolmes.log.get('5155165527080960');
+  
+    console.log(log);
+})();
+```
+
+## Identity
+
+Several operations, especially credit ones, require that the identity
+of a person or business is validated beforehand.
+
+Identities are validated according to the following sequence:
+1. The Identity resource is created for a specific Tax ID
+2. Documents are attached to the Identity resource
+3. The Identity resource is updated to indicate that all documents have been attached
+4. The Identity is sent for validation and returns a webhook notification to reflect
+the success or failure of the operation
+
+### Create IndividualIdentities
+
+You can create an IndividualIdentity to validate a document of a natural person
+
+```javascript
+await (async() => {
+    let identities = await starkinfra.individualIdentity.create([
+        new starkinfra.IndividualIdentity({
+            'name': "Walter White",
+            'taxId': "012.345.678-90",
+            'tags': ["breaking", "bad"]
+        })
+    ]);
+  
+    for await (let identity of identities) {
+        console.log(identity);
+    }
+})();
+```
+
+**Note**: Instead of using IndividualIdentity objects, you can also pass each element in dictionary format
+
+### Query IndividualIdentity
+
+You can query multiple individual identities according to filters.
+
+```javascript
+await (async() => {
+    let identities = await starkinfra.individualIdentity.query({
+        'limit': 10,
+        'after': '2022-01-01',
+        'before': '2022-04-01',
+        'status': "success",
+        'tags': ["breaking", "bad"]
+    });
+  
+    for await (let identity of identities) {
+        console.log(identity);
+    }
+})();
+```
+
+### Get an IndividualIdentity
+
+After its creation, information on an individual identity may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let identity = await starkinfra.individualIdentity.get('5155165527080960');
+  
+    console.log(identity);
+})();
+```
+
+### Update an IndividualIdentity
+
+You can update a specific identity status to "processing" for send it to validation.
+
+```javascript
+await (async() => {
+   let identity = await starkinfra.individualIdentity.update('5155165527080960', {'status': 'processing'});
+  
+    console.log(identity);
+})();
+```
+
+**Note**: Before sending your individual identity to validation by patching its status, you must send all the required documents using the create method of the CreditDocument resource. Note that you must reference the individual identity in the create method of the CreditDocument resource by its id.
+
+
+### Cancel an IndividualIdentity
+
+You can cancel an individual identity before updating its status to processing.
+
+```javascript
+await (async () => {
+  let identity = await starkinfra.individualIdentity.cancel('5155165527080960');
+
+  console.log(identity);
+})();
+```
+
+### Query IndividualIdentity logs
+
+You can query individual identity logs to better understand individual identity life cycles. 
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.individualIdentity.log.query({
+        'limit': 50,
+        'after': '2022-01-01',
+        'before': '2022-01-20'
+    });
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get an IndividualIdentity log
+
+You can also get a specific log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.individualIdentity.log.get('5155165527080960');
+  
+    console.log(log);
+})();
+```
+
+### Create IndividualDocuments
+
+You can create an individual document to attach images of documents to a specific individual Identity.
+You must reference the desired individual identity by its id.
+
+```javascript
+await (async() => {
+    let documents = await starkinfra.individualDocument.create([
+        new starkinfra.IndividualDocument({
+            'type': "identity-front",
+            'content': "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD...",
+            'identityId': '5155165527080960',
+            'tags': ["breaking", "bad"]
+        })
+    ]);
+
+    console.log(documents[0]);
+
+    documents = await starkinfra.individualDocument.create([
+        new starkinfra.IndividualDocument({
+            'type': "identity-back",
+            'content': "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD...",
+            'identityId': '5155165527080960',
+            'tags': ["breaking", "bad"]
+        })
+    ]);
+
+    console.log(documents[0]);
+
+    documents = await starkinfra.individualDocument.create([
+        new starkinfra.IndividualDocument({
+            'type': "selfie",
+            'content': "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD...",
+            'identityId': '5155165527080960',
+            'tags': ["breaking", "bad"]
+        })
+    ]);
+
+    console.log(documents[0]);
+})();
+```
+
+**Note**: Instead of using IndividualDocument objects, you can also pass each element in dictionary format
+
+### Query IndividualDocuments
+
+You can query multiple individual documents according to filters.
+
+```javascript
+await (async() => {
+    let documents = await starkinfra.individualDocument.query({
+        'after': '2022-01-01',
+        'before': '2022-03-01',
+        'status': "success",
+        'tags': ["breaking", "bad"],
+    });
+  
+    for await (let document of documents) {
+        console.log(document);
+    }
+})();
+```
+
+### Get an IndividualDocument
+
+After its creation, information on an individual document may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let documents = await starkinfra.individualDocument.get('5155165527080960');
+  
+    console.log(documents);
+})();
+```
+  
+### Query IndividualDocument logs
+
+You can query individual document logs to better understand individual document life cycles. 
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.individualDocument.log.query({
+        'limit': 50
+        'after': '2022-01-01',
+        'before': '2022-01-20'
+    });
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get an IndividualDocument log
+
+You can also get a specific log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.individualDocument.log.get('5155165527080960');
+  
+    console.log(log);
+})();
+```
 
 ## Webhook
 

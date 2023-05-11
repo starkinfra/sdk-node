@@ -17,6 +17,7 @@ class DynamicBrcode extends Resource {
      * in the BR Code. Stark Infra will receive the GET request and forward it to your
      * registered endpoint with a GET request containing the UUID of the BR Code for
      * identification.
+     * 
      * When you initialize a DynamicBrcode, the entity will not be automatically
      * created in the Stark Infra API. The 'create' function sends the objects
      * to the Stark Infra API and returns the created object.

@@ -36,7 +36,6 @@ class Attempt extends Resource {
 exports.Attempt = Attempt;
 let resource = {'class': exports.Attempt, 'name': 'EventAttempt'};
 
-
 exports.get = async function (id, { user } = {}) {
     /**
      *

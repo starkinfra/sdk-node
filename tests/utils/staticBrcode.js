@@ -8,6 +8,8 @@ exports.generateExampleStaticBrcodeJson = function () {
             .replace('{phoneNumber}', Math.floor(Math.random() * (999999999 - 100000000 + 1) + 100000000)),
         'amount': Math.floor(Math.random() * (9999 - 1000 + 1) + 1000),
         'reconciliationId': String(Math.floor(Math.random() * (9999 - 1000 + 1) + 1000)),
-        'city': 'São Paulo'
+        'city': 'São Paulo',
+        'cashierBankCode': '20018183',
+        'description': 'A StaticBrcode'
     })
 };

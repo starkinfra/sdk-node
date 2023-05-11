@@ -74,6 +74,5 @@ describe('TestIssuingPurchaseResponse', function() {
             'status': 'approved'
         });
         assert(typeof purchase === 'string');
-        console.log(purchase);
     });
 })

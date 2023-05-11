@@ -173,7 +173,6 @@ describe("TestPixRequestResponse", function(){
             'status': 'approved'
         });
         assert(typeof requests === 'string');
-        console.log(requests);
     });
 
     it("test_denied", async () => {
@@ -182,7 +181,6 @@ describe("TestPixRequestResponse", function(){
             'reason': 'taxIdMismatch'
         });
         assert(typeof requests === 'string');
-        console.log(requests);
     });
 });
 

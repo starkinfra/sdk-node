@@ -13,7 +13,6 @@ describe('TestPixChargebackPost', function() {
         for (let chargeback of chargebacks) {
             let canceledPixChargeback = await starkinfra.pixChargeback.cancel(chargeback.id);
             assert(canceledPixChargeback.status === 'canceled');
-            console.log(canceledPixChargeback);
         }
     });
 });
@@ -53,7 +52,6 @@ describe('TestPixChargebackGet', function(){
         let chargebacks = await starkinfra.pixChargeback.query({'limit': 1});
         for await (let chargeback of chargebacks) {
             assert(typeof chargeback.id == 'string');
-            console.log(chargeback);
             chargeback = await starkinfra.pixChargeback.get(chargeback.id, '012.345.678-90');
             assert(typeof chargeback.id == 'string');
         }

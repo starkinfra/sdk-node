@@ -98,7 +98,6 @@ describe('TestDynamicBrcodeResponseDue', function() {
             receiverStateCode: "SP",
             receiverZipCode: "01234-567",
         });
-        console.log(response);
         assert(typeof response == 'string');
     });
 });
@@ -115,7 +114,6 @@ describe('TestDynamicBrcodeResponseInstant', function() {
             amount: 100,
 
         });
-        console.log(response);
         assert(typeof response == 'string');
     });
 });

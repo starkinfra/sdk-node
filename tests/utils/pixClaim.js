@@ -8,8 +8,7 @@ exports.generateExamplePixClaimJson = function () {
         'branchCode': '0000-1',
         'name': 'Jamie Lannister',
         'taxId': '012.345.678-90',
-        'keyId': '+55{areaCode}{phoneNumber}'
-            .replace('{areaCode}', Math.floor(Math.random() * (99 - 10 + 1) + 10))
+        'keyId': '+5511{phoneNumber}'
             .replace('{phoneNumber}', Math.floor(Math.random() * (999999999 - 100000000 + 1) + 100000000))
     })
 };

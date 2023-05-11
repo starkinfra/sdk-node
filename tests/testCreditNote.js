@@ -12,7 +12,6 @@ describe('TestCreditNotePost', function(){
         notes.push(new starkinfra.CreditNote(exampleCreditNote));
         notes = await starkinfra.creditNote.create(notes);
         for (let note of notes) {
-            console.log(note)
             assert(typeof note.id == 'string');
         }
     });
@@ -130,40 +129,33 @@ describe('TestCreditNotePostAndCancel', function(){
 });
 
 let exampleCreditNote = {
-    templateId: templateId,
-    name: 'Jamie Lannister',
-    taxId: '012.345.678-90',
-    nominalAmount: 100000,
-    scheduled: '2023-05-28',
-    invoices: [
-        new starkinfra.creditNote.Invoice({
-            due: '2023-06-25',
-            amount: 120000,
-            fine: 10,
-            interest: 2
-        })
-    ],
-    tags: ['test', 'testing'],
+    externalId: "my_unique_id_" + new Date().getTime(),
+    invoices: [{
+        amount: 23422413,
+        due: "2024-06-16"
+    }],
+    name: "Jamie Lannister",
+    rebateAmount: 0,
+    scheduled: "2023-06-07",
+    signers: [{
+        contact: "https://b591-179-191-69-138.sa.ngrok.io",
+        method: "server",
+        name: "Jamie Lannister"
+    }],
+    taxId: "012.345.678-90",
+    templateId: "5707012469948416",
+    paymentType: "transfer",
     payment: {
-        bankCode: '00000000',
-        branchCode: '1234',
-        accountNumber: '129340-1',
-        name: 'Jamie Lannister',
-        taxId: '012.345.678-90'
+        accountNumber: "5005482",
+        bankCode: "60701190",
+        branchCode: "7248",
+        name: "Jamie Lannister",
+        taxId: "594.739.480-42"
     },
-    paymentType: 'transfer',
-    signers: [
-        {
-            name: 'Jamie Lannister',
-            contact: 'jamie.lannister.01330e4c-bf92-4a54-8349-a540b90aa24e@invaliddomain.com',
-            method: 'link'
-        }
-    ],
-    externalId: bacenId.create('12345678'),
-    streetLine1: "Rua ABC",
-    streetLine2: "Ap 123",
-    district: "Jardim Paulista",
     city: "São Paulo",
     stateCode: "SP",
+    district: "Jardim Paulista",
+    streetLine1: "Rua ABC",
+    streetLine2: "Ap 123",
     zipCode: "01234-567"
 }
