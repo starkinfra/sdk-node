@@ -31,6 +31,7 @@ class IssuingPurchase extends Resource {
      * @param acquirerId [string]: acquirer ID. ex: '5656565656565656'
      * @param merchantId [string]: merchant ID. ex: '5656565656565656'
      * @param merchantName [string]: merchant name. ex: 'Google Cloud Platform'
+     * @param metadata [dictionary]: dictionary object used to store additional information about the IssuingPurchase object. ex: { authorizationId: 'OjZAqj' }
      * @param merchantFee [integer]: fee charged by the merchant to cover specific costs, such as ATM withdrawal logistics, etc. ex: 200 (= R$ 2.00)
      * @param walletId [string]: virtual wallet ID. ex: '5656565656565656'
      * @param methodCode [string]: method code. Options: 'chip', 'token', 'server', 'manual', 'magstripe' or 'contactless'
@@ -56,7 +57,7 @@ class IssuingPurchase extends Resource {
                     amount=null, tax=null, issuerAmount=null, issuerCurrencyCode=null, 
                     issuerCurrencySymbol=null, merchantAmount=null, merchantCurrencyCode=null, 
                     merchantCurrencySymbol=null, merchantCategoryCode=null, merchantCountryCode=null, 
-                    acquirerId=null, merchantId=null, merchantName=null, merchantFee=null, 
+                    acquirerId=null, merchantId=null, merchantName=null, metadata=null, merchantFee=null, 
                     walletId=null, methodCode=null, score=null, endToEndId=null, 
                     tags=null, zipCode=null, issuingTransactionIds=null, status=null, 
                     created=null, updated=null, isPartialAllowed=null, cardTags=null, 
@@ -81,6 +82,7 @@ class IssuingPurchase extends Resource {
         this.acquirerId = acquirerId;
         this.merchantId = merchantId;
         this.merchantName = merchantName;
+        this.metadata = metadata;
         this.merchantFee = merchantFee;
         this.walletId = walletId;
         this.methodCode = methodCode;
