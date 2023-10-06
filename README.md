@@ -2109,6 +2109,7 @@ app.get('/', async (req, res) => {
                 reconciliationId: invoice.reconciliationId,
                 amount: invoice.amount,
                 senderName: invoice.senderName,
+                senderTaxId: invoice.senderTaxId,
                 receiverName: invoice.receiverName,
                 receiverStreetLine: invoice.receiverStreetLine,
                 receiverCity: invoice.receiverCity,
