@@ -92,6 +92,7 @@ describe('TestDynamicBrcodeResponseDue', function() {
             reconciliationId: "b77f52367ab944879f9566ee6eaf1781",
             amount: 100,
             senderName: "Anthony Edward Stark",
+            senderTaxId: "012.345.678-90",
             receiverName: "Jamie Lannister",
             receiverStreetLine: "Av. Paulista, 200",
             receiverCity: "Sao Paulo",
