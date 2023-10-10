@@ -94,6 +94,7 @@ describe('TestDynamicBrcodeResponseDue', function() {
             senderName: "Anthony Edward Stark",
             senderTaxId: "012.345.678-90",
             receiverName: "Jamie Lannister",
+            receiverTaxId: "20.018.183/0001-8",
             receiverStreetLine: "Av. Paulista, 200",
             receiverCity: "Sao Paulo",
             receiverStateCode: "SP",
