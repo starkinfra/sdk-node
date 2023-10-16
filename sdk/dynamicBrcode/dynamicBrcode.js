@@ -169,8 +169,8 @@ exports.page = async function ({ cursor, limit, after, before, uuids, externalId
 
 exports.responseDue = async function ({ 
                                         version, created, due, expiration, keyId, status, reconciliationId, nominalAmount, senderName, 
-                                        senderTaxId, receiverName, receiverStreetLine, receiverCity, receiverStateCode, receiverZipCode, 
-                                        receiverTaxId=null, fine=null, interest=null, discount=null, description=null 
+                                        senderTaxId, receiverName, receiverTaxId, receiverStreetLine, receiverCity, receiverStateCode, 
+                                        receiverZipCode, fine=null, interest=null, discount=null, description=null 
                                     }) {
     /**
      *
@@ -194,13 +194,13 @@ exports.responseDue = async function ({
      * @param senderName [string]: sender's full name. ex: 'Anthony Edward Stark'
      * @param senderTaxId [string]: sender's CPF (11 digits formatted or unformatted) or CNPJ (14 digits formatted or unformatted). ex: '01.001.001/0001-01'
      * @param receiverName [string]: receiver's full name. ex: 'Jamie Lannister'
+     * @param receiverTaxId [string]: receiver's CPF (11 digits formatted or unformatted) or CNPJ (14 digits formatted or unformatted). ex: '012.345.678-90'
      * @param receiverStreetLine [string]: receiver's main address. ex: 'Av. Paulista, 200'
      * @param receiverCity [string]: receiver's address city name. ex: 'Sao Paulo'
      * @param receiverStateCode [string]: receiver's address state code. ex: 'SP'
      * @param receiverZipCode [string]: receiver's address zip code. ex: '01234-567'
      *
      * Parameters (optional):
-     * @param receiverTaxId [string, default null]: receiver's CPF (11 digits formatted or unformatted) or CNPJ (14 digits formatted or unformatted). ex: '012.345.678-90'
      * @param fine [float, default 2.0]: Percentage charged if the sender pays after the due datetime.
      * @param interest [float, default 1.0]: Interest percentage charged if the sender pays after the due datetime.
      * @param discounts [list of dictionaries, default null]: list of dictionaries with "percentage":float and "due":string or string pairs.
@@ -222,6 +222,7 @@ exports.responseDue = async function ({
         'senderName': senderName,
         'senderTaxId': senderTaxId,
         'receiverName': receiverName,
+        'receiverTaxId': receiverTaxId,
         'receiverStreetLine': receiverStreetLine,
         'receiverCity': receiverCity,
         'receiverStateCode': receiverStateCode,

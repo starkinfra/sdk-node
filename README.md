@@ -2111,6 +2111,7 @@ app.get('/', async (req, res) => {
                 senderName: invoice.senderName,
                 senderTaxId: invoice.senderTaxId,
                 receiverName: invoice.receiverName,
+                receiverTaxId: invoice.receiverTaxId,
                 receiverStreetLine: invoice.receiverStreetLine,
                 receiverCity: invoice.receiverCity,
                 receiverStateCode: invoice.receiverStateCode,
