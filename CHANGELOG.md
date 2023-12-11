@@ -14,6 +14,11 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ## [Unreleased]
 ### Added
+- IssuingToken resource
+- IssuingTokenLog resource
+- IssuingTokenDesign resource
+- IssuingTokenRequest sub-resource
+- IssuingTokenActivation sub-resource
 - merchantCategoryType, description, productId and holderId attributes to IssuingPurchase resource
 ### Changed
 - senderTaxId and receiverTaxId parameters to DynamicBrcode resource

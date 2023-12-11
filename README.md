@@ -30,6 +30,10 @@ This SDK version is compatible with the Stark Infra API v2.
         - [Stock](#query-issuingstocks): View your current stock of a certain IssuingDesign linked to an Embosser on the workspace
         - [Restock](#create-issuingrestocks): Create restock orders of a specific IssuingStock object
         - [EmbossingRequest](#create-issuingembossingrequests): Create embossing requests
+        - [TokenRequest](#create-an-issuingtokenrequest): Generate the payload to create the token
+        - [Token](#process-token-authorizations): Authorize and manage your tokens
+        - [TokenActivation](#process-token-activations): Get notified on how to inform the activation code to the holder 
+        - [TokenDesign](#get-an-issuingtokendesign): View your current token card arts
         - [Purchases](#process-purchase-authorizations): Authorize and view your past purchases
         - [Invoices](#create-issuinginvoices): Add money to your issuing balance
         - [Withdrawals](#create-issuingwithdrawals): Send money back to your Workspace from your issuing balance
@@ -827,6 +831,245 @@ await (async() => {
 })();
 ```
 
+### Create an IssuingTokenRequest
+
+You can create a request that provides the required data you must send to the wallet app.
+
+```javascript
+await (async() => {
+    let request = await starkinfra.issuingTokenRequest.create({
+        cardId: '5189831499972623',
+        walletId: 'google',
+        methodCode: 'app'
+    });
+  
+    console.log(request);
+})();
+```
+
+### Process Token authorizations
+
+It's easy to process token authorizations delivered to your endpoint.
+Remember to pass the signature header so the SDK can make sure it's StarkInfra that sent you the event.
+If you do not approve or decline the authorization within 2 seconds, the authorization will be denied.
+
+```javascript
+const starkinfra = require('starkinfra');
+const express = require('express')
+const app = express()
+
+app.use(express.raw({type: '*/*'}));
+
+const port = 3000
+app.post('/', async (req, res) => {
+    try {
+        let authorization = await starkinfra.issuingToken.parse({
+            content: req.body.toString(),
+            signature: req.headers['digital-signature']
+        });
+        res.send(
+            starkinfra.issuingToken.responseAuthorization( // this optional method just helps you build the response JSON
+                status: 'accepted',
+                activationMethods: [
+                    {
+                        'type': 'app',
+                        'value': 'com.subissuer.android'
+                    },
+                    {
+                        'type': 'text',
+                        'value': '** *****-5678'
+                    }
+                ],
+                designId: '4584031664472031',
+                tags=['token', 'user/1234']
+            )
+        );
+
+        // or
+
+        res.send(
+            starkinfra.issuingToken.responseAuthorization(
+                status: 'denied',
+                reason: 'other'
+            )
+        );
+    }
+    catch (err) {
+        console.log(err)
+        res.status(400).end()
+    }
+})
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+```
+
+### Process Token activations
+
+It's easy to process token activation notifications delivered to your endpoint.
+Remember to pass the signature header so the SDK can make sure it's Stark Infra that sent you the event.
+
+```javascript
+const starkinfra = require('starkinfra');
+const express = require('express')
+const app = express()
+
+app.use(express.raw({type: '*/*'}));
+
+const port = 3000
+app.post('/', async (req, res) => {
+    try {
+        let authorization = await starkinfra.issuingToken.parse({
+            content: req.body.toString(),
+            signature: req.headers['digital-signature']
+        });
+    }
+    catch (err) {
+        console.log(err)
+        res.status(400).end()
+    }
+})
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+```
+
+After that, you may generate the activation code and send it to the cardholder.
+The cardholder enters the received code in the wallet app. We'll receive and send it to
+tokenAuthorizationUrl for your validation. Completing the provisioning process. 
+
+```javascript
+const starkinfra = require('starkinfra');
+const express = require('express')
+const app = express()
+
+app.use(express.raw({type: '*/*'}));
+
+const port = 3000
+app.post('/', async (req, res) => {
+    try {
+        res.send(
+            starkinfra.issuingToken.responseActivation( // this optional method just helps you build the response JSON
+                status: 'approved',
+                tags: ['token', 'user/1234']
+            )
+        );
+
+        // or
+
+        res.send(
+            starkinfra.issuingToken.responseActivation(
+                status: 'denied',
+                reason: 'other'
+            )
+        );
+    }
+    catch (err) {
+        console.log(err)
+        res.status(400).end()
+    }
+})
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+```
+
+### Get an IssuingToken
+
+You can get a single token by its id.
+
+```javascript
+await (async() => {
+    let token = await starkinfra.issuingToken.get('5749080709922816');
+  
+    console.log(token);
+})();
+```
+
+### Query IssuingTokens
+
+You can get a list of created tokens given some filters.
+
+```javascript
+await (async() => {
+    let tokens = await starkinfra.issuingInvoice.query({
+        'limit': 5,
+        'after': '2022-01-01',
+        'before': '2023-03-01',
+        'status': 'active',
+        'cardIds': ['5656565656565656', '4545454545454545'],
+        'externalIds': ['DSHRMC00002626944b0e3b539d4d459281bdba90c2588791', 'DSHRMC00002626941c531164a0b14c66ad9602ee716f1e85']
+    });
+  
+    for await (let token of tokens) {
+        console.log(token);
+    }
+})();
+```
+
+### Update an IssuingToken
+
+You can update a specific token by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let token = await starkinfra.issuingToken.update('5155165527080960', { status: 'blocked' });
+
+    console.log(token);
+})();
+```
+
+### Cancel an IssuingToken
+
+You can also cancel a token by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let token = await starkinfra.issuingToken.cancel('5155165527080960');
+
+    console.log(token);
+})();
+```
+
+### Get an IssuingTokenDesign
+
+You can get a single design by its id.
+
+```javascript
+await (async() => {
+    let token = await starkinfra.issuingTokenDesign.get('5749080709922816');
+  
+    console.log(token);
+})();
+```
+
+### Query IssuingTokenDesigns 
+
+You can get a list of available designs given some filters.
+
+```javascript
+await (async() => {
+    let designs = await starkinfra.issuingInvoice.query({
+        'limit': 5,
+        'after': '2022-01-01',
+        'before': '2023-03-01'
+    });
+  
+    for await (let design of designs) {
+        console.log(design);
+    }
+})();
+```
+
+## Get an IssuingTokenDesign PDF
+
+A design PDF can be retrieved by its id. 
+
+```javascript
+await (async() => {
+    let pdf = await starkinfra.issuingTokenDesign.pdf('5155165527080960');
+    await fs.writeFile('token.pdf', pdf);
+})();
+```
+
 ### Process Purchase authorizations
 
 It's easy to process purchase authorizations delivered to your endpoint.
@@ -848,9 +1091,9 @@ app.post('/', async (req, res) => {
         });
         res.send(
             starkinfra.issuingAuthorization.response( // this optional method just helps you build the response JSON
-                status='accepted',
-                amount=authorization.amount,
-                tags=['my-purchase-id/123']
+                status: 'accepted',
+                amount: authorization.amount,
+                tags: ['my-purchase-id/123']
             )
         );
 
@@ -858,9 +1101,9 @@ app.post('/', async (req, res) => {
 
         res.send(
             starkinfra.issuingAuthorization.response(
-                status='denied',
-                reason='other',
-                tags=['other-id/456']
+                status: 'denied',
+                reason: 'other',
+                tags: ['other-id/456']
             )
         );
     }
