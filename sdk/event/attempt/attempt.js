@@ -1,5 +1,5 @@
 const rest = require('../../utils/rest.js');
-const check = require('../../utils/check.js');
+const check = require('core-node').check;
 const Resource = require('../../utils/resource.js').Resource
 
 
@@ -56,7 +56,7 @@ exports.get = async function (id, { user } = {}) {
     return rest.getId(resource, id, user);
 };
 
-exports.query = async function ({ resource, limit, after, before, eventIds, webhookIds, user } = {}) {
+exports.query = async function ({ limit, after, before, eventIds, webhookIds, user } = {}) {
     /**
      *
      * Retrieve Event Attempts
@@ -76,7 +76,6 @@ exports.query = async function ({ resource, limit, after, before, eventIds, webh
      *
      */
     let query = {
-        resource: resource,
         limit: limit,
         after: after,
         before: before,
@@ -86,7 +85,7 @@ exports.query = async function ({ resource, limit, after, before, eventIds, webh
     return rest.getList(resource, query, user);
 };
 
-exports.page = async function ({ cursor, resource, limit, after, before, eventIds, webhookIds, user } = {}) {
+exports.page = async function ({ cursor, limit, after, before, eventIds, webhookIds, user } = {}) {
     /**
      *
      * Retrieve paged Event Attempts
@@ -109,7 +108,6 @@ exports.page = async function ({ cursor, resource, limit, after, before, eventId
      */
     let query = {
         cursor: cursor,
-        resource: resource,
         limit: limit,
         after: after,
         before: before,

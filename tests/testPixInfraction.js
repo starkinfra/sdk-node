@@ -101,7 +101,7 @@ describe('TestPixInfractionPatch', function() {
     it('test_success', async () => {
         let pixInfraction = await getPixInfractionToPatch();
         assert(pixInfraction.status === 'delivered');
-        pixInfraction = await starkinfra.pixInfraction.update(pixInfraction.id, 'agreed')
+        pixInfraction = await starkinfra.pixInfraction.update(pixInfraction.id, {'result': 'agreed', 'fraudType': 'scam'})
         assert(pixInfraction.status === 'agreed');
     });
 });
@@ -112,7 +112,8 @@ generateExamplePixInfractionJson = async function(n=1) {
     for (let id of endToEndIds) {
         pixInfractions.push({
             referenceId: id,
-            type: 'fraud',
+            type: 'reversal',
+            method: 'scam'
         })
     }
     return pixInfractions;

@@ -1,7 +1,7 @@
 const rest = require('../utils/rest');
-const check = require('../utils/check.js');
+const check = require('core-node').check;
 const parse = require('../utils/parse.js');
-const Resource = require('../utils/resource.js').Resource;
+const Resource = require('core-node').Resource;
 
 
 class Event extends Resource {

@@ -34,7 +34,7 @@ describe('TestPixKeyPage', function(){
         let cursor = null;
         let page = null;
         for (let i = 0; i < 2; i++) {
-            [page, cursor] = await starkinfra.pixKey.page({ 'limit': 5, 'cursor': cursor });
+            [page, cursor] = await starkinfra.pixKey.page({ 'limit': 1, 'cursor': cursor });
             for (let entity of page) {
                 assert(!ids.includes(entity.id));
                 ids.push(entity.id);

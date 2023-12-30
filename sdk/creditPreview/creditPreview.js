@@ -1,5 +1,5 @@
 const rest = require('../utils/rest.js');
-const SubResource = require('../utils/subResource.js').SubResource
+const SubResource = require('core-node').SubResource;
 const {CreditNotePreview} = require('./creditNotePreview.js');
 const creditNotePreviewResource = require('./creditNotePreview.js').subResource;
 

@@ -1,8 +1,8 @@
-const api = require('../utils/api.js');
 const rest = require('../utils/rest.js');
+const api = require('core-node').api;
 const parse = require('../utils/parse.js');
-const check = require('../utils/check.js');
-const Resource = require('../utils/resource.js').Resource
+const check = require('core-node').check;
+const Resource = require('core-node').Resource;
 
 
 class IssuingToken extends Resource {

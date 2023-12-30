@@ -1,9 +1,9 @@
 const rest = require('../utils/rest.js');
-const check = require('../utils/check.js');
+const check = require('core-node').check;
 const {parseObjects} = require('../utils/parse');
+const Resource = require('core-node').Resource;
 const {IssuingRule} = require('../issuingRule/issuingRule.js');
 const ruleResource = require('../issuingRule/issuingRule').resource;
-const Resource = require('../utils/resource.js').Resource
 
 
 class IssuingHolder extends Resource {

@@ -1,6 +1,5 @@
 const rest = require('../utils/rest.js');
-const check = require('../utils/check.js');
-const Resource = require('../utils/resource.js').Resource
+const Resource = require('core-node').Resource;
 
 
 class CreditHolmes extends Resource {

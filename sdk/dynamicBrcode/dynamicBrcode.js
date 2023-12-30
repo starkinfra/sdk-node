@@ -1,8 +1,8 @@
 const rest = require('../utils/rest.js');
-const check = require('../utils/check.js');
+const api = require('core-node').api;
+const check = require('core-node').check;
 const parse = require('../utils/parse.js');
-const api = require('../utils/api.js');
-const Resource = require('../utils/resource.js').Resource
+const Resource = require('core-node').Resource;
 
 
 class DynamicBrcode extends Resource {

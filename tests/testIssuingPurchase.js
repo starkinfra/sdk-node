@@ -9,7 +9,7 @@ describe('TestIssuingPurchaseQuery', function() {
     it('test_success', async () => {
         let purchases = await starkinfra.issuingPurchase.query({'limit': 10});
         for await (let purchase of purchases) {
-            assert(typeof purchase.id == 'string');
+            assert(typeof purchase.id == 'string')
             assert(typeof purchase.metadata == typeof {})
         }
     });

@@ -1,9 +1,9 @@
 const {parseObjects} = require('../utils/parse');
+const Resource = require('core-node').Resource;
 const {CardMethod} = require('../cardMethod/cardMethod.js');
+const cardMethodResource = require('../cardMethod/cardMethod').subResource;
 const {MerchantCountry} = require('../merchantCountry/merchantCountry.js');
 const {MerchantCategory} = require('../merchantCategory/merchantCategory.js');
-const Resource = require('../utils/resource.js').Resource
-const cardMethodResource = require('../cardMethod/cardMethod').subResource;
 const merchantCountryResource = require('../merchantCountry/merchantCountry').subResource;
 const merchantCategoryResource = require('../merchantCategory/merchantCategory').subResource;
 

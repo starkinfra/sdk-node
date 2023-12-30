@@ -1,5 +1,5 @@
 const rest = require('../utils/rest.js');
-const Resource = require('../utils/resource.js').Resource
+const Resource = require('core-node').Resource;
 
 
 class IssuingDesign extends Resource {
@@ -120,5 +120,5 @@ exports.pdf = async function (id, {user} = {}) {
      * @returns IssuingDesign pdf file
      *
      */
-    return rest.getPdf(exports.resource, id, null, user);
+    return rest.getContent(exports.resource, id, null, user, 'pdf');
 };

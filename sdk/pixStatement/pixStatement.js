@@ -1,6 +1,6 @@
 const rest = require('../utils/rest.js');
-const check = require('../utils/check.js');
-const Resource = require('../utils/resource.js').Resource
+const check = require('core-node').check;
+const Resource = require('core-node').Resource;
 
 
 class PixStatement extends Resource {
@@ -150,5 +150,5 @@ exports.csv = async function (id, {user} = {}) {
      * @returns PixStatement csv file
      *
      */
-    return rest.getCsv(resource, id, {}, user);
+    return rest.getContent(resource, id, {}, user, 'csv');
 };
