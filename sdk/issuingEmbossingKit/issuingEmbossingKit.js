@@ -1,8 +1,8 @@
 const rest = require('../utils/rest.js');
+const {parseObjects} = require('../utils/parse.js');
+const Resource = require('core-node').Resource;
 const {IssuingDesign} = require('../issuingDesign/issuingDesign.js');
 const issuingDesignResource = require('../issuingDesign/issuingDesign.js').resource;
-const Resource = require('../utils/resource.js').Resource
-const {parseObjects} = require('../utils/parse.js');
 
 
 class IssuingEmbossingKit extends Resource {

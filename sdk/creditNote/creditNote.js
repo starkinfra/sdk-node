@@ -6,8 +6,8 @@ const {Transfer} = require('./transfer.js');
 const transferResource = require('./transfer.js').resource;
 const rest = require('../utils/rest.js');
 const {parseObjects} = require('../utils/parse.js');
-const Resource = require('../utils/resource.js').Resource
-const check = require('../utils/check.js');
+const Resource = require('core-node').Resource;
+const check = require('core-node').check;
 
 
 class CreditNote extends Resource {

@@ -1,7 +1,7 @@
-const check = require('../utils/check.js');
-const SubResource = require('../utils/subResource.js').SubResource
-const Invoice = require('../creditNote/invoice/invoice.js').Invoice;
+const check = require('core-node').check;
+const SubResource = require('core-node').SubResource;
 const parseObjects = require('../utils/parse').parseObjects;
+const Invoice = require('../creditNote/invoice/invoice.js').Invoice;
 const invoiceResource = require('../creditNote/invoice/invoice.js').resource;
 
 class CreditNotePreview extends SubResource {
@@ -45,7 +45,7 @@ class CreditNotePreview extends SubResource {
 
         this.type = type;
         this.nominalAmount = nominalAmount;
-        this.scheduled = check.datetimeOrDate(scheduled);
+        this.scheduled = check.dateTimeOrDate(scheduled);
         this.taxId = taxId;
         this.invoices = parseObjects(invoices, invoiceResource, Invoice);
         this.nominalInterest = nominalInterest;

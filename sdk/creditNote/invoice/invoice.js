@@ -1,4 +1,4 @@
-const check = require('../../utils/check.js');
+const check = require('core-node').check;
 const {parseObjects} = require('../../utils/parse');
 const {Description} = require('./description');
 const descriptionResource = require('./description.js').subResource;
@@ -55,7 +55,7 @@ class Invoice extends Resource {
         super(id);
 
         this.amount = amount;
-        this.due = check.datetimeOrDate(due);
+        this.due = check.dateTimeOrDate(due);
         this.expiration = expiration;
         this.tags = tags;
         this.descriptions = parseObjects(descriptions, descriptionResource, Description);

@@ -1,6 +1,6 @@
 const rest = require('../utils/rest.js');
-const check = require('../utils/check.js');
-const Resource = require('../utils/resource.js').Resource
+const check = require('core-node').check;
+const Resource = require('core-node').Resource;
 
 
 class PixInfraction extends Resource {
@@ -16,11 +16,13 @@ class PixInfraction extends Resource {
      *
      * Parameters (required):
      * @param referenceId [string]: endToEndId or returnId of the transaction being reported. ex: 'E20018183202201201450u34sDGd19lz'
-     * @param type [string]: type of infraction report. Options: 'fraud', 'reversal', 'reversalChargeback'
+     * @param type [string]: type of infraction report. Options: 'reversal', 'reversalChargeback'
+     * @param method [string]:  method of Pix Infraction. Options: "scam", "unauthorized", "coercion", "invasion", "other", "unknown"
      * 
      * Parameters (optional):
      * @param description [string, default null]: description for any details that can help with the infraction investigation.
      * @param tags [list of strings, default []]: list of strings for tagging. ex: ['travel', 'food']
+     * @param fraudType [string, default null]: type of Pix Fraud. Options: "identity", "mule", "scam", "unknown", "other"
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the PixInfraction is created. ex: '5656565656565656'
@@ -36,8 +38,8 @@ class PixInfraction extends Resource {
      *
      */
     constructor({ 
-                    referenceId, type, description = null, tags = null, id = null, 
-                    creditedBankCode = null, debitedBankCode = null, flow = null, 
+                    referenceId, type, method, description = null, tags = null, fraudType = null,
+                    id = null, creditedBankCode = null, debitedBankCode = null, flow = null, 
                     analysis = null, reportedBy = null, result = null, status = null,  
                     created = null, updated = null 
                 }) {
@@ -45,8 +47,10 @@ class PixInfraction extends Resource {
 
         this.referenceId = referenceId;
         this.type = type;
+        this.method = method;
         this.description = description;
         this.tags = tags;
+        this.fraudType = fraudType;
         this.creditedBankCode = creditedBankCode;
         this.debitedBankCode = debitedBankCode;
         this.flow = flow;
@@ -175,7 +179,7 @@ exports.page = async function ({ cursor, limit, after, before, status, ids, type
     return rest.getPage(resource, query, user);
 };
 
-exports.update = async function ( id, result, { analysis, user } = {}) {
+exports.update = async function ( id, result, { fraudType, analysis, user } = {}) {
     /**
      *
      * Update PixInfraction entity
@@ -185,6 +189,9 @@ exports.update = async function ( id, result, { analysis, user } = {}) {
      * Parameters (required):
      * @param id [string]: PixInfraction id. ex: '5656565656565656'
      * @param result [string]: result after the analysis of the PixInfraction. Options: 'agreed', 'disagreed'
+     * 
+     * Parameters (conditionally required):
+     * @param fraudType [string, default null]: type of Pix Fraud. Options: "identity", "mule", "scam", "unknown", "other"
      *
      * Parameters (optional):
      * @param analysis [string, default null]: analysis that led to the result.
@@ -195,6 +202,7 @@ exports.update = async function ( id, result, { analysis, user } = {}) {
      */
     let payload = {
         'result': result,
+        'fraudType': fraudType,
         'analysis': analysis,
     };
     return rest.patchId(resource, id, payload, user);
