@@ -1,5 +1,5 @@
 const {parseObjects} = require('../utils/parse');
-const Resource = require('core-node').Resource;
+const Resource = require('starkcore').Resource;
 const {CardMethod} = require('../cardMethod/cardMethod.js');
 const cardMethodResource = require('../cardMethod/cardMethod').subResource;
 const {MerchantCountry} = require('../merchantCountry/merchantCountry.js');

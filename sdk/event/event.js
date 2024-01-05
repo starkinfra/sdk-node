@@ -1,7 +1,7 @@
 const rest = require('../utils/rest');
-const check = require('core-node').check;
+const check = require('starkcore').check;
 const parse = require('../utils/parse.js');
-const Resource = require('core-node').Resource;
+const Resource = require('starkcore').Resource;
 
 
 class Event extends Resource {

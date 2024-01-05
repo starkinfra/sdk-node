@@ -1,8 +1,8 @@
 const rest = require('../utils/rest.js');
-const api = require('core-node').api;
-const check = require('core-node').check;
+const api = require('starkcore').api;
+const check = require('starkcore').check;
 const parse = require('../utils/parse.js');
-const Resource = require('core-node').Resource;
+const Resource = require('starkcore').Resource;
 
 
 class PixRequest extends Resource {

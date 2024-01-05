@@ -1,4 +1,4 @@
-const check = require('core-node').check;
+const check = require('starkcore').check;
 const {parseObjects} = require('../../utils/parse');
 const {Description} = require('./description');
 const descriptionResource = require('./description.js').subResource;
