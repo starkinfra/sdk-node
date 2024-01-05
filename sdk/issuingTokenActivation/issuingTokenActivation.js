@@ -1,5 +1,5 @@
 const parse = require('../utils/parse.js');
-const SubResource = require('core-node').SubResource;
+const SubResource = require('starkcore').SubResource;
 
 
 class IssuingTokenActivation extends SubResource {

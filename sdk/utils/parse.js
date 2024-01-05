@@ -1,4 +1,4 @@
-const parse = require('core-node').parse;
+const parse = require('starkcore').parse;
 const { apiVersion, sdkVersion, host, language, timeout } = require('../utils/rest.js');
 
 
@@ -11,7 +11,7 @@ exports.parseObjects = function (objects, resource, resourceClass) {
 }
 
 exports.parseAndVerify = async function (resource, content, signature, user = null) {
-    return parse.parseAndVerify(
+    return parse.parseAndVerify (
         resource,
         content,
         signature,
