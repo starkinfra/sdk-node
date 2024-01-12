@@ -1,6 +1,6 @@
 {
   "name": "starkinfra",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "SDK to facilitate Node integrations with Stark Infra",
   "main": "index.js",
   "directories": {
