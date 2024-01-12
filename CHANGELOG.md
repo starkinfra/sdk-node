@@ -13,6 +13,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Fixed
+- user export to rest resource
+- Readme credentials examples
 
 ## [0.6.0] - 2024-01-08
 ### Changed

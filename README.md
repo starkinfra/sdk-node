@@ -214,7 +214,7 @@ let organization = new starkinfra.Organization({
 // To dynamically use your organization credentials in a specific workspaceId,
 // you can use the organization.replace() method:
 (async() => {
-    let balance = await starkinfra.balance.get({
+    let balance = await starkinfra.issuingBalance.get({
         user: starkinfra.organization.replace(organization, '4848484848484848')
     });
     console.log(balance);
@@ -242,7 +242,7 @@ There are two ways to inform the user to the SDK:
 ```javascript
 const starkinfra = require('starkinfra');
 (async() => {
-    let balance = await starkinfra.balance.get({user: project}); // or organization
+    let balance = await starkinfra.issuingBalance.get({user: project}); // or organization
 })();
 ```
 
@@ -254,7 +254,7 @@ const starkinfra = require('starkinfra');
 starkinfra.user = project; // or organization
 
 (async() => {
-    let balance = await starkinfra.balance.get();
+    let balance = await starkinfra.issuingBalance.get();
 })();
 ```
 

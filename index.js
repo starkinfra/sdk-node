@@ -1,7 +1,7 @@
 exports.version = '0.6.0';
 
 exports.cache = {};
-exports.user = null
+exports.user = {}
 exports.language = 'en-US'
 
 // Modules
