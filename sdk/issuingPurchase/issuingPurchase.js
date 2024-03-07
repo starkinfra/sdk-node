@@ -208,6 +208,28 @@ exports.page = async function ({ cursor, ids, cardIds, holderIds, endToEndIds, l
     return rest.getPage(resource, query, user);
 };
 
+exports.update = async function (id, {tags, description, user}) {
+    /**
+     *
+     *Update an IssuingPurchase by passing id.
+     *
+     * @description Update an IssuingPurchase by passing id.
+     *
+     * Parameters (optional):
+     * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
+     * @param description [string, default null]: additional information to the IssuingPurchase.
+     *
+     * Return:
+     * @returns IssuingPurchase object with updated attributes 
+     *
+     */
+    let payload = {
+        tags: tags,
+        description: description
+    };
+    return rest.patchId(resource, id, payload, user);
+};
+
 exports.parse = async function (content, signature, {user} = {}) {
     /**
      *
@@ -233,9 +255,7 @@ exports.parse = async function (content, signature, {user} = {}) {
     return parse.parseAndVerify(resource, content, signature, user);
 };
 
-exports.response = async function ({
-                                        status, amount=null, reason=null, tags=null
-                                    }) {
+exports.response = async function ({status, amount=null, reason=null, tags=null}) {
     /**
      *
      * Helps you respond IssuingPurchase requests

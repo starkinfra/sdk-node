@@ -3,7 +3,6 @@ const starkinfra = require('../index.js');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
-
 describe('TestIssuingPurchaseQuery', function() {
     this.timeout(10000);
     it('test_success', async () => {
@@ -25,6 +24,26 @@ describe('TestIssuingPurchaseGet', function() {
             purchase = await starkinfra.issuingPurchase.get(purchase.id);
             assert(typeof purchase.id == 'string');
             assert(typeof purchase.metadata == typeof {})
+        }
+    });
+});
+
+describe('TestIssuingPurchasePatch', function() {
+    this.timeout(10000);
+    it('test_success', async () => {
+        let purchases = await starkinfra.issuingPurchase.query({'limit': 1});
+        let issuingPurchaseId;
+        for await (let purchase of purchases) {
+            issuingPurchaseId = purchase.id;
+
+        tags=['war supply', 'purchase #1234'],
+        description = "winterfell";
+        updatedPurchase = await starkinfra.issuingPurchase.update(issuingPurchaseId,{
+            "tags":tags,
+            "description":description,
+        })
+        assert.deepEqual(updatedPurchase.tags, tags);
+        assert.equal(updatedPurchase.description, description);
         }
     });
 });
