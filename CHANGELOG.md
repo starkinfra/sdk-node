@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- update method to IssuingPurchase resource
 
 ## [0.6.2] - 2024-02-21
 ### Changed
