@@ -47,6 +47,6 @@ exports.get = async function ({user} = {}) {
      * @returns IssuingBalance object with updated attributes
      *
      */
-    let IssuingBalance = (await rest.getList(resource, 100, user)).next();
+    let IssuingBalance = await rest.getList(resource, 100, user).next();
     return IssuingBalance['value'];
 };
