@@ -13,8 +13,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [0.7.1] - 2024-04-01
 ### Fixed
-- issuingBalance return
+- IssuingBalance return
 
 ## [0.7.0] - 2024-03-13
 ### Added
