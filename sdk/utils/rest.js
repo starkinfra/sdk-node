@@ -51,7 +51,7 @@ exports.getId = async function (resource, id, user = starkInfra.user, { ...query
 
 exports.getPublicKey = async function (user = starkInfra.user) {
     return rest.getPublicKey(
-        sdkVersion, 
+        sdkVersion,
         host,
         apiVersion,
         user,
@@ -74,7 +74,7 @@ exports.getContent = async function (resource, id, user = starkInfra.user, query
         query
     );
 };
-    
+
 exports.deleteId = async function (resource, id, user = starkInfra.user) {
     return rest.deleteId(
         sdkVersion,
@@ -121,7 +121,7 @@ exports.getSubResource = async function (resource, id, subResource, user = stark
         host,
         apiVersion,
         user,
-        api.endpoint(resource['name']),
+        resource,
         id,
         subResource,
         language,
@@ -139,6 +139,85 @@ exports.getPage = async function (resource, query = {}, user = starkInfra.user )
         language,
         timeout,
         query
+    );
+};
+
+exports.postRaw = async function (path, payload, prefix = null, throwError = true, user = starkInfra.user, { ...query } = {}) {
+    return rest.postRaw(
+        sdkVersion,
+        host,
+        apiVersion,
+        path,
+        payload,
+        user,
+        language,
+        timeout,
+        query,
+        prefix,
+        throwError
+    );
+};
+
+exports.getRaw = async function (path, query = {}, prefix = null, throwError = true, user = starkInfra.user ) {
+    return rest.getRaw(
+        sdkVersion,
+        host,
+        apiVersion,
+        path,
+        user,
+        language,
+        timeout,
+        query,
+        prefix,
+        throwError
+    )
+}
+
+exports.patchRaw = async function (path, payload, prefix = null, throwError = true, user = starkInfra.user, { ...query } = {}) {
+    return rest.patchRaw(
+        sdkVersion,
+        host,
+        apiVersion,
+        path,
+        payload,
+        user,
+        language,
+        timeout,
+        query,
+        prefix,
+        throwError
+    );
+};
+
+exports.putRaw = async function (path, payload, prefix = null, throwError = true, user = starkInfra.user, { ...query } = {}) {
+    return rest.putRaw(
+        sdkVersion,
+        host,
+        apiVersion,
+        path,
+        payload,
+        user,
+        language,
+        timeout,
+        query,
+        prefix,
+        throwError
+    );
+};
+
+exports.deleteRaw = async function (path, payload, prefix = null, throwError = true, user = starkInfra.user, { ...query } = {}) {
+    return rest.deleteRaw(
+        sdkVersion,
+        host,
+        apiVersion,
+        path,
+        payload,
+        user,
+        language,
+        timeout,
+        query,
+        prefix,
+        throwError
     );
 };
 
