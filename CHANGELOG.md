@@ -17,6 +17,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - core version to v0.1.1
 ### Added
 - request methods
+### Fixed
+- issuingWithdrawal create
 
 ## [0.7.2] - 2024-05-09
 ## Changed

@@ -1,5 +1,6 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
+const {generateExampleIssuingWithdrawalJson} = require('./utils/issuingWithdrawal.js')
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -23,5 +24,12 @@ describe('TestIssuingWithdrawalGet', function() {
             withdrawal = await starkinfra.issuingWithdrawal.get(withdrawal.id);
             assert(typeof withdrawal.id == 'string');
         }
+    });
+});
+
+describe('TestIssuingWithdrawalCreate', function() {
+    this.timeout(10000);
+    it('test_success', async () => {
+        let withdrawals = await starkinfra.issuingWithdrawal.create(generateExampleIssuingWithdrawalJson());
     });
 });
