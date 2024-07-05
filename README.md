@@ -3273,6 +3273,142 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
+# request
+
+This resource allows you to send HTTP requests to StarkInfra routes.
+
+## GET
+
+You can perform a GET request to any StarkInfra route.
+
+It's possible to get a single resource using its id in the path.
+
+```javascript
+const starkinfra = require('starkinfra');
+(async() => {
+    const exampleId = "5699165527090460"
+    let path = `/pix-request/${exampleId}`;
+    let request = await starkinfra.request.get(path);
+    console.log(request)
+})();
+```
+
+You can also get the specific resource log,
+
+```javascript
+const starkinfra = require('starkinfra');
+(async() => {
+    const exampleId = "5699165527090460"
+    let path = `/pix-request/log/${exampleId}`;
+    let request = await starkinfra.request.get(path);
+    console.log(request)
+})();
+```
+
+This same method will be used to list all created items for the requested resource.
+
+```javascript
+const starkinfra = require('starkinfra');
+(async() => {
+    const after = "2024-01-01"
+    const before = "2024-02-01"
+    let cursor = null
+    while(true){
+        let request = starkinfra.request.get(
+            '/pix-request/',
+            {"after": after, "before": before, "cursor": cursor}
+        )
+        cursor = request["content"]["cursor"]
+        if(cursor == null){
+            break
+        }
+    }
+})();
+```
+
+To list logs, you will use the same logic as for getting a single log.
+
+```javascript
+const starkinfra = require('starkinfra');
+(async() => {
+    const after = "2024-01-01"
+    const before = "2024-02-01"
+    let cursor = null
+    while(true){
+        let request = starkinfra.request.get(
+            '/pix-request/log',
+            {"after": after, "before": before, "cursor": cursor}
+        )
+        cursor = request["content"]["cursor"]
+        if(cursor == null){
+            break
+        }
+    }
+})();
+```
+
+## POST
+
+You can perform a POST request to any StarkInfra route.
+
+This will create an object for each item sent in your request
+
+**Note**: It's not possible to create multiple resources simultaneously. You need to send separate requests if you want to create multiple resources, such as invoices and boletos.
+
+```javascript
+const starkinfra = require('starkinfra');
+(async() => {
+    const data = {
+        "holders": [
+            {
+                "name": "Jaime Lannister",
+                "externalId": "my_external_id",
+                "taxId": "012.345.678-90"
+            }
+        ]
+    }
+    let request = starkinfra.request.post(
+        "/issuing-holder",
+        data,
+    )
+    console.log(request["content"])
+})();
+```
+
+## PATCH
+
+You can perform a PATCH request to any StarkInfra route.
+
+It's possible to update a single item of a StarkInfra resource.
+
+```javascript
+const starkinfra = require('starkinfra');
+(async() => {
+    let exampleId = "5155165527080960"
+    let request = starkinfra.request.patch(
+        `/issuing-holder/${exampleId}`,
+        {"tags": ["Arya", "Stark"]}
+    )
+    console.log(request["content"])
+})();
+```
+
+## DELETE
+
+You can perform a DELETE request to any StarkInfra route.
+
+It's possible to delete a single item of a StarkInfra resource.
+```javascript
+const starkinfra = require('starkinfra');
+(async() => {
+    let exampleId = "5155165527080960"
+    let request = starkinfra.request.delete(
+        `/issuing-holder/${exampleId}`
+    )
+    console.log(request["content"])
+})();       
+```
+
 # Handling errors
 
 The SDK may raise one of four types of errors: __InputErrors__, __InternalServerError__, __UnknownError__, __InvalidSignatureError__

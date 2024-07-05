@@ -3,6 +3,7 @@ exports.version = '0.7.2';
 exports.cache = {};
 exports.user = {}
 exports.language = 'en-US'
+exports.requestMethodsPrefix = "Joker"
 
 // Modules
 exports.project = require('./sdk/user/project.js')
@@ -53,6 +54,7 @@ exports.returnId = require('./sdk/utils/returnId.js');
 exports.endToEndId = require('./sdk/utils/endToEndId.js');
 exports.key = require('./sdk/key.js');
 exports.error = require('./sdk/error.js');
+exports.request = require('./sdk/request/request.js')
 
 
 // Classes
