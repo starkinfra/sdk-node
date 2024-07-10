@@ -14,13 +14,15 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ## [Unreleased]
 
+## [0.8.1] - 2024-07-10
+### Fixed
+- issuingWithdrawal create
+
 ## [0.8.0] - 2024-07-05
 ## Changed
 - core version to v0.1.1
 ### Added
 - request methods
-### Fixed
-- issuingWithdrawal create
 
 ## [0.7.2] - 2024-05-09
 ## Changed
