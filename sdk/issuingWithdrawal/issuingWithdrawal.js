@@ -46,7 +46,7 @@ class IssuingWithdrawal extends Resource {
 exports.IssuingWithdrawal = IssuingWithdrawal;
 let resource = {'class': exports.IssuingWithdrawal, 'name': 'IssuingWithdrawal'};
 
-exports.create = async function ({ amount, externalId, description, tags = null, user= null } = {}) {
+exports.create = async function ({ amount, externalId, description, tags, user} = {}) {
     /**
      *
      * Create IssuingWithdrawal
@@ -72,7 +72,7 @@ exports.create = async function ({ amount, externalId, description, tags = null,
         description: description,
         tags: tags
     }
-    return rest.post(resource, options, user);
+    return rest.postSingle(resource, options, user);
 };
 
 exports.get = async function (id, { user } = {}) {
