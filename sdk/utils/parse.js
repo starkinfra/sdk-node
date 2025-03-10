@@ -1,7 +1,6 @@
 const parse = require('starkcore').parse;
 const { apiVersion, sdkVersion, host, language, timeout } = require('../utils/rest.js');
 
-
 exports.parseObjects = function (objects, resource, resourceClass) {
     return parse.parseObjects (
         objects,
