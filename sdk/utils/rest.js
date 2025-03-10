@@ -5,17 +5,18 @@ const starkInfra = require('../../index')
 const apiVersion = 'v2'
 const sdkVersion = '2.13.0'
 const host = starkHost.infra;
-const language = 'en-US';
 const timeout = 2000
+let language = starkInfra.language;
 
 exports.getList = async function* (resource, query, user = starkInfra.user) {
+    console.log("rest",language)
     yield* rest.getList(
         sdkVersion,
         host,
         apiVersion,
         resource,
         user,
-        language,
+        starkInfra.language,
         timeout,
         query
     );
@@ -29,7 +30,7 @@ exports.post = async function (resource, entities, user = starkInfra.user, { ...
         user,
         resource,
         entities,
-        language,
+        starkInfra.language,
         timeout,
         query
     );
@@ -43,7 +44,7 @@ exports.getId = async function (resource, id, user = starkInfra.user, { ...query
         user,
         resource,
         id,
-        language,
+        starkInfra.language,
         timeout,
         query
     );
@@ -55,7 +56,7 @@ exports.getPublicKey = async function (user = starkInfra.user) {
         host,
         apiVersion,
         user,
-        language,
+        starkInfra.language,
         timeout
     );
 };
@@ -69,7 +70,7 @@ exports.getContent = async function (resource, id, user = starkInfra.user, query
         resource,
         id,
         subResource,
-        language,
+        starkInfra.language,
         timeout,
         query
     );
@@ -83,7 +84,7 @@ exports.deleteId = async function (resource, id, user = starkInfra.user) {
         user,
         resource,
         id,
-        language,
+        starkInfra.language,
         timeout,
     );
 };
@@ -95,7 +96,7 @@ exports.postSingle = async function (resource, query, user = starkInfra.user) {
         apiVersion,
         user,
         resource,
-        language,
+        starkInfra.language,
         timeout,
         query
     );
@@ -110,7 +111,7 @@ exports.patchId = async function (resource, id, payload, user = starkInfra.user)
         resource,
         id,
         payload,
-        language,
+        starkInfra.language,
         timeout
     );
 };
@@ -124,7 +125,7 @@ exports.getSubResource = async function (resource, id, subResource, user = stark
         resource,
         id,
         subResource,
-        language,
+        starkInfra.language,
         timeout
     );
 };
@@ -136,7 +137,7 @@ exports.getPage = async function (resource, query = {}, user = starkInfra.user )
         apiVersion,
         resource,
         user,
-        language,
+        starkInfra.language,
         timeout,
         query
     );
@@ -150,7 +151,7 @@ exports.postRaw = async function (path, payload, prefix = null, throwError = tru
         path,
         payload,
         user,
-        language,
+        starkInfra.language,
         timeout,
         query,
         prefix,
@@ -165,7 +166,7 @@ exports.getRaw = async function (path, query = {}, prefix = null, throwError = t
         apiVersion,
         path,
         user,
-        language,
+        starkInfra.language,
         timeout,
         query,
         prefix,
@@ -181,7 +182,7 @@ exports.patchRaw = async function (path, payload, prefix = null, throwError = tr
         path,
         payload,
         user,
-        language,
+        starkInfra.language,
         timeout,
         query,
         prefix,
@@ -197,7 +198,7 @@ exports.putRaw = async function (path, payload, prefix = null, throwError = true
         path,
         payload,
         user,
-        language,
+        starkInfra.language,
         timeout,
         query,
         prefix,
@@ -213,7 +214,7 @@ exports.deleteRaw = async function (path, payload, prefix = null, throwError = t
         path,
         payload,
         user,
-        language,
+        starkInfra.language,
         timeout,
         query,
         prefix,
@@ -224,5 +225,5 @@ exports.deleteRaw = async function (path, payload, prefix = null, throwError = t
 exports.apiVersion = 'v2'
 exports.sdkVersion = '2.13.0'
 exports.host = starkHost.infra;
-exports.language = 'en-US';
+exports.language = starkInfra.language;
 exports.timeout = 2000
