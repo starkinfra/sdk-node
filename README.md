@@ -1422,10 +1422,10 @@ app.use(express.raw({type: '*/*'}));
 const port = 3000
 app.post('/', async (req, res) => {
     try {
-        let reversal = await starkinfra.pixRequest.parse({
-            content: req.body.toString(),
-            signature: req.headers['Digital-Signature']
-        });
+        let request = await starkinfra.pixRequest.parse(
+            req.body.toString(),
+            req.headers["digital-signature"],
+        );
         res.end()
     }
     catch (err) {
