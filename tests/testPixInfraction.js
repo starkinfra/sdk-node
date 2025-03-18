@@ -113,7 +113,9 @@ generateExamplePixInfractionJson = async function(n=1) {
         pixInfractions.push({
             referenceId: id,
             type: 'reversal',
-            method: 'scam'
+            method: 'scam',
+            operatorEmail: 'ned.stark@company.com',
+            operatorPhone: '+5511999999999'
         })
     }
     return pixInfractions;

@@ -16,23 +16,23 @@ class PixChargeback extends Resource {
      * to the Stark Infra API and returns the created object.
      *
      * Parameters (required):
-     * @param amount [integer]: amount in cents to be reversed. ex: 11234 (= R$ 112.34)
-     * @param referenceId [string]: endToEndId or returnId of the transaction to be reversed. ex: 'E20018183202201201450u34sDGd19lz'
-     * @param reason [string]: reason why the reversal was requested. Options: 'fraud', 'flaw', 'reversalChargeback'
+     * @param amount [integer]: amount in cents to be reversed. ex: 11234 (= R$ 112.34).
+     * @param referenceId [string]: endToEndId or returnId of the transaction to be reversed. ex: 'E20018183202201201450u34sDGd19lz'.
+     * @param reason [string]: reason why the reversal was requested. Options: 'fraud', 'flaw', 'reversalChargeback'.
+     * @param description [string, default null]: description for the PixChargeback. Required if reason is 'flaw'.
      *
      * Parameters (optional):
-     * @param description [string, default null]: description for the PixChargeback.
-     * @param tags [list of strings, default []]: list of strings for tagging. ex: ['travel', 'food']
+     * @param tags [list of strings, default []]: list of strings for tagging. ex: ['travel', 'food'].
      *
      * Attributes (return-only):
-     * @param id [string]: unique id returned when the PixChargeback is created. ex: '5656565656565656'
+     * @param id [string]: unique id returned when the PixChargeback is created. ex: '5656565656565656'.
      * @param analysis [string]: analysis that led to the result.
-     * @param senderBankCode [string]: bankCode of the Pix participant that created the PixChargeback. ex: '20018183'
-     * @param receiverBankCode [string]: bankCode of the Pix participant that received the PixChargeback. ex: '20018183'
-     * @param rejectionReason [string]: reason for the rejection of the Pix chargeback. Options: 'noBalance', 'accountClosed', 'unableToReverse'
+     * @param senderBankCode [string]: bankCode of the Pix participant that created the PixChargeback. ex: '20018183'.
+     * @param receiverBankCode [string]: bankCode of the Pix participant that received the PixChargeback. ex: '20018183'.
+     * @param rejectionReason [string]: reason for the rejection of the Pix chargeback. Options: 'noBalance', 'accountClosed', 'invalidRequest', 'unableToReverse'.
      * @param reversalReferenceId [string]: returnId or endToEndId of the reversal transaction. ex: 'D20018183202202030109X3OoBHG74wo'.
-     * @param result [string]: result after the analysis of the PixChargeback by the receiving party. Options: 'rejected', 'accepted', 'partiallyAccepted'
-     * @param flow [string]: direction of the Pix Chargeback. Options: 'in' for received chargebacks, 'out' for chargebacks you requested
+     * @param result [string]: result after the analysis of the PixChargeback by the receiving party. Options: 'rejected', 'accepted', 'partiallyAccepted'.
+     * @param flow [string]: direction of the Pix Chargeback. Options: 'in' for received chargebacks, 'out' for chargebacks you requested.
      * @param status [string]: current PixChargeback status. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
      * @param created [string]: creation datetime for the PixChargeback. ex: '2022-01-01T12:00:00:00'.
      * @param updated [string]: latest update datetime for the PixChargeback. ex: '2022-01-01T12:00:00:00'.
@@ -184,15 +184,13 @@ exports.update = async function ( id, result, { rejectionReason, reversalReferen
      * @description Respond to a received PixChargeback.
      *
      * Parameters (required):
-     * @param id [string]: PixChargeback id. ex: '5656565656565656'
+     * @param id [string]: PixChargeback id. ex: '5656565656565656'.
      * @param result [string]: result after the analysis of the PixChargeback. Options: 'rejected', 'accepted', 'partiallyAccepted'.
      *
      * Parameters (conditionally required):
-     * @param rejectionReason [string, default null]: if the PixChargeback is rejected a reason is required. Options: 'noBalance', 'accountClosed', 'unableToReverse',
-     * @param reversalReferenceId [string, default null]: returnId of the reversal transaction. ex: 'D20018183202201201450u34sDGd19lz'
-     *
-     * Parameters (optional):
-     * @param analysis [string, default null]: description of the analysis that led to the result.
+     * @param rejectionReason [string, default null]: if the PixChargeback is rejected a reason is required. Options: 'noBalance', 'accountClosed', 'invalidRequest', 'unableToReverse'.
+     * @param reversalReferenceId [string, default null]: returnId of the reversal transaction. ex: 'D20018183202201201450u34sDGd19lz'.
+     * @param analysis [string, default null]: description of the analysis that led to the result. . Required if rejection_reason is 'invalidRequest'.
      *
      * Return:
      * @returns PixChargeback with updated attributes.

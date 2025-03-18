@@ -1919,7 +1919,10 @@ const starkinfra = require('starkinfra');
     let infractions = await starkinfra.pixInfraction.create([
         {
             referenceId: 'E20018183202201201450u34sDGd19lz',
-            type: 'fraud'
+            type: 'fraud',
+            method: 'scam',
+            operatorPhone: 'fraud@company.com',
+            operatorEmail: '+5511999999999',
         }
     ]);
     for (let infraction of infractions) {

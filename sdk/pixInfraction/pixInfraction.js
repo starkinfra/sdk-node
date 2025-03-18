@@ -23,6 +23,8 @@ class PixInfraction extends Resource {
      * @param description [string, default null]: description for any details that can help with the infraction investigation.
      * @param tags [list of strings, default []]: list of strings for tagging. ex: ['travel', 'food']
      * @param fraudType [string, default null]: type of Pix Fraud. Options: "identity", "mule", "scam", "unknown", "other"
+     * @param operatorEmail [string]: contact email of the operator responsible for the PixInfraction.
+     * @param operatorPhone [string]: contact phone number of the operator responsible for the PixInfraction.
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the PixInfraction is created. ex: '5656565656565656'
@@ -41,7 +43,7 @@ class PixInfraction extends Resource {
                     referenceId, type, method, description = null, tags = null, fraudType = null,
                     id = null, creditedBankCode = null, debitedBankCode = null, flow = null, 
                     analysis = null, reportedBy = null, result = null, status = null,  
-                    created = null, updated = null 
+                    created = null, updated = null, operatorEmail = null, operatorPhone = null
                 }) {
         super(id);
 
@@ -51,6 +53,8 @@ class PixInfraction extends Resource {
         this.description = description;
         this.tags = tags;
         this.fraudType = fraudType;
+        this.operatorEmail = operatorEmail;
+        this.operatorPhone = operatorPhone;
         this.creditedBankCode = creditedBankCode;
         this.debitedBankCode = debitedBankCode;
         this.flow = flow;
