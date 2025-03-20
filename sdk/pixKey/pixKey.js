@@ -181,7 +181,7 @@ exports.update = async function ( id, reason, { accountCreated, accountNumber, a
      * @description Update a PixKey parameters by passing its id.
      *
      * Parameters (required):
-     * @param id [string]: PixKey id. ex: '5656565656565656'
+     * @param id [string]: PixKey id. Allowed types are: CPF, CNPJ, phone number or email. ex: '5656565656565656'
      * @param reason [string]: reason why the PixKey is being patched. Options: 'branchTransfer', 'reconciliation' or 'userRequested'.
      *
      * Parameters (optional):
