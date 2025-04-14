@@ -40,6 +40,7 @@ class PixRequest extends Resource {
      * @param cashierType [string, default null]: Cashier's type. ex: [merchant, other, participant]
      * @param tags [list of strings, default null]: list of strings for reference when searching for PixRequests. ex: ['employees', 'monthly']
      * @param method [string, default null]: execution  method for thr creation of the Pix. ex: 'manual', 'payerQrcode', 'dynamicQrcode'.
+     * @param priority [string, default null]: Defines the channel through which the entities will be processed. Options: 'low', 'high'
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the PixRequest is created. ex: '5656565656565656'
@@ -59,7 +60,7 @@ class PixRequest extends Resource {
                     reconciliationId = null, initiatorTaxId = null, cashAmount = null, 
                     cashierBankCode = null, cashierType = null, tags = null, 
                     method = null, id = null, fee = null, status = null, flow = null, 
-                    senderBankCode = null, created = null, updated = null 
+                    senderBankCode = null, created = null, updated = null, priority = null
                 }) {
         super(id);
 
@@ -92,6 +93,7 @@ class PixRequest extends Resource {
         this.senderBankCode = senderBankCode;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
+        this.priority = priority;
     }
 }
 

@@ -203,5 +203,6 @@ let examplePixRequest = {
     cashAmount: 1000,
     cashierBankCode: "00000000",
     cashierType: "merchant",
-    tags: ["lannister","chargeback"]
+    tags: ["lannister","chargeback"],
+    priority: "high"
 }
