@@ -3,6 +3,7 @@ const api = require('starkcore').api;
 const check = require('starkcore').check;
 const parse = require('../utils/parse.js');
 const Resource = require('starkcore').Resource;
+const starkinfra = require('starkinfra');
 
 
 class PixRequest extends Resource {
@@ -233,7 +234,7 @@ exports.parse = async function (content, signature, {user} = {}) {
      * @returns Parsed PixRequest object
      *
      */
-    let request = await parse.parseAndVerify(resource, content, signature, user);
+    let request = await parse.parseAndVerify(resource, content, signature, user = starkInfra.user);
 
     request.fee = request.fee ? request.fee : 0;
     request.tags = request.tags ? request.tags : [];
