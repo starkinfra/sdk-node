@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Removed
+- axios dependency
 
 ## [0.10.0] - 2025-04-14
 ### Added
