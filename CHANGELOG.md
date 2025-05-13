@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- get PixUser resource
 
 ## [0.10.0] - 2025-04-14
 ### Added
