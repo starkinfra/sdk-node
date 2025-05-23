@@ -2,6 +2,7 @@ const assert = require('assert');
 const starkinfra = require('../index.js');
 const {templateId} = require('./utils/user');
 const {bacenId} = require('../index');
+const fs = require('fs').promises;
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -124,6 +125,19 @@ describe('TestCreditNotePostAndCancel', function(){
         for (let note of notes) {
             canceledNote = await starkinfra.creditNote.cancel(note.id);
             assert(canceledNote.status === 'canceled')
+        }
+    });
+});
+
+describe('TestCreditNotePdfGet', function(){
+    this.timeout(30000);
+    it('test_get_pdf', async () => {
+        let notes = await starkinfra.creditNote.query({limit: 1, status: 'success'});
+        for await (let note of notes) {
+            assert(typeof note.id == 'string');
+            let pdf = await starkinfra.creditNote.pdf(note.id);
+            const stringifiedPdf = pdf.slice(0, 4).toString('utf8');
+            assert.strictEqual(stringifiedPdf, '%PDF');
         }
     });
 });
