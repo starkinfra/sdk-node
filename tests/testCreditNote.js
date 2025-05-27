@@ -128,6 +128,19 @@ describe('TestCreditNotePostAndCancel', function(){
     });
 });
 
+describe('TestCreditNotePdfGet', function(){
+    this.timeout(30000);
+    it('test_get_pdf', async () => {
+        let notes = await starkinfra.creditNote.query({limit: 1, status: 'success'});
+        for await (let note of notes) {
+            assert(typeof note.id == 'string');
+            let pdf = await starkinfra.creditNote.pdf(note.id);
+            const stringifiedPdf = pdf.slice(0, 4).toString('utf8');
+            assert.strictEqual(stringifiedPdf, '%PDF');
+        }
+    });
+});
+
 let exampleCreditNote = {
     externalId: "my_unique_id_" + new Date().getTime(),
     invoices: [{
