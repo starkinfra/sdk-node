@@ -2,6 +2,7 @@ const rest = require('../utils/rest');
 const check = require('starkcore').check;
 const parse = require('../utils/parse.js');
 const Resource = require('starkcore').Resource;
+const starkInfra = require('../../index.js');
 
 
 class Event extends Resource {
@@ -183,5 +184,5 @@ exports.parse = async function ({content, signature, user} = {}) {
      * @returns Event object with updated attributes
      *
      */
-    return parse.parseAndVerify(resource, content, signature, user)
+    return parse.parseAndVerify(resource, content, signature, user ? user : starkInfra.user)
 };

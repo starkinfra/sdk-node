@@ -13,6 +13,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Fixed
+- language bug
+- parse functions bugs
 
 ## [0.12.0] - 2025-05-27
 ### Added

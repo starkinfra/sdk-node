@@ -3,6 +3,7 @@ const api = require('starkcore').api;
 const check = require('starkcore').check;
 const parse = require('../utils/parse.js');
 const Resource = require('starkcore').Resource;
+const starkInfra = require('../../index.js');
 
 
 class PixReversal extends Resource {
@@ -191,7 +192,7 @@ exports.parse = async function (content, signature, {user} = {}) {
      * @returns Parsed PixReversal object
      *
      */
-    let reversal = await parse.parseAndVerify(resource, content, signature, user);
+    let reversal = await parse.parseAndVerify(resource, content, signature, user ? user : starkInfra.user);
 
     reversal.fee = reversal.fee ? reversal.fee : 0;
     reversal.tags = reversal.tags ? reversal.tags : [];

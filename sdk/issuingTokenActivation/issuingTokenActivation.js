@@ -1,5 +1,6 @@
 const parse = require('../utils/parse.js');
 const SubResource = require('starkcore').SubResource;
+const starkInfra = require('../../index.js');
 
 
 class IssuingTokenActivation extends SubResource {
@@ -54,5 +55,5 @@ exports.parse = async function (content, signature, {user} = {}) {
      * @return Parsed IssuingTokenActivation object
      *
      */
-    return parse.parseAndVerify(exports.subResource, content, signature, user);
+    return parse.parseAndVerify(exports.subResource, content, signature, user ? user : starkInfra.user);
 };
