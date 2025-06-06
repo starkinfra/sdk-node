@@ -13,10 +13,12 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- CreditNote pdf method
 
 ## [0.12.0] - 2025-05-27
 ### Added
-- CreditNote pdf method
+- CreditNote payment pdf method
 
 ## [0.11.0] - 2025-05-19
 ### Added
