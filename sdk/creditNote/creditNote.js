@@ -251,6 +251,26 @@ exports.cancel = async function (id, {user} = {}) {
     return rest.deleteId(resource, id, user);
 };
 
+exports.paymentPdf = async function (id, {user} = {}) {
+    /**
+     *
+     * Retrieve a specific CreditNote payment pdf file
+     *
+     * @description Receive a single CreditNote payment pdf file generated in the Stark Bank API by passing its id.
+     *
+     * Parameters (required):
+     * @param id [string]: object unique id. ex: '5656565656565656'
+     *
+     * Parameters (optional):
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns CreditNote pdf file
+     *
+     */
+    return rest.getContent(resource, id, user, null, 'payment/pdf');
+};
+
 exports.pdf = async function (id, {user} = {}) {
     /**
      *
@@ -268,5 +288,5 @@ exports.pdf = async function (id, {user} = {}) {
      * @returns CreditNote pdf file
      *
      */
-    return rest.getContent(resource, id, user, null, 'payment/pdf');
+    return rest.getContent(resource, id, user, null, '/pdf');
 };
