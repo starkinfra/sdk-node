@@ -7,13 +7,40 @@ starkinfra.user = require('./utils/user').exampleProject;
 
 describe('TestDynamicBrcodePost', function(){
     this.timeout(10000);
-    it('test_success', async () => {
-        let brcodes = [];
-        brcodes.push(new starkinfra.DynamicBrcode(generateExampleDynamicBrcodeJson()));
-        brcodes = await starkinfra.dynamicBrcode.create(brcodes);
-        for (let brcode of brcodes) {
-            assert(typeof brcode.uuid == 'string');
-        }
+
+    it('test_create_instant_br_code', async () => {
+        const brcode = new starkinfra.DynamicBrcode(generateExampleDynamicBrcodeJson("instant"));
+        const [createdBrcode] = await starkinfra.dynamicBrcode.create([brcode]);
+        assert.strictEqual(createdBrcode.type, "instant");
+        assert.strictEqual(typeof createdBrcode.uuid, 'string');
+    });
+
+    it('test_create_due_br_code', async () => {
+        const brcode = new starkinfra.DynamicBrcode(generateExampleDynamicBrcodeJson("due"));
+        const [createdBrcode] = await starkinfra.dynamicBrcode.create([brcode]);
+        assert.strictEqual(createdBrcode.type, "due");
+        assert.strictEqual(typeof createdBrcode.uuid, 'string');
+    });
+
+    it('test_create_subscription_br_code', async () => {
+        const brcode = new starkinfra.DynamicBrcode(generateExampleDynamicBrcodeJson("subscription"));
+        const [createdBrcode] = await starkinfra.dynamicBrcode.create([brcode]);
+        assert.strictEqual(createdBrcode.type, "subscription");
+        assert.strictEqual(typeof createdBrcode.uuid, 'string');
+    });
+
+    it('test_create_subscriptionAndInstant_br_code', async () => {
+        const brcode = new starkinfra.DynamicBrcode(generateExampleDynamicBrcodeJson("subscriptionAndInstant"));
+        const [createdBrcode] = await starkinfra.dynamicBrcode.create([brcode]);
+        assert.strictEqual(createdBrcode.type, "subscriptionAndInstant");
+        assert.strictEqual(typeof createdBrcode.uuid, 'string');
+    });
+
+    it('test_create_dueAndOrSubscription_br_code', async () => {
+        const brcode = new starkinfra.DynamicBrcode(generateExampleDynamicBrcodeJson("dueAndOrSubscription"));
+        const [createdBrcode] = await starkinfra.dynamicBrcode.create([brcode]);
+        assert.strictEqual(createdBrcode.type, "dueAndOrSubscription");
+        assert.strictEqual(typeof createdBrcode.uuid, 'string');
     });
 });
 
