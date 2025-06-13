@@ -1,6 +1,7 @@
 const rest = require('../utils/rest.js');
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
+const { Subscription } = require('./subscription/subscription.js')
 
 
 class BrcodePreview extends Resource {
@@ -38,6 +39,7 @@ class BrcodePreview extends Resource {
      * @param reductionAmount [integer]: Reduction value to discount from nominalAmount. ex: 1000
      * @param scheduled [string]: date of payment execution. ex: "2020-03-10"
      * @param status [string]: Payment status. ex: "active", "paid", "canceled" or "unknown"
+     * @param subscription [Subscription object]: BR code subscription information
      * @param taxId [string]: Payment receiver tax ID. ex: "012.345.678-90"
      * 
      */
@@ -47,7 +49,7 @@ class BrcodePreview extends Resource {
                     cashierBankCode=null, cashierType=null, discountAmount=null,
                     fineAmount=null, interestAmount=null, keyId=null, name=null, 
                     nominalAmount=null, reconciliationId=null, reductionAmount=null, 
-                    scheduled=null, status=null, taxId=null
+                    scheduled=null, status=null, subscription=null, taxId=null
                 }) {
         super(id);
 
@@ -72,7 +74,33 @@ class BrcodePreview extends Resource {
         this.reductionAmount = reductionAmount
         this.scheduled = check.dateTimeOrDate(scheduled)
         this.status = status
+        this.subscription = _parseSubscription(subscription)
         this.taxId = taxId
+    }
+}
+
+const _parseSubscription = (subscription) => {
+    if(subscription) {
+        return new Subscription({
+            amount: subscription.amount,
+            amountMinLimit: subscription.amountMinLimit,
+            bacenId: subscription.bacenId,
+            created: subscription.created,
+            description: subscription.description,
+            installmentEnd: subscription.installmentEnd,
+            installmentStart: subscription.installmentStart,
+            interval: subscription.interval,
+            pullRetryLimit: subscription.pullRetryLimit,
+            receiverBankCode: subscription.receiverBankCode,
+            receiverName: subscription.receiverName,
+            receiverTaxId: subscription.receiverTaxId,
+            referenceCode: subscription.referenceCode,
+            senderFinalName: subscription.senderFinalName,
+            senderFinalTaxId: subscription.senderFinalTaxId,
+            status: subscription.status,
+            type: subscription.type,
+            updated: subscription.updated
+        });
     }
 }
 

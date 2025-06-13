@@ -1,5 +1,6 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
+const {generateExampleDynamicBrcodeJson} = require('./utils/dynamicBrcode');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -35,5 +36,17 @@ describe('TestBrcodePreviewPost', function(){
             assert(preview.id === brcodes[index].id);
             index += 1;
         }
+    });
+
+    it('test_subscription', async () => {
+        const brcode = new starkinfra.DynamicBrcode(generateExampleDynamicBrcodeJson("subscription"));
+        const [createdBrcode] = await starkinfra.dynamicBrcode.create([brcode]);
+        console.log("createdBrcode", createdBrcode);
+
+        let preview = await starkinfra.brcodePreview.create([
+            new starkinfra.BrcodePreview({id: createdBrcode.id, payerId:"20.018.183/0001-80"}),
+        ]);
+
+        console.log("preview", preview);
     });
 });
