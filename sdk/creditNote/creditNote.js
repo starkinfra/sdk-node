@@ -268,5 +268,25 @@ exports.pdf = async function (id, {user} = {}) {
      * @returns CreditNote pdf file
      *
      */
+    return rest.getContent(resource, id, user, null, 'pdf');
+};
+
+exports.payment = async function (id, {user} = {}) {
+    /**
+     *
+     * Retrieve a specific CreditNote Payment pdf file
+     *
+     * @description Receive a single CreditNote Payment pdf file generated in the Stark Bank API by passing its id.
+     *
+     * Parameters (required):
+     * @param id [string]: object unique id. ex: '5656565656565656'
+     *
+     * Parameters (optional):
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns CreditNote Payment pdf file
+     *
+     */
     return rest.getContent(resource, id, user, null, 'payment/pdf');
 };
