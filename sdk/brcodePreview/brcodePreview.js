@@ -1,6 +1,7 @@
 const rest = require('../utils/rest.js');
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
+const { Subscription } = require('./subscription/subscription.js')
 
 
 class BrcodePreview extends Resource {
@@ -29,6 +30,7 @@ class BrcodePreview extends Resource {
      * @param cashierBankCode [string]: Cashier's bank code. ex: "20018183"
      * @param cashierType [string]: Cashier's type. Options: "merchant", "participant" and "other"
      * @param discountAmount [integer]: Discount value calculated over nominalAmount. ex: 3000
+     * @param due [string]: BR Code due date. ex: "2020-03-10 10:30:00.000000+00:00"
      * @param fineAmount [integer]: Fine value calculated over nominalAmount. ex: 20000
      * @param interestAmount [integer]: Interest value calculated over nominalAmount. ex: 10000
      * @param keyId [string]: Receiver's PixKey id. ex: "+5511989898989"
@@ -38,16 +40,17 @@ class BrcodePreview extends Resource {
      * @param reductionAmount [integer]: Reduction value to discount from nominalAmount. ex: 1000
      * @param scheduled [string]: date of payment execution. ex: "2020-03-10"
      * @param status [string]: Payment status. ex: "active", "paid", "canceled" or "unknown"
+     * @param subscription [Subscription object]: BR code subscription information
      * @param taxId [string]: Payment receiver tax ID. ex: "012.345.678-90"
      * 
      */
     constructor({
                     id, payerId, endToEndId=null, accountNumber=null, accountType=null, amount=null, 
                     amountType=null, bankCode=null, branchCode=null, cashAmount=null, 
-                    cashierBankCode=null, cashierType=null, discountAmount=null,
+                    cashierBankCode=null, cashierType=null, discountAmount=null, due=null,
                     fineAmount=null, interestAmount=null, keyId=null, name=null, 
                     nominalAmount=null, reconciliationId=null, reductionAmount=null, 
-                    scheduled=null, status=null, taxId=null
+                    scheduled=null, status=null, subscription=null, taxId=null
                 }) {
         super(id);
 
@@ -63,6 +66,7 @@ class BrcodePreview extends Resource {
         this.cashierBankCode = cashierBankCode
         this.cashierType = cashierType
         this.discountAmount = discountAmount
+        this.due = check.dateTimeOrDate(due)
         this.fineAmount = fineAmount
         this.interestAmount = interestAmount
         this.keyId = keyId
@@ -72,7 +76,33 @@ class BrcodePreview extends Resource {
         this.reductionAmount = reductionAmount
         this.scheduled = check.dateTimeOrDate(scheduled)
         this.status = status
+        this.subscription = _parseSubscription(subscription)
         this.taxId = taxId
+    }
+}
+
+const _parseSubscription = (subscription) => {
+    if(subscription) {
+        return new Subscription({
+            amount: subscription.amount,
+            amountMinLimit: subscription.amountMinLimit,
+            bacenId: subscription.bacenId,
+            created: subscription.created,
+            description: subscription.description,
+            installmentEnd: subscription.installmentEnd,
+            installmentStart: subscription.installmentStart,
+            interval: subscription.interval,
+            pullRetryLimit: subscription.pullRetryLimit,
+            receiverBankCode: subscription.receiverBankCode,
+            receiverName: subscription.receiverName,
+            receiverTaxId: subscription.receiverTaxId,
+            referenceCode: subscription.referenceCode,
+            senderFinalName: subscription.senderFinalName,
+            senderFinalTaxId: subscription.senderFinalTaxId,
+            status: subscription.status,
+            type: subscription.type,
+            updated: subscription.updated
+        });
     }
 }
 
