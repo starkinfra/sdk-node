@@ -1,19 +1,51 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const {generateExampleDynamicBrcodeJson} = require('./utils/dynamicBrcode');
+const {createDynamicBrcodeByType} = require('./utils/dynamicBrcode');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
 
 describe('TestDynamicBrcodePost', function(){
     this.timeout(10000);
-    it('test_success', async () => {
-        let brcodes = [];
-        brcodes.push(new starkinfra.DynamicBrcode(generateExampleDynamicBrcodeJson()));
-        brcodes = await starkinfra.dynamicBrcode.create(brcodes);
-        for (let brcode of brcodes) {
-            assert(typeof brcode.uuid == 'string');
-        }
+
+    it('test_create_instant_br_code', async () => {
+        const type = "instant";
+        const createdBrcode = await createDynamicBrcodeByType(type);
+
+        assert(createdBrcode.type === type);
+        assert(typeof createdBrcode.uuid === 'string');
+    });
+
+    it('test_create_due_br_code', async () => {
+        const type = "due";
+        const createdBrcode = await createDynamicBrcodeByType(type);
+
+        assert(createdBrcode.type === type);
+        assert(typeof createdBrcode.uuid === 'string');
+    });
+
+    it('test_create_subscription_br_code', async () => {
+        const type = "subscription";
+        const createdBrcode = await createDynamicBrcodeByType(type);
+
+        assert(createdBrcode.type === type);
+        assert(typeof createdBrcode.uuid === 'string');
+    });
+
+    it('test_create_subscriptionAndInstant_br_code', async () => {
+        const type = "subscriptionAndInstant";
+        const createdBrcode = await createDynamicBrcodeByType(type);
+
+        assert(createdBrcode.type === type);
+        assert(typeof createdBrcode.uuid === 'string');
+    });
+
+    it('test_create_dueAndOrSubscription_br_code', async () => {
+        const type = "dueAndOrSubscription";
+        const createdBrcode = await createDynamicBrcodeByType(type);
+
+        assert(createdBrcode.type === type);
+        assert(typeof createdBrcode.uuid === 'string');
     });
 });
 
