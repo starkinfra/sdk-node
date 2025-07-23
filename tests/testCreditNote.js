@@ -131,10 +131,23 @@ describe('TestCreditNotePostAndCancel', function(){
 describe('TestCreditNotePdfGet', function(){
     this.timeout(30000);
     it('test_get_pdf', async () => {
-        let notes = await starkinfra.creditNote.query({limit: 1, status: 'success'});
+        let notes = await starkinfra.creditNote.query({limit: 1});
         for await (let note of notes) {
             assert(typeof note.id == 'string');
             let pdf = await starkinfra.creditNote.pdf(note.id);
+            const stringifiedPdf = pdf.slice(0, 4).toString('utf8');
+            assert.strictEqual(stringifiedPdf, '%PDF');
+        }
+    });
+});
+
+describe('TestCreditNoteTransferPdfGet', function(){
+    this.timeout(30000);
+    it('test_get_pdf', async () => {
+        let notes = await starkinfra.creditNote.query({limit: 1, status: 'success'});
+        for await (let note of notes) {
+            assert(typeof note.id == 'string');
+            let pdf = await starkinfra.creditNote.payment(note.id);
             const stringifiedPdf = pdf.slice(0, 4).toString('utf8');
             assert.strictEqual(stringifiedPdf, '%PDF');
         }
