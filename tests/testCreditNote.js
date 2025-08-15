@@ -169,7 +169,7 @@ let exampleCreditNote = {
         name: "Jamie Lannister"
     }],
     taxId: "012.345.678-90",
-    templateId: "5707012469948416",
+    templateId: "5706627130851328",
     paymentType: "transfer",
     payment: {
         accountNumber: "5005482",
