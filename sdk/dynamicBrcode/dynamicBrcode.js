@@ -3,6 +3,7 @@ const api = require('starkcore').api;
 const check = require('starkcore').check;
 const parse = require('../utils/parse.js');
 const Resource = require('starkcore').Resource;
+const starkInfra = require('../../index.js');
 
 
 class DynamicBrcode extends Resource {
@@ -316,5 +317,5 @@ exports.verify = async function ({uuid, signature, user} = {}) {
      * @return Verified Brcode's UUID.
      *
      */
-    return parse.verify(uuid, signature, user);
+    return parse.verify(uuid, signature, user ? user : starkInfra.user);
 };
