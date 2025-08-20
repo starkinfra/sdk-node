@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Fixed
+- default user used by parse method
 
 ## [0.14.0] - 2025-07-23
 ### Added
