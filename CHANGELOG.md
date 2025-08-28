@@ -15,6 +15,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ## [Unreleased]
 ### Added
 - CreditSigner resendToken method
+### Fixed
+- language attribute
+- parse functions
 
 ## [0.14.0] - 2025-07-23
 ### Added
