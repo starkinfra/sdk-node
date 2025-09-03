@@ -1,4 +1,5 @@
 const Resource = require('starkcore').Resource;
+const rest = require('../utils/rest.js');
 
 
 class CreditSigner extends Resource {
@@ -29,4 +30,28 @@ class CreditSigner extends Resource {
 }
 
 exports.CreditSigner = CreditSigner;
-exports.resource = {'class': exports.CreditSigner, 'name': 'CreditSigner'};
+let resource = {'class': exports.CreditSigner, 'name': 'CreditSigner'};
+exports.resource = resource
+
+exports.resendToken = async function (id, {user} = {}) {
+    /**
+     *
+     * Resend token to signer
+     *
+     * @description Resend token to a specific signer
+     *
+     * Parameters (required):
+     * @param id [string]: object unique id. ex: '5656565656565656'
+     *
+     * Parameters (optional):
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns CreditSigner object with updated attributes
+     *
+     */
+    let payload = {
+        isSent: false
+    };
+    return rest.patchId(resource, id, payload, user);
+};
