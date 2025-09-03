@@ -1,6 +1,11 @@
 const parse = require('starkcore').parse;
-const { apiVersion, sdkVersion, host, language, timeout } = require('../utils/rest.js');
+const starkInfra = require('../../index.js');
+const starkHost = require('starkcore').starkHost;
 
+const apiVersion = starkInfra.apiVersion
+const sdkVersion = starkInfra.version
+const host = starkHost.infra;
+const timeout = starkInfra.timeout
 
 exports.parseObjects = function (objects, resource, resourceClass) {
     return parse.parseObjects (
@@ -10,7 +15,7 @@ exports.parseObjects = function (objects, resource, resourceClass) {
     );
 }
 
-exports.parseAndVerify = async function (resource, content, signature, user = null) {
+exports.parseAndVerify = async function (resource, content, signature, user = starkInfra.user) {
     return parse.parseAndVerify (
         resource,
         content,
@@ -19,12 +24,12 @@ exports.parseAndVerify = async function (resource, content, signature, user = nu
         apiVersion,
         host,
         user,
-        language,
+        language = starkInfra.language,
         timeout
     );
 }
 
-exports.verify = async function (content, signature, user = null) {
+exports.verify = async function (content, signature, user = starkInfra.user) {
     return parse.verify (
         content,
         signature,
@@ -32,7 +37,7 @@ exports.verify = async function (content, signature, user = null) {
         apiVersion,
         host,
         user,
-        language,
+        language = starkInfra.language,
         timeout
     );
 }
