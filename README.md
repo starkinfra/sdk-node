@@ -2249,7 +2249,7 @@ const starkinfra = require('starkinfra')
         new starkinfra.DynamicBrcode({
             name: "Jamie Lannister",
             city: "Rio de Janeiro",
-            externalId: "my_unique_id_05",
+            externalId: "06e25313-6a93-42e6-92c3-cfc1cea2880b",
             type: "instant"
         })
     ]);

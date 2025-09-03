@@ -9,6 +9,7 @@ exports.requestMethodsPrefix = "Joker"
 exports.project = require('./sdk/user/project.js')
 exports.organization = require('./sdk/user/organization.js')
 exports.creditNote = require('./sdk/creditNote');
+exports.creditSigner = require('./sdk/creditSigner');
 exports.creditHolmes = require('./sdk/creditHolmes');
 exports.creditPreview = require('./sdk/creditPreview');
 exports.pixKey = require('./sdk/pixKey');

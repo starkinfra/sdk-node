@@ -2,15 +2,15 @@ const assert = require('assert');
 const starkinfra = require('../index.js');
 const {templateId} = require('./utils/user');
 const {bacenId} = require('../index');
+const {randomUUID} = require('crypto');
+const {exampleCreditNote} = require('./utils/creditNote');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
 describe('TestCreditNotePost', function(){
     this.timeout(10000);
     it('test_success', async () => {
-        let notes = [];
-        notes.push(new starkinfra.CreditNote(exampleCreditNote));
-        notes = await starkinfra.creditNote.create(notes);
+        let notes = await starkinfra.creditNote.create([exampleCreditNote]);
         for (let note of notes) {
             assert(typeof note.id == 'string');
         }
@@ -118,9 +118,9 @@ describe('TestCreditNoteQueryParams', function(){
 describe('TestCreditNotePostAndCancel', function(){
     this.timeout(10000);
     it('test_success', async () => {
-        let notes = [];
-        notes.push(new starkinfra.CreditNote(exampleCreditNote));
-        notes = await starkinfra.creditNote.create(notes);
+        let note = exampleCreditNote;
+        note.externalId = randomUUID();
+        notes = await starkinfra.creditNote.create([note]);
         for (let note of notes) {
             canceledNote = await starkinfra.creditNote.cancel(note.id);
             assert(canceledNote.status === 'canceled')
@@ -153,35 +153,3 @@ describe('TestCreditNoteTransferPdfGet', function(){
         }
     });
 });
-
-let exampleCreditNote = {
-    externalId: "my_unique_id_" + new Date().getTime(),
-    invoices: [{
-        amount: 23422413,
-        due: "2024-06-16"
-    }],
-    name: "Jamie Lannister",
-    rebateAmount: 0,
-    scheduled: "2023-06-07",
-    signers: [{
-        contact: "https://b591-179-191-69-138.sa.ngrok.io",
-        method: "server",
-        name: "Jamie Lannister"
-    }],
-    taxId: "012.345.678-90",
-    templateId: "5707012469948416",
-    paymentType: "transfer",
-    payment: {
-        accountNumber: "5005482",
-        bankCode: "60701190",
-        branchCode: "7248",
-        name: "Jamie Lannister",
-        taxId: "594.739.480-42"
-    },
-    city: "São Paulo",
-    stateCode: "SP",
-    district: "Jardim Paulista",
-    streetLine1: "Rua ABC",
-    streetLine2: "Ap 123",
-    zipCode: "01234-567"
-}
