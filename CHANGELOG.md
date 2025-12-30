@@ -13,6 +13,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- new fields to PixChargeback and PixInfraction resources
+- PixDispute resource and methods
+
 ## [0.15.0] - 2025-09-04
 ### Added
 - CreditSigner resendToken method
