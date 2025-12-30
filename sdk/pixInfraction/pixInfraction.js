@@ -18,13 +18,13 @@ class PixInfraction extends Resource {
      * @param referenceId [string]: endToEndId or returnId of the transaction being reported. ex: 'E20018183202201201450u34sDGd19lz'
      * @param type [string]: type of infraction report. Options: 'reversal', 'reversalChargeback'
      * @param method [string]:  method of Pix Infraction. Options: "scam", "unauthorized", "coercion", "invasion", "other", "unknown"
+     * @param operatorEmail [string]: contact email of the operator responsible for the PixInfraction.
+     * @param operatorPhone [string]: contact phone number of the operator responsible for the PixInfraction.
      * 
      * Parameters (optional):
      * @param description [string, default null]: description for any details that can help with the infraction investigation.
      * @param tags [list of strings, default []]: list of strings for tagging. ex: ['travel', 'food']
      * @param fraudType [string, default null]: type of Pix Fraud. Options: "identity", "mule", "scam", "unknown", "other"
-     * @param operatorEmail [string]: contact email of the operator responsible for the PixInfraction.
-     * @param operatorPhone [string]: contact phone number of the operator responsible for the PixInfraction.
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the PixInfraction is created. ex: '5656565656565656'
@@ -37,13 +37,16 @@ class PixInfraction extends Resource {
      * @param status [string]: current PixInfraction status. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
      * @param created [string]: creation datetime for the PixInfraction. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the PixInfraction. ex: '2020-03-10 10:30:00.000'
+     * @param amount [integer]: amount in cents of the reported transaction.
+     * @param bacenId [string]: unique id returned by the Central Bank for the PixInfraction. ex: "3b10c3ef-3117-4ab8-815d-d3867ada7560"
+     * @param disputeId [string]: id of the PixDispute associated with the PixInfraction.
      *
      */
     constructor({ 
-                    referenceId, type, method, description = null, tags = null, fraudType = null,
-                    id = null, creditedBankCode = null, debitedBankCode = null, flow = null, 
-                    analysis = null, reportedBy = null, result = null, status = null,  
-                    created = null, updated = null, operatorEmail = null, operatorPhone = null
+                    referenceId, type, method, operatorEmail, operatorPhone, description = null,
+                    tags = null, fraudType = null, id = null, creditedBankCode = null, debitedBankCode = null,
+                    flow = null, analysis = null, reportedBy = null, result = null, status = null,  
+                    created = null, updated = null, amount = null, bacenId = null, disputeId = null
                 }) {
         super(id);
 
@@ -64,6 +67,9 @@ class PixInfraction extends Resource {
         this.status = status;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
+        this.amount = amount;
+        this.bacenId = bacenId;
+        this.disputeId = disputeId;
     }
 }
 
