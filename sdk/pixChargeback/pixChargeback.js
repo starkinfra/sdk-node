@@ -36,13 +36,24 @@ class PixChargeback extends Resource {
      * @param status [string]: current PixChargeback status. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
      * @param created [string]: creation datetime for the PixChargeback. ex: '2022-01-01T12:00:00:00'.
      * @param updated [string]: latest update datetime for the PixChargeback. ex: '2022-01-01T12:00:00:00'.
+     * @param bacenId [string]: unique id returned by the Central Bank for the PixChargeback. ex: "817fc523-9e9d-40ab-9e53-dacb71454a05"
+     * @param disputeId [string]: id of the dispute associated with the PixChargeback.
+     * @param isMonitoringRequired [bool]: indicates if monitoring is required for this chargeback.
+     * @param reversalAccountNumber [string]: account number for the reversal transaction.
+     * @param reversalAccountType [string]: account type for the reversal transaction.
+     * @param reversalBankCode [string]: bank code for the reversal transaction.
+     * @param reversalBranchCode [string]: branch code for the reversal transaction.
+     * @param reversalTaxId [string]: tax ID for the reversal transaction.
      *
      */
     constructor({ 
                     amount, referenceId, reason, description = null, tags = null, 
                     id = null,  analysis = null, senderBankCode = null, receiverBankCode = null, 
                     rejectionReason = null, reversalReferenceId = null, result = null, 
-                    flow = null, status = null, created = null, updated = null 
+                    flow = null, status = null, created = null, updated = null, 
+                    bacenId = null, disputeId = null, isMonitoringRequired = null,
+                    reversalAccountNumber = null, reversalAccountType = null, reversalBankCode = null,
+                    reversalBranchCode = null, reversalTaxId = null
                 }) {
         super(id);
 
@@ -61,6 +72,14 @@ class PixChargeback extends Resource {
         this.status = status;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
+        this.bacenId = bacenId;
+        this.disputeId = disputeId;
+        this.isMonitoringRequired = isMonitoringRequired;
+        this.reversalAccountNumber = reversalAccountNumber;
+        this.reversalAccountType = reversalAccountType;
+        this.reversalBankCode = reversalBankCode;
+        this.reversalBranchCode = reversalBranchCode;
+        this.reversalTaxId = reversalTaxId;
     }
 }
 

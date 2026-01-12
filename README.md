@@ -52,7 +52,8 @@ This SDK version is compatible with the Stark Infra API v2.
         - [PixDomain](#query-pixdomains): View registered SPI participants certificates
         - [StaticBrcode](#create-staticbrcodes): Create static Pix BR codes
         - [DynamicBrcode](#create-dynamicbrcodes): Create dynamic Pix BR codes
-        - [BrcodePreview](#create-brcodepreviews): Read data from BR Codes before 
+        - [BrcodePreview](#create-brcodepreviews): Read data from BR Codes before
+        - [PixDispute](#create-pixdisputes): Create PixDisputes
     - [Lending](#lending)
         - [CreditNote](#create-creditnotes): Create credit notes
         - [CreditPreview](#create-creditpreviews): Create credit previews
@@ -2421,7 +2422,7 @@ app.get('/', async (req, res) => {
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
 ```
 
-## Create BrcodePreviews
+### Create BrcodePreviews
 You can create BrcodePreviews to preview BR Codes before paying them.
 
 ```javascript
@@ -2442,6 +2443,101 @@ const starkinfra = require('starkinfra')
     for (let preview of previews) {
         console.log(preview);
     }
+})();
+```
+
+### Create PixDisputes
+
+Pix disputes can be created when a fraud is detected creating a chain of transactions in order to reverse the funds to the origin.
+
+```javascript
+const starkinfra = require('starkinfra')
+
+(async () => {
+    let disputes = await starkinfra.pixDispute.create([
+        new starkinfra.PixDispute({
+            referenceId: "E39908427202512222248Lo3j8SXPF6z",
+            method: "scam",
+            operatorEmail: "test@test.com",
+            operatorPhone: "+5511999999999"
+        })
+    ])
+
+    for (let dispute of disputes) {
+        console.log(dispute);
+    }
+})();
+```
+
+### Query PixDisputes
+
+You can query multiple PixDisputes according to filters.
+
+```javascript
+(async() => {
+    let disputes = await starkinfra.pixDispute.query({
+        after: '2020-01-01',
+        before: '2020-03-01'
+    });
+
+    for await (let dispute of disputes) {
+        console.log(dispute);
+    }
+})();
+```
+
+### Get a PixDispute
+
+After its creation, information on a PixDispute may be retrieved by its id. 
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let dispute = await starkinfra.pixDispute.get('5155165527080960');
+    console.log(dispute);
+})();
+```
+
+### Cancel a PixDispute
+
+Cancel a specific PixDispute using its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async () => {
+  let dispute = await starkinfra.pixDispute.cancel('5155165527080960');
+  console.log(dispute);
+})();
+```
+
+### Query PixDispute logs
+
+You can query PixDispute logs to better understand PixDispute life cycles.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let logs = await starkinfra.pixDispute.log.query({limit: 50});
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a PixDispute log
+
+You can also get a specific log by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.pixDispute.log.get('5155165527080960');
+    console.log(log);
 })();
 ```
 
