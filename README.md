@@ -61,6 +61,8 @@ This SDK version is compatible with the Stark Infra API v2.
     - [Identity](#identity)
         - [IndividualIdentity](#create-individualidentities): Create individual identities
         - [IndividualDocument](#create-individualdocuments): Create individual documents
+        - [IndividualAccountRequest](#create-individualaccountrequest): Create individual account requests
+        - [AccountRequestAttachment](#create-accountrequestattachment): Create account request attachments
     - [Webhook](#webhook):
         - [Webhook](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
         - [WebhookEvents](#process-webhook-events): Manage Webhook events
@@ -3171,6 +3173,181 @@ await (async() => {
     let log = await starkinfra.individualDocument.log.get('5155165527080960');
   
     console.log(log);
+})();
+```
+
+### Create IndividualAccountRequest
+
+You can create an individual account request to request an account for a specific individual.
+
+```javascript
+await (async() => {
+    let accounts = await starkinfra.individualAccountRequest.create([
+        new starkinfra.IndividualAccountRequest({
+            name: "Tony Stark",
+            taxId: "634.906.770-30",
+            address: "R. pamplona, 4321",
+            income: 50000
+        })
+    ]);
+  
+    for await (let account of accounts) {
+        console.log(account);
+    }
+})();
+```
+
+**Note**: Instead of using IndividualIdentity objects, you can also pass each element in dictionary format
+
+### Query IndividualAccountRequest
+
+You can query multiple individual account request according to filters.
+
+```javascript
+await (async() => {
+    let accounts = await starkinfra.individualAccountRequest.query({
+        'limit': 10,
+        'after': '2022-01-01',
+        'before': '2022-04-01',
+        'status': "success",
+        'tags': ["breaking", "bad"],
+        'ids': ["5656565656565656"]
+    });
+  
+    for await (let account of accounts) {
+        console.log(account);
+    }
+})();
+```
+
+### Get an IndividualAccountRequest
+
+After its creation, information on an individual account request may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let account = await starkinfra.individualAccountRequest.get('5155165527080960');
+  
+    console.log(account);
+})();
+```
+
+### Update an IndividualAccountRequest
+
+You can update a specific account request status to "processing" for send it to validation.
+
+```javascript
+await (async() => {
+   let account = await starkinfra.individualAccountRequest.update('5155165527080960', {'status': 'processing'});
+  
+    console.log(account);
+})();
+```
+
+**Note**: Before sending your individual account request to validation by patching its status, you must send all the required documents using the create method of the AccountRequestAttachment resource.
+
+### Query IndividualAccountRequest logs
+
+You can query individual account request logs to better understand account request life cycles. 
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.individualAccountRequest.log.query({
+        'limit': 50,
+        'after': '2022-01-01',
+        'before': '2022-01-20'
+    });
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get an IndividualAccountRequest log
+
+You can also get a specific log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.individualAccountRequest.log.get('5155165527080960');
+  
+    console.log(log);
+})();
+```
+
+### Create AccountRequestAttachment
+
+You can create an account request attachment to attach images of documents to a specific individual account request.
+You must reference the desired account request by its id.
+
+```javascript
+await (async() => {
+    let attachments = await starkinfra.accountRequestAttachment.create([
+        new starkinfra.AccountRequestAttachment({
+            'type': "identity-front",
+            'content': "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD...",
+            'accountRequestId': '5155165527080960',
+            'tags': ["breaking", "bad"]
+        })
+    ]);
+
+    console.log(attachments[0]);
+
+    attachments = await starkinfra.accountRequestAttachment.create([
+        new starkinfra.AccountRequestAttachment({
+            'type': "identity-back",
+            'content': "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD...",
+            'accountRequestId': '5155165527080960',
+            'tags': ["breaking", "bad"]
+        })
+    ]);
+
+    console.log(attachments[0]);
+
+    attachments = await starkinfra.accountRequestAttachment.create([
+        new starkinfra.AccountRequestAttachment({
+            'type': "selfie",
+            'content': "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD...",
+            'accountRequestId': '5155165527080960',
+            'tags': ["breaking", "bad"]
+        })
+    ]);
+
+    console.log(attachments[0]);
+})();
+```
+
+**Note**: Instead of using AccountRequestAttachment objects, you can also pass each element in dictionary format
+
+### Query AccountRequestAttachments
+
+You can query multiple account request attachments according to filters.
+
+```javascript
+await (async() => {
+    let attachments = await starkinfra.accountRequestAttachment.query({
+        'after': '2022-01-01',
+        'before': '2022-03-01',
+        'status': "success",
+        'tags': ["breaking", "bad"],
+    });
+  
+    for await (let attachment of attachment) {
+        console.log(attachment);
+    }
+})();
+```
+
+### Get an AccountRequestAttachment
+
+After its creation, information on an account request attachment may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let attachment = await starkinfra.accountRequestAttachment.get('5155165527080960');
+  
+    console.log(attachment);
 })();
 ```
 
