@@ -78,7 +78,7 @@ let resource = {'class': exports.PixInfraction, 'name': 'PixInfraction'};
 
 exports.create = async function (infractions, {user} = {}) {
     /**
-     *
+     * @deprecated Function deprecated since v0.18.0
      * Create PixInfraction objects
      *
      * @description Create PixInfractions in the Stark Infra API
@@ -93,7 +93,7 @@ exports.create = async function (infractions, {user} = {}) {
      * @returns List of PixInfraction objects with updated attributes.
      *
      */
-    return rest.post(resource, infractions, user);
+    throw new Error('Function deprecated since v0.18.0');
 };
 
 exports.get = async function (id, {user} = {}) {

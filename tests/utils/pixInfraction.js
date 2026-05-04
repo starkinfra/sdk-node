@@ -12,7 +12,7 @@ exports.getPixInfractionToPatch = async function () {
             cursor: cursor
         })
         for await (let infraction of infractions) {
-            if (infraction.flow !== 'in') {
+            if (infraction.flow === 'in') {
                 pixInfractions.push(infraction);
             }
         }
