@@ -1,20 +1,17 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const endToEndId = require('./utils/endToEndId.js');
 const {getPixInfractionToPatch} = require('./utils/pixInfraction');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
 
-describe('TestPixInfractionPostAndDelete', function(){
+describe('TestPixInfractionCreateDeprecated', function(){
     this.timeout(10000);
-    it('test_success', async () => {
-        let infractionReports = await starkinfra.pixInfraction.create(await generateExamplePixInfractionJson(2));
-        assert(infractionReports.length === 2)
-        for (let infraction of infractionReports) {
-            let canceledPixInfraction = await starkinfra.pixInfraction.cancel(infraction.id);
-            assert(canceledPixInfraction.status === 'canceled');
-        }
+    it('test_create_throws_deprecated', async () => {
+        await assert.rejects(
+            () => starkinfra.pixInfraction.create([]),
+            { message: 'Function deprecated since v0.18.0' }
+        );
     });
 });
 
@@ -101,22 +98,8 @@ describe('TestPixInfractionPatch', function() {
     it('test_success', async () => {
         let pixInfraction = await getPixInfractionToPatch();
         assert(pixInfraction.status === 'delivered');
-        pixInfraction = await starkinfra.pixInfraction.update(pixInfraction.id, {'result': 'agreed', 'fraudType': 'scam'})
-        assert(pixInfraction.status === 'agreed');
+        pixInfraction = await starkinfra.pixInfraction.update(pixInfraction.id, 'agreed', {fraudType: 'scam'})
+        assert(pixInfraction.result === 'agreed');
     });
 });
 
-generateExamplePixInfractionJson = async function(n=1) {
-    let pixInfractions = [];
-    let endToEndIds = await endToEndId.get(n);
-    for (let id of endToEndIds) {
-        pixInfractions.push({
-            referenceId: id,
-            type: 'reversal',
-            method: 'scam',
-            operatorEmail: 'ned.stark@company.com',
-            operatorPhone: '+5511999999999'
-        })
-    }
-    return pixInfractions;
-}
