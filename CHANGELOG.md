@@ -14,7 +14,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ## [Unreleased]
 
-## [0.18.0] - 2026-05-04
+## [0.18.0] - 2026-05-05
 ### Added
 - Deprecated create pix infraction
 
