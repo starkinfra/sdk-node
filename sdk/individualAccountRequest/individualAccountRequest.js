@@ -1,6 +1,7 @@
 const rest = require('../utils/rest.js');
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
+const {Address} = require('./address.js');
 
 
 class IndividualAccountRequest extends Resource {
@@ -15,11 +16,11 @@ class IndividualAccountRequest extends Resource {
      * to the Stark Infra API and returns the list of created objects.
      *
      * Parameters (required):
-     * @param address [string]: Address of the individual. ex: 'R. pamplona, 123'
-     * @param income [number]: Income of the individual. ex: 5000
+     * @param address [IndividualAccountRequest.Address object or dictionary]: Structured residential address of the individual. ex: new starkinfra.individualAccountRequest.Address({street: 'Rua do Estilo Barroco', number: '648', neighborhood: 'Santo Amaro', city: 'Sao Paulo', state: 'SP', zipCode: '05724005'})
+     * @param income [number]: Income of the individual in cents. ex: 5000
      * @param name [string]: Name of the individual. ex: 'John Doe'
      * @param taxId [string]: Tax ID of the individual. ex: '012.345.678-90'
-     * 
+     *
      * Parameters (optional):
      * @param tags [list of strings, default []]: list of strings for reference when searching for IndividualAccountRequests. ex: ['employees', 'monthly']
      *
@@ -37,7 +38,7 @@ class IndividualAccountRequest extends Resource {
                     id = null, status = null, created = null, updated = null
                 }) {
         super(id);
-        this.address = address;
+        this.address = parseAddress(address);
         this.income = income;
         this.name = name;
         this.taxId = taxId;
@@ -52,6 +53,16 @@ class IndividualAccountRequest extends Resource {
 
 exports.IndividualAccountRequest = IndividualAccountRequest;
 let resource = {'class': exports.IndividualAccountRequest, 'name': 'IndividualAccountRequest'};
+
+const parseAddress = function (address) {
+    // address is a structured nested object (M2) — never flattened. A plain dictionary is
+    // coerced into an Address instance; an existing Address instance is kept as-is; null passes through.
+    if (address == null)
+        return address;
+    if (address instanceof Address)
+        return address;
+    return Object.assign(new Address(address), address);
+};
 
 exports.create = async function (accountRequests, { user } = {}) {
     /**
@@ -163,8 +174,8 @@ exports.update = async function (id, { address, income, name, taxId, status, tag
      * @param id [string]: IndividualAccountRequest id. ex: '5656565656565656'
      * 
      * Parameters (optional):
-     * @param address [string]: Address of the individual. ex: 'R. pamplona, 123'
-     * @param income [number]: Income of the individual. ex: 5000
+     * @param address [IndividualAccountRequest.Address object or dictionary]: Structured residential address of the individual. Replaces the address as a whole object — there is no partial/deep-merge PATCH. ex: new starkinfra.individualAccountRequest.Address({street: 'Av. Faria Lima', number: '4321', neighborhood: 'Itaim Bibi', city: 'Sao Paulo', state: 'SP', zipCode: '04538133'})
+     * @param income [number]: Income of the individual in cents. ex: 5000
      * @param name [string]: Name of the individual. ex: 'John Doe'
      * @param taxId [string]: Tax ID of the individual. ex: '012.345.678-90'
      * @param status [string]: Status of the individual account request. ex: 'processing'
