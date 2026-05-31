@@ -84,7 +84,7 @@ exports.query = async function ({ limit, after, before, types, accountRequestIds
     return rest.getList(resource, query, user);
 };
 
-exports.page = async function ({ cursor, ids, limit, after, before, types, accountRequestIds, user } = {}) {
+exports.page = async function ({ cursor, limit, after, before, types, accountRequestIds, user } = {}) {
     /**
      *
      * Retrieve paged IndividualAccountRequest Logs
@@ -107,7 +107,6 @@ exports.page = async function ({ cursor, ids, limit, after, before, types, accou
      */
     let query = {
         cursor: cursor,
-        ids: ids,
         limit: limit,
         after: after,
         before: before,

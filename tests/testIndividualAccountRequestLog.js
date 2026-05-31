@@ -13,7 +13,7 @@ describe('TestIndividualAccountRequestLogGet', function(){
             assert(typeof log.id == 'string');
             i += 1;
         }
-        assert(i > 1);
+        assert(i === 5);
     });
 });
 
@@ -21,13 +21,24 @@ describe('TestIndividualAccountRequestLogGet', function(){
 describe('TestIndividualAccountRequestLogInfoGet', function(){
     this.timeout(10000);
     it('test_success', async () => {
-        let logs = await starkinfra.individualAccountRequest.log.query({
-        'limit': 1,
+        let logs = await starkinfra.individualAccountRequest.log.query({limit: 1});
+        for await (let log of logs) {
+            assert(typeof log.id == 'string');
+            log = await starkinfra.individualAccountRequest.log.get(log.id);
+            assert(typeof log.id == 'string');
+            assert(typeof log.request === 'object' && log.request !== null);
+        }
     });
-  
-    for await (let log of logs) {
-        console.log(log);
-    }
+});
+
+describe('TestIndividualAccountRequestLogTypeEnum', function(){
+    this.timeout(10000);
+    it('test_success', async () => {
+        const allowed = ["approved", "created", "denied", "processing", "updated"];
+        const logs = await starkinfra.individualAccountRequest.log.query({limit: 10});
+        for await (let log of logs) {
+            assert(allowed.includes(log.type));
+        }
     });
 });
 
@@ -47,7 +58,7 @@ describe('TestIndividualAccountRequestLogGetPage', function () {
                 break;
             }
         }
-        assert(ids.length > 1);
+        assert(ids.length === 10);
     });
 });
 
@@ -59,7 +70,7 @@ describe('TestIndividualAccountRequestLogQueryParams', function(){
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',
-            types: 'denied',
+            types: 'created',
             accountRequestIds: ['1','2'],
         });
         assert(requests.length===undefined)
@@ -75,7 +86,7 @@ describe('TestIndividualAccountRequestLogPageParams', function(){
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',
-            types: 'denied',
+            types: 'created',
             accountRequestIds: ['1','2'],
         });
         assert(requests.length===0)

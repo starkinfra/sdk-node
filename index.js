@@ -31,7 +31,7 @@ exports.staticBrcode = require('./sdk/staticBrcode');
 exports.brcodePreview = require('./sdk/brcodePreview');
 exports.individualIdentity = require('./sdk/individualIdentity');
 exports.individualDocument = require('./sdk/individualDocument');
-exports.accountRequestAttachment = require('./sdk/accountRequestAttachment');
+exports.individualAccountAttachment = require('./sdk/individualAccountAttachment');
 exports.individualAccountRequest = require('./sdk/individualAccountRequest');
 exports.issuingProduct = require('./sdk/issuingProduct');
 exports.issuingCard = require('./sdk/issuingCard');
@@ -60,7 +60,7 @@ exports.bacenId = require('./sdk/utils/bacenId.js');
 exports.returnId = require('./sdk/utils/returnId.js');
 exports.endToEndId = require('./sdk/utils/endToEndId.js');
 exports.key = require('./sdk/key.js');
-exports.error = require('./sdk/error.js');
+exports.error = require('./node_modules/starkcore/starkcore/error.js');
 exports.request = require('./sdk/request/request.js')
 
 
@@ -88,7 +88,7 @@ exports.BrcodePreview = exports.brcodePreview.BrcodePreview;
 exports.IndividualIdentity = exports.individualIdentity.IndividualIdentity;
 exports.IndividualDocument = exports.individualDocument.IndividualDocument;
 exports.IndividualAccountRequest = exports.individualAccountRequest.IndividualAccountRequest;
-exports.AccountRequestAttachment = exports.accountRequestAttachment.AccountRequestAttachment;
+exports.IndividualAccountAttachment = exports.individualAccountAttachment.IndividualAccountAttachment;
 exports.IssuingProduct = exports.issuingProduct.IssuingProduct;
 exports.IssuingCard = exports.issuingCard.IssuingCard;
 exports.IssuingRule = exports.issuingRule.IssuingRule;

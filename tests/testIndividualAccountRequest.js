@@ -17,6 +17,28 @@ describe("TestIndividualAccountRequestPost", function() {
     });
 });
 
+describe("TestIndividualAccountRequestAddressObject", function() {
+    this.timeout(10000);
+    it("test_address_is_nested_object", async () => {
+        let example = generateExampleIndividualAccountRequest();
+        let request = new starkinfra.IndividualAccountRequest(example);
+
+        assert(typeof request.address === "object" && request.address !== null);
+        assert(typeof request.address !== "string");
+
+        assert(request.address.street === "Rua do Estilo Barroco");
+        assert(request.address.number === "648");
+        assert(request.address.neighborhood === "Santo Amaro");
+        assert(request.address.city === "Sao Paulo");
+        assert(request.address.state === "SP");
+        assert(request.address.zipCode === "05724005");
+
+        assert(request.addressStreet === undefined);
+        assert(request.addressCity === undefined);
+        assert(request.addressZipCode === undefined);
+    });
+});
+
 describe("TestIndividualAccountRequestGet", function() {
     this.timeout(10000);
     it("test_success", async () => {
@@ -123,10 +145,146 @@ describe("TestIndividualAccountRequestPatch", function () {
         for await (let request of requests) {
             assert(typeof request.id == "string");
             const updatedRequest = await starkinfra.individualAccountRequest.update(request.id, patchData);
-            
-            for (let key in patchData) {
-                assert(updatedRequest[key] === patchData[key]);
-            }
+            assert(updatedRequest.address.street === patchData.address.street);
+            assert(updatedRequest.address.zipCode === patchData.address.zipCode);
+            assert(updatedRequest.name === patchData.name);
         }
+    });
+});
+
+describe("TestIndividualAccountRequestStatusEnum", function () {
+    this.timeout(10000);
+    it("test_success", async () => {
+        const allowed = ["approved", "created", "denied", "processing", "updated"];
+        const requests = await starkinfra.individualAccountRequest.query({ limit: 10 });
+        for await (let request of requests) {
+            assert(allowed.includes(request.status));
+        }
+    });
+});
+
+describe("TestIndividualAccountRequestDatetimeParsing", function () {
+    this.timeout(10000);
+    it("test_success", async () => {
+        const requests = await starkinfra.individualAccountRequest.query({ limit: 1 });
+        for await (let request of requests) {
+            assert(typeof request.created === 'string');
+            assert(typeof request.updated === 'string');
+        }
+    });
+});
+
+describe("TestIndividualAccountRequestOutputOnlyFields", function () {
+    this.timeout(10000);
+    it("test_success", async () => {
+        let example = generateExampleIndividualAccountRequest();
+        example.id = "5189530608992256";
+        example.status = "processing";
+        example.accountType = "individual";
+        let request = new starkinfra.IndividualAccountRequest(example);
+        assert(request.id === "5189530608992256");
+        assert(request.status === "processing");
+        assert(request.accountType === "individual");
+    });
+});
+
+describe("TestIndividualAccountRequestInvalidName", function () {
+    this.timeout(10000);
+    it("test_invalid_name", async () => {
+        let ok = false;
+        let example = generateExampleIndividualAccountRequest();
+        example.name = "";
+        try {
+            await starkinfra.individualAccountRequest.create([new starkinfra.IndividualAccountRequest(example)]);
+        } catch (e) {
+            if (!(e instanceof starkinfra.error.InputErrors))
+                throw e;
+            ok = true;
+        }
+        assert(ok);
+    });
+});
+
+describe("TestIndividualAccountRequestInvalidTaxId", function () {
+    this.timeout(10000);
+    it("test_invalid_tax_id", async () => {
+        let ok = false;
+        let example = generateExampleIndividualAccountRequest();
+        example.taxId = "000.000.000-00";
+        try {
+            await starkinfra.individualAccountRequest.create([new starkinfra.IndividualAccountRequest(example)]);
+        } catch (e) {
+            if (!(e instanceof starkinfra.error.InputErrors))
+                throw e;
+            ok = true;
+        }
+        assert(ok);
+    });
+});
+
+describe("TestIndividualAccountRequestInvalidAddress", function () {
+    this.timeout(10000);
+    it("test_invalid_address", async () => {
+        let ok = false;
+        let example = generateExampleIndividualAccountRequest();
+        example.address = { street: "Rua do Estilo Barroco" };
+        try {
+            await starkinfra.individualAccountRequest.create([new starkinfra.IndividualAccountRequest(example)]);
+        } catch (e) {
+            if (!(e instanceof starkinfra.error.InputErrors))
+                throw e;
+            ok = true;
+        }
+        assert(ok);
+    });
+});
+
+describe("TestIndividualAccountRequestInvalidIncome", function () {
+    this.timeout(10000);
+    it("test_invalid_income", async () => {
+        let ok = false;
+        let example = generateExampleIndividualAccountRequest();
+        example.income = -1;
+        try {
+            await starkinfra.individualAccountRequest.create([new starkinfra.IndividualAccountRequest(example)]);
+        } catch (e) {
+            if (!(e instanceof starkinfra.error.InputErrors))
+                throw e;
+            ok = true;
+        }
+        assert(ok);
+    });
+});
+
+describe("TestIndividualAccountRequestInvalidStatus", function () {
+    this.timeout(10000);
+    it("test_invalid_status", async () => {
+        let ok = false;
+        let request = (await starkinfra.individualAccountRequest.create([
+            new starkinfra.IndividualAccountRequest(generateExampleIndividualAccountRequest())
+        ]))[0];
+        try {
+            await starkinfra.individualAccountRequest.update(request.id, {status: "not-a-real-status"});
+        } catch (e) {
+            if (!(e instanceof starkinfra.error.InputErrors))
+                throw e;
+            ok = true;
+        }
+        assert(ok);
+    });
+});
+
+describe("TestIndividualAccountRequestNotFound", function () {
+    this.timeout(10000);
+    it("test_not_found", async () => {
+        let ok = false;
+        try {
+            await starkinfra.individualAccountRequest.get("0");
+        } catch (e) {
+            if (!(e instanceof starkinfra.error.InputErrors))
+                throw e;
+            ok = true;
+        }
+        assert(ok);
     });
 });
