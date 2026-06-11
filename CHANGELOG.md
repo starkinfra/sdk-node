@@ -13,6 +13,11 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Changed
+- AccountRequestAttachment resource renamed to IndividualAccountAttachment
+- IndividualAccountRequest address field changed from string to object
+### Added
+- IndividualAccountAttachment delete method
 
 ## [0.18.0] - 2026-05-04
 ### Added

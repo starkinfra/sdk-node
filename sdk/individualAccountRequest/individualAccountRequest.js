@@ -15,11 +15,11 @@ class IndividualAccountRequest extends Resource {
      * to the Stark Infra API and returns the list of created objects.
      *
      * Parameters (required):
-     * @param address [string]: Address of the individual. ex: 'R. pamplona, 123'
+     * @param address [dictionary object]: Address of the individual. ex: {street: 'R. Pamplona', number: '123', neighborhood: 'Jardim Paulista', city: 'São Paulo', state: 'SP', zipCode: '01405030'}
      * @param income [number]: Income of the individual. ex: 5000
      * @param name [string]: Name of the individual. ex: 'John Doe'
      * @param taxId [string]: Tax ID of the individual. ex: '012.345.678-90'
-     * 
+     *
      * Parameters (optional):
      * @param tags [list of strings, default []]: list of strings for reference when searching for IndividualAccountRequests. ex: ['employees', 'monthly']
      *
@@ -163,7 +163,7 @@ exports.update = async function (id, { address, income, name, taxId, status, tag
      * @param id [string]: IndividualAccountRequest id. ex: '5656565656565656'
      * 
      * Parameters (optional):
-     * @param address [string]: Address of the individual. ex: 'R. pamplona, 123'
+     * @param address [dictionary object]: Address of the individual. ex: {street: 'R. Pamplona', number: '123', neighborhood: 'Jardim Paulista', city: 'São Paulo', state: 'SP', zipCode: '01405030'}
      * @param income [number]: Income of the individual. ex: 5000
      * @param name [string]: Name of the individual. ex: 'John Doe'
      * @param taxId [string]: Tax ID of the individual. ex: '012.345.678-90'

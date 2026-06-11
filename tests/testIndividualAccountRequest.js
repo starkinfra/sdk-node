@@ -125,7 +125,7 @@ describe("TestIndividualAccountRequestPatch", function () {
             const updatedRequest = await starkinfra.individualAccountRequest.update(request.id, patchData);
             
             for (let key in patchData) {
-                assert(updatedRequest[key] === patchData[key]);
+                assert.deepStrictEqual(updatedRequest[key], patchData[key]);
             }
         }
     });
