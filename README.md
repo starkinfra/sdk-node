@@ -57,6 +57,7 @@ This SDK version is compatible with the Stark Infra API v2.
         - [PixDispute](#create-pixdisputes): Create PixDisputes
         - [PixPullSubscription](#create-pixpullsubscriptions): Set up recurring Pix debit authorizations
         - [PixPullRequest](#create-pixpullrequests): Trigger automatic Pix debits against a subscription
+        - [PixFraud](#create-pixfrauds): Report a PixKey or taxId for confirmed fraud
     - [Lending](#lending)
         - [CreditNote](#create-creditnotes): Create credit notes
         - [CreditPreview](#create-creditpreviews): Create credit previews
@@ -2887,6 +2888,112 @@ const starkinfra = require('starkinfra');
 
 (async() => {
     let log = await starkinfra.pixPullRequest.log.get('5155165527080960');
+    console.log(log);
+})();
+```
+
+### Create PixFrauds
+
+Pix frauds are used to report a PixKey or taxId to the Central Bank when a fraud has been confirmed.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let frauds = await starkinfra.pixFraud.create([
+        new starkinfra.PixFraud({
+            externalId: 'my_external_id_1234',
+            type: 'scam',
+            taxId: '012.345.678-90',
+            tags: ['fraudulent']
+        })
+    ]);
+
+    for (let fraud of frauds) {
+        console.log(fraud);
+    }
+})();
+```
+
+### Query PixFrauds
+
+You can query multiple PixFrauds according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let frauds = await starkinfra.pixFraud.query({
+        limit: 1,
+        after: '2022-01-01',
+        before: '2022-01-12',
+        status: ['registered'],
+        ids: ['5729405850615808']
+    });
+
+    for await (let fraud of frauds) {
+        console.log(fraud);
+    }
+})();
+```
+
+### Get a PixFraud
+
+After its creation, information on a PixFraud may be retrieved by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let fraud = await starkinfra.pixFraud.get('5155165527080960');
+    console.log(fraud);
+})();
+```
+
+### Cancel a PixFraud
+
+Cancel a specific PixFraud using its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async () => {
+    let fraud = await starkinfra.pixFraud.cancel('5155165527080960');
+    console.log(fraud);
+})();
+```
+
+### Query PixFraud logs
+
+You can query PixFraud logs to better understand their life cycles.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    const logs = await starkinfra.pixFraud.log.query({
+        limit: 50,
+        ids: ['5729405850615808'],
+        after: '2022-01-01',
+        before: '2022-01-20',
+        types: ['registered'],
+        fraudIds: ['5719405850615809']
+    });
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a PixFraud log
+
+You can also get a specific log by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.pixFraud.log.get('5155165527080960');
     console.log(log);
 })();
 ```
