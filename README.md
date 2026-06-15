@@ -2940,6 +2940,12 @@ const starkinfra = require('starkinfra');
                     method: 'link'
                 })
             ],
+            rules: [
+                starkinfra.creditNote.Rule({
+                    key: 'invoiceCreationMode',
+                    value: 'scheduled'
+                })
+            ],
             externalId: '1234',
             streetLine1: 'Av. Paulista, 200',
             streetLine2: '10 andar',

@@ -153,3 +153,88 @@ describe('TestCreditNoteTransferPdfGet', function(){
         }
     });
 });
+
+describe('TestCreditNoteRuleConstruct', function(){
+    this.timeout(10000);
+    it('test_success', async () => {
+        let rule = new starkinfra.creditNote.Rule({
+            key: 'invoiceCreationMode',
+            value: 'scheduled'
+        });
+        assert(rule.key === 'invoiceCreationMode');
+        assert(rule.value === 'scheduled');
+    });
+
+    it('test_exposed_under_namespace', async () => {
+        assert(typeof starkinfra.creditNote.Rule === 'function');
+        assert(typeof starkinfra.creditNote.Invoice === 'function');
+        assert(typeof starkinfra.creditNote.Transfer === 'function');
+    });
+});
+
+describe('TestCreditNoteRulesParse', function(){
+    this.timeout(10000);
+    it('test_success_from_object', async () => {
+        let rule = new starkinfra.creditNote.Rule({
+            key: 'invoiceCreationMode',
+            value: 'scheduled'
+        });
+        let note = new starkinfra.CreditNote(Object.assign({}, exampleCreditNote, {
+            rules: [rule]
+        }));
+        assert(Array.isArray(note.rules));
+        assert(note.rules.length === 1);
+        assert(note.rules[0] instanceof starkinfra.creditNote.Rule);
+        assert(note.rules[0].key === 'invoiceCreationMode');
+        assert(note.rules[0].value === 'scheduled');
+    });
+
+    it('test_success_from_dict', async () => {
+        let note = new starkinfra.CreditNote(Object.assign({}, exampleCreditNote, {
+            rules: [{key: 'invoiceCreationMode', value: 'scheduled'}]
+        }));
+        assert(Array.isArray(note.rules));
+        assert(note.rules.length === 1);
+        assert(note.rules[0] instanceof starkinfra.creditNote.Rule);
+        assert(note.rules[0].key === 'invoiceCreationMode');
+        assert(note.rules[0].value === 'scheduled');
+    });
+});
+
+describe('TestCreditNoteRulesPost', function(){
+    this.timeout(10000);
+    it('test_success', async () => {
+        let note = Object.assign({}, exampleCreditNote);
+        note.externalId = randomUUID();
+        let notes = await starkinfra.creditNote.create([note]);
+        for (let created of notes) {
+            assert(typeof created.id == 'string');
+            assert(Array.isArray(created.rules));
+            for (let rule of created.rules) {
+                assert(typeof rule.key == 'string');
+                assert(typeof rule.value == 'string');
+            }
+        }
+    });
+});
+
+describe('TestCreditNoteDebtorWorkspaceId', function(){
+    this.timeout(10000);
+    it('test_present_on_created', async () => {
+        let note = Object.assign({}, exampleCreditNote);
+        note.externalId = randomUUID();
+        let notes = await starkinfra.creditNote.create([note]);
+        for (let created of notes) {
+            assert(typeof created.id == 'string');
+            assert('debtorWorkspaceId' in created);
+        }
+    });
+
+    it('test_present_on_get', async () => {
+        let notes = await starkinfra.creditNote.query({limit: 1});
+        for await (let note of notes) {
+            note = await starkinfra.creditNote.get(note.id);
+            assert('debtorWorkspaceId' in note);
+        }
+    });
+});

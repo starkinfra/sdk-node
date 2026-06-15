@@ -17,6 +17,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - PixPullSubscription resource
 - PixPullRequest resource
 - IssuingStockRule resource
+- rules and debtorWorkspaceId parameters to CreditNote resource
 
 ## [0.18.0] - 2026-06-22
 ### Changed

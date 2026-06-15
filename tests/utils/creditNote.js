@@ -10,6 +10,10 @@ const exampleCreditNote = {
     nominalAmount: 200000,
     rebateAmount: 0,
     scheduled: "2049-06-07",
+    rules: [{
+        key: "invoiceCreationMode",
+        value: "scheduled"
+    }],
     signers: [{
         contact: "https://b591-179-191-69-138.sa.ngrok.io",
         method: "server",
