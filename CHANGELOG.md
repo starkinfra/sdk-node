@@ -20,6 +20,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - rules and debtorWorkspaceId parameters to CreditNote resource
 - reason attribute to PixRequest resource
 - PixFraud resource
+- PixKeyHolmes resource
 
 ## [0.18.0] - 2026-06-22
 ### Changed

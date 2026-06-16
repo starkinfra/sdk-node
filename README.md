@@ -58,6 +58,7 @@ This SDK version is compatible with the Stark Infra API v2.
         - [PixPullSubscription](#create-pixpullsubscriptions): Set up recurring Pix debit authorizations
         - [PixPullRequest](#create-pixpullrequests): Trigger automatic Pix debits against a subscription
         - [PixFraud](#create-pixfrauds): Report a PixKey or taxId for confirmed fraud
+        - [PixKeyHolmes](#create-pixkeyholmes): Investigate the registration status of a Pix Key
     - [Lending](#lending)
         - [CreditNote](#create-creditnotes): Create credit notes
         - [CreditPreview](#create-creditpreviews): Create credit previews
@@ -2995,6 +2996,49 @@ const starkinfra = require('starkinfra');
 (async() => {
     let log = await starkinfra.pixFraud.log.get('5155165527080960');
     console.log(log);
+})();
+```
+
+### Create PixKeyHolmes
+
+PixKeyHolmes are used to investigate the registration status of a Pix Key in the Central Bank's DICT.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let holmes = await starkinfra.pixKeyHolmes.create([
+        new starkinfra.PixKeyHolmes({
+            keyId: 'valid@sandbox.com',
+            tags: ['pix', 'key']
+        })
+    ]);
+
+    for (let sherlock of holmes) {
+        console.log(sherlock);
+    }
+})();
+```
+
+### Query PixKeyHolmes
+
+You can query multiple PixKeyHolmes according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let holmes = await starkinfra.pixKeyHolmes.query({
+        limit: 1,
+        after: '2022-01-01',
+        before: '2022-01-12',
+        status: ['solved'],
+        ids: ['5729405850615808']
+    });
+
+    for await (let sherlock of holmes) {
+        console.log(sherlock);
+    }
 })();
 ```
 
