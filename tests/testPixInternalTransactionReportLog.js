@@ -4,11 +4,11 @@ const starkinfra = require('../index.js');
 starkinfra.user = require('./utils/user').exampleProject;
 
 
-describe('TestPixFraudLogGet', function(){
+describe('TestPixInternalTransactionReportLogGet', function () {
     this.timeout(10000);
     it('test_success', async () => {
         let i = 0;
-        const logs = await starkinfra.pixFraud.log.query({limit: 5});
+        const logs = await starkinfra.pixInternalTransactionReport.log.query({limit: 5});
         for await (let log of logs) {
             assert(typeof log.id == 'string');
             i += 1;
@@ -18,27 +18,30 @@ describe('TestPixFraudLogGet', function(){
 });
 
 
-describe('TestPixFraudLogInfoGet', function(){
+describe('TestPixInternalTransactionReportLogInfoGet', function () {
     this.timeout(10000);
     it('test_success', async () => {
-        let logs = await starkinfra.pixFraud.log.query({limit: 1});
+        let logs = await starkinfra.pixInternalTransactionReport.log.query({limit: 1});
         for await (let log of logs) {
             assert(typeof log.id == 'string');
-            log = await starkinfra.pixFraud.log.get(log.id);
+            log = await starkinfra.pixInternalTransactionReport.log.get(log.id);
             assert(typeof log.id == 'string');
+            assert(log.report != null);
+            assert(log.report.id != null);
+            assert(log.type != null);
         }
     });
 });
 
 
-describe('TestPixFraudLogGetPage', function () {
+describe('TestPixInternalTransactionReportLogGetPage', function () {
     this.timeout(10000);
     it('test_success', async () => {
         let ids = [];
         let cursor = null;
         let page = null;
         for (let i = 0; i < 2; i++) {
-            [page, cursor] = await starkinfra.pixFraud.log.page({limit: 5, cursor: cursor});
+            [page, cursor] = await starkinfra.pixInternalTransactionReport.log.page({limit: 5, cursor: cursor});
             for (let entity of page) {
                 assert(!ids.includes(entity.id));
                 ids.push(entity.id);
@@ -52,53 +55,33 @@ describe('TestPixFraudLogGetPage', function () {
 });
 
 
-describe('TestPixFraudLogQueryParams', function(){
+describe('TestPixInternalTransactionReportLogQueryParams', function () {
     this.timeout(10000);
     it('test_success', async () => {
-        const logs = await starkinfra.pixFraud.log.query({
+        const logs = await starkinfra.pixInternalTransactionReport.log.query({
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',
-            types: ['created', 'registered'],
-            fraudIds: ['1', '2'],
-            ids: ['1', '2'],
+            types: 'failed',
+            reportIds: ['1', '2'],
         });
         assert(logs.length === undefined);
     });
 });
 
 
-describe('TestPixFraudLogPageParams', function(){
+describe('TestPixInternalTransactionReportLogPageParams', function () {
     this.timeout(10000);
     it('test_success', async () => {
         let cursor = null;
         let logs = null;
-        [logs, cursor] = await starkinfra.pixFraud.log.page({
+        [logs, cursor] = await starkinfra.pixInternalTransactionReport.log.page({
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',
-            types: ['created', 'registered'],
-            fraudIds: ['1', '2'],
-            ids: ['1', '2'],
+            types: 'failed',
+            reportIds: ['1', '2'],
         });
         assert(logs.length === 0);
-    });
-});
-
-
-describe('TestPixFraudLogAttributes', function(){
-    this.timeout(10000);
-    it('test_success', async () => {
-        let i = 0;
-        const logs = await starkinfra.pixFraud.log.query({limit: 5});
-        for await (let log of logs) {
-            assert(typeof log.id == 'string');
-            assert(typeof log.fraud.id == 'string');
-            assert(typeof log.type == 'string');
-            assert(log.type.length > 0);
-            assert(log.created);
-            i += 1;
-        }
-        assert(i === 5);
     });
 });
