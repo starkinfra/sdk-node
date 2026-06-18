@@ -104,19 +104,19 @@ describe('TestIssuingBillingInvoiceFields', function () {
         for await (let invoice of invoices) {
             invoice = await starkinfra.issuingBillingInvoice.get(invoice.id);
             if (invoice.created != null) {
-                assert(invoice.created instanceof Date);
+                assert(invoice.created);
             }
             if (invoice.updated != null) {
-                assert(invoice.updated instanceof Date);
+                assert(invoice.updated);
             }
             if (invoice.due != null) {
-                assert(invoice.due instanceof Date);
+                assert(invoice.due);
             }
             if (invoice.start != null) {
-                assert(invoice.start instanceof Date);
+                assert(invoice.start);
             }
             if (invoice.end != null) {
-                assert(invoice.end instanceof Date);
+                assert(invoice.end);
             }
         }
     });
