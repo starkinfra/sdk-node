@@ -39,6 +39,8 @@ This SDK version is compatible with the Stark Infra API v2.
         - [Withdrawals](#create-issuingwithdrawals): Send money back to your Workspace from your issuing balance
         - [Balance](#get-your-issuingbalance): View your issuing balance
         - [Transactions](#query-issuingtransactions): View the transactions that have affected your issuing balance
+        - [BillingInvoices](#query-issuingbillinginvoices): View the invoices charged for your issuing usage
+        - [BillingTransactions](#query-issuingbillingtransactions): View the transactions of your issuing billing invoices
     - [Pix](#pix)
         - [PixRequests](#create-pixrequests): Create Pix transactions
         - [PixReversals](#create-pixreversals): Reverse Pix transactions
@@ -1004,6 +1006,20 @@ await (async() => {
 })();
 ```
 
+The returned tokens carry a return-only `url` attribute, and you may supply an `activationCode` received through the bank app or SMS when building one.
+
+```javascript
+await (async() => {
+    let token = new starkinfra.IssuingToken({
+        cardId: '5189831499972623',
+        activationCode: '481632'
+    });
+
+    console.log(token.activationCode);
+    console.log(token.url);
+})();
+```
+
 ### Update an IssuingToken
 
 You can update a specific token by its id.
@@ -1354,6 +1370,72 @@ await (async() => {
     let transaction = await starkinfra.issuingTransaction.get('5155165527080960');
     
     console.log(transaction);
+})();
+```
+
+### Query IssuingBillingInvoices
+
+To view the invoices charged for your issuing usage, you can query them
+according to filters.
+
+```javascript
+await (async() => {
+    let invoices = await starkinfra.issuingBillingInvoice.query({
+        after: '2020-01-01',
+        before: '2020-03-01'
+    });
+
+    for await (let invoice of invoices) {
+        console.log(invoice);
+    }
+})();
+```
+
+### Get an IssuingBillingInvoice
+
+You can get a specific billing invoice by its id:
+
+```javascript
+await (async() => {
+    let invoice = await starkinfra.issuingBillingInvoice.get('5155165527080960');
+
+    console.log(invoice);
+})();
+```
+
+### Query IssuingBillingTransactions
+
+To view the transactions of your issuing billing invoices, you can query them
+according to filters.
+
+```javascript
+await (async() => {
+    let transactions = await starkinfra.issuingBillingTransaction.query({
+        after: '2020-01-01',
+        before: '2020-03-01'
+    });
+
+    for await (let transaction of transactions) {
+        console.log(transaction);
+    }
+})();
+```
+
+### Query paginated IssuingBillingTransactions
+
+If your initial number of transactions is too large for a single query, you can page through
+the results manually using the cursor returned on each call.
+
+```javascript
+await (async() => {
+    let cursor = null;
+    let page = null;
+    do {
+        [page, cursor] = await starkinfra.issuingBillingTransaction.page({limit: 5, cursor: cursor});
+        for (let transaction of page) {
+            console.log(transaction);
+        }
+    } while (cursor != null);
 })();
 ```
 

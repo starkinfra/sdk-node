@@ -26,10 +26,13 @@ class IssuingToken extends Resource {
      * @param created [string]: creation datetime for the IssuingToken. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the IssuingToken. ex: '2020-03-10 10:30:00.000'
      * 
+     * @param url [string]: token URL. ex: 'https://token.starkinfra.com/5656565656565656'
+     *
      * Attributes (Authorization request only):
+     * @param activationCode [string]: activation code received through the bank app or sms. ex: '481632'
      * @param methodCode [string]: provisioning method. Options: 'app', 'token', 'manual', 'server' or 'browser'
      * @param deviceType [string]: device type used for tokenization. ex: 'Phone'
-     * @param deviceName [string]: device name used for tokenization. ex: 'My phone' 
+     * @param deviceName [string]: device name used for tokenization. ex: 'My phone'
      * @param deviceSerialNumber [string]: device serial number used for tokenization. ex: '2F6D63'
      * @param deviceOsName [string]: device operational system name used for tokenization. ex: 'Android'
      * @param deviceOsVersion [string]: device operational system version used for tokenization. ex: '4.4.4'
@@ -37,11 +40,11 @@ class IssuingToken extends Resource {
      * @param walletInstanceId [string]: unique id referred to the wallet app in the current device. ex: '71583be4777eb89aaf0345eebeb82594f096615ed17862d0'
      *
      */
-    constructor({ 
-                    cardId=null, walletId=null, walletName=null, merchantId=null, id=null, externalId=null, 
-                    tags=null, status=null, created=null, updated=null, methodCode=null, deviceType=null, 
-                    deviceName=null, deviceSerialNumber=null, deviceOsName=null, deviceOsVersion=null, 
-                    deviceImei=null, walletInstanceId=null
+    constructor({
+                    cardId=null, walletId=null, walletName=null, merchantId=null, id=null, externalId=null,
+                    tags=null, status=null, created=null, updated=null, activationCode=null, methodCode=null,
+                    deviceType=null, deviceName=null, deviceSerialNumber=null, deviceOsName=null, deviceOsVersion=null,
+                    deviceImei=null, walletInstanceId=null, url=null
                 }) {
         super(id);
 
@@ -54,6 +57,7 @@ class IssuingToken extends Resource {
         this.status = status;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
+        this.activationCode = activationCode;
         this.methodCode = methodCode;
         this.deviceType = deviceType;
         this.deviceName = deviceName;
@@ -62,6 +66,7 @@ class IssuingToken extends Resource {
         this.deviceOsVersion = deviceOsVersion;
         this.deviceImei = deviceImei;
         this.walletInstanceId = walletInstanceId;
+        this.url = url;
     }
 }
 
@@ -229,7 +234,7 @@ exports.parse = async function (content, signature, {user} = {}) {
     return parse.parseAndVerify(resource, content, signature, user);
 };
 
-exports.responseAuthorization = async function (status, { reason, activationMethods, designId, tags } = {}) {
+exports.responseAuthorization = async function ({ status, reason = null, activationMethods = null, designId = null, tags = null }) {
     /**
      *
      * Helps you respond IssuingToken authorization requests
@@ -264,7 +269,7 @@ exports.responseAuthorization = async function (status, { reason, activationMeth
     return JSON.stringify(response);
 };
 
-exports.responseActivation = async function (status, { reason, tags } = {}) {
+exports.responseActivation = async function ({ status, reason = null, tags = null }) {
     /**
      *
      * Helps you respond IssuingToken activation requests
