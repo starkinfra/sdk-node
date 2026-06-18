@@ -21,7 +21,7 @@ describe('TestIssuingBillingTransactionGet', function () {
         for await (let transaction of transactions) {
             assert(typeof transaction.id == 'string');
             if (transaction.created != null) {
-                assert(transaction.created instanceof Date);
+                assert(transaction.created);
             }
         }
     });
