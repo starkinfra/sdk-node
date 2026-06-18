@@ -18,6 +18,7 @@ class IssuingPurchase extends Resource {
      * @param cardId [string]: unique id returned when IssuingCard is created. ex: '5656565656565656'
      * @param cardEnding [string]: last 4 digits of the card number. ex: '1234'
      * @param purpose [string]: purchase purpose. ex: 'purchase'
+     * @param installmentCount [integer]: quantity of installments to be confirmed. Minimum = 1. ex: 12
      * @param amount [integer]: IssuingPurchase value in cents. Minimum = 0. ex: 1234 (= R$ 12.34)
      * @param tax [integer]: IOF amount taxed for international purchases. ex: 1234 (= R$ 12.34)
      * @param issuerAmount [integer]: issuer amount. ex: 1234 (= R$ 12.34)
@@ -57,8 +58,8 @@ class IssuingPurchase extends Resource {
      *
      */
     constructor({ 
-                    holderName=null, productId=null, cardId=null, cardEnding=null, purpose=null, 
-                    amount=null, tax=null, issuerAmount=null, issuerCurrencyCode=null, 
+                    holderName=null, productId=null, cardId=null, cardEnding=null, purpose=null,
+                    installmentCount=null, amount=null, tax=null, issuerAmount=null, issuerCurrencyCode=null,
                     issuerCurrencySymbol=null, merchantAmount=null, merchantCurrencyCode=null, 
                     merchantCurrencySymbol=null, merchantCategoryCode=null, merchantCategoryType=null, 
                     merchantCountryCode=null, acquirerId=null, merchantId=null, merchantName=null, 
@@ -74,6 +75,7 @@ class IssuingPurchase extends Resource {
         this.cardId = cardId;
         this.cardEnding = cardEnding;
         this.purpose = purpose;
+        this.installmentCount = installmentCount;
         this.amount = amount;
         this.tax = tax;
         this.issuerAmount = issuerAmount;
@@ -208,7 +210,7 @@ exports.page = async function ({ cursor, ids, cardIds, holderIds, endToEndIds, l
     return rest.getPage(resource, query, user);
 };
 
-exports.update = async function (id, {tags, description, user}) {
+exports.update = async function (id, {tags, description, user} = {}) {
     /**
      *
      *Update an IssuingPurchase by passing id.

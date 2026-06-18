@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- installmentCount attribute to IssuingPurchase resource
 ### Fixed
 - docstrings to reflect current business rules across Pix, Issuing and Credit resources
 - Readme parse method call for IssuingTokenActivation

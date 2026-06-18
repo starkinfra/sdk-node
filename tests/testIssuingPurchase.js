@@ -28,6 +28,37 @@ describe('TestIssuingPurchaseGet', function() {
     });
 });
 
+describe('TestIssuingPurchaseInstallmentCount', function() {
+    this.timeout(10000);
+    it('test_success', async () => {
+        let i = 0;
+        let purchases = await starkinfra.issuingPurchase.query({'limit': 10});
+        for await (let purchase of purchases) {
+            assert(typeof purchase.id == 'string');
+            assert('installmentCount' in purchase);
+            if (purchase.installmentCount != null) {
+                assert(typeof purchase.installmentCount == 'number');
+                assert(Number.isInteger(purchase.installmentCount));
+            }
+            i += 1;
+        }
+        assert(i > 0);
+    });
+
+    it('test_success_get', async () => {
+        let purchases = await starkinfra.issuingPurchase.query({'limit': 1});
+        for await (let purchase of purchases) {
+            assert(typeof purchase.id == 'string');
+            purchase = await starkinfra.issuingPurchase.get(purchase.id);
+            assert('installmentCount' in purchase);
+            if (purchase.installmentCount != null) {
+                assert(typeof purchase.installmentCount == 'number');
+                assert(Number.isInteger(purchase.installmentCount));
+            }
+        }
+    });
+});
+
 describe('TestIssuingPurchasePatch', function() {
     this.timeout(10000);
     it('test_success', async () => {
