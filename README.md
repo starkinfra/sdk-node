@@ -1147,6 +1147,21 @@ await (async() => {
 })();
 ```
 
+### Update an IssuingPurchase
+
+You can update a purchase's tags and description by its id.
+
+```javascript
+await (async() => {
+    let purchase = await starkinfra.issuingPurchase.update('5155165527080960', {
+        'tags': ['tony', 'stark'],
+        'description': 'Office Supplies'
+    });
+  
+    console.log(purchase);
+})();
+```
+
 ### Query IssuingPurchase logs
 
 Logs are pretty important to understand the life cycle of a purchase.

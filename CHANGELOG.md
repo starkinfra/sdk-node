@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- installmentCount attribute to IssuingPurchase resource
 
 ## [0.18.0] - 2026-05-04
 ### Added
