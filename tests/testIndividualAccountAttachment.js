@@ -140,6 +140,7 @@ describe("TestIndividualAccountAttachmentDelete", function() {
             assert(typeof attachments[0].id == 'string');
             let attachment = await starkinfra.individualAccountAttachment.delete(attachments[0].id);
             assert(typeof attachment.id == 'string');
+            assert(attachment.status === 'deleted');
         }
     });
 });

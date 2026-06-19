@@ -1,5 +1,3 @@
-const starkinfra = require('../../index.js');
-
 exports.generateExampleIndividualAccountRequest = function () {
     return {
         name: "John Doe",
@@ -13,6 +11,7 @@ exports.generateExampleIndividualAccountRequest = function () {
             zipCode: "01405030"
         },
         income: 100000,
+        birthDate: "2012-03-06",
         tags: ["savings"]
     };
 };

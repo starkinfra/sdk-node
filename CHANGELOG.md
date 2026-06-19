@@ -13,15 +13,14 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
 ### Changed
 - AccountRequestAttachment resource renamed to IndividualAccountAttachment
 - IndividualAccountRequest address field changed from string to object
 ### Added
-- IndividualAccountAttachment delete method
-
-## [0.18.0] - 2026-05-04
-### Added
 - Deprecated create pix infraction
+- IndividualAccountAttachment delete method
+- birthDate attribute to IndividualAccountRequest and IndividualIdentity resources
 
 ## [0.17.0] - 2026-04-02
 ### Added

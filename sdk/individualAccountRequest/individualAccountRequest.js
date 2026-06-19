@@ -1,6 +1,7 @@
 const rest = require('../utils/rest.js');
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
+const { Address } = require('./address.js');
 
 
 class IndividualAccountRequest extends Resource {
@@ -15,12 +16,13 @@ class IndividualAccountRequest extends Resource {
      * to the Stark Infra API and returns the list of created objects.
      *
      * Parameters (required):
-     * @param address [dictionary object]: Address of the individual. ex: {street: 'R. Pamplona', number: '123', neighborhood: 'Jardim Paulista', city: 'São Paulo', state: 'SP', zipCode: '01405030'}
+     * @param address [Address object]: structured residential address of the individual. ex: new Address({street: 'R. Pamplona', number: '123', neighborhood: 'Jardim Paulista', city: 'São Paulo', state: 'SP', zipCode: '01405030'})
      * @param income [number]: Income of the individual. ex: 5000
      * @param name [string]: Name of the individual. ex: 'John Doe'
      * @param taxId [string]: Tax ID of the individual. ex: '012.345.678-90'
      *
      * Parameters (optional):
+     * @param birthDate [string, default null]: birth date of the individual. ex: '2012-03-06'
      * @param tags [list of strings, default []]: list of strings for reference when searching for IndividualAccountRequests. ex: ['employees', 'monthly']
      *
      * Attributes (return-only):
@@ -32,15 +34,16 @@ class IndividualAccountRequest extends Resource {
      * @param updated [string]: latest update datetime for the IndividualAccountRequest. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({ 
-                    address, income, name, taxId, tags = null, accountType = null, flags = null, 
+    constructor({
+                    address, income, name, taxId, birthDate = null, tags = null, accountType = null, flags = null,
                     id = null, status = null, created = null, updated = null
                 }) {
         super(id);
-        this.address = address;
+        this.address = _parseAddress(address);
         this.income = income;
         this.name = name;
         this.taxId = taxId;
+        this.birthDate = check.date(birthDate);
         this.accountType = accountType;
         this.flags = flags;
         this.tags = tags;
@@ -48,6 +51,20 @@ class IndividualAccountRequest extends Resource {
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
     }
+}
+
+const _parseAddress = (address) => {
+    if (address) {
+        return new Address({
+            street: address.street,
+            number: address.number,
+            neighborhood: address.neighborhood,
+            city: address.city,
+            state: address.state,
+            zipCode: address.zipCode
+        });
+    }
+    return null;
 }
 
 exports.IndividualAccountRequest = IndividualAccountRequest;
@@ -157,20 +174,21 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
     return rest.getPage(resource, query, user);
 };
 
-exports.update = async function (id, { address, income, name, taxId, status, tags, user } = {}) {
+exports.update = async function (id, { address, income, name, taxId, birthDate, status, tags, user } = {}) {
     /**
      * Parameters (required):
      * @param id [string]: IndividualAccountRequest id. ex: '5656565656565656'
-     * 
+     *
      * Parameters (optional):
-     * @param address [dictionary object]: Address of the individual. ex: {street: 'R. Pamplona', number: '123', neighborhood: 'Jardim Paulista', city: 'São Paulo', state: 'SP', zipCode: '01405030'}
+     * @param address [Address object]: structured residential address of the individual. ex: new Address({street: 'R. Pamplona', number: '123', neighborhood: 'Jardim Paulista', city: 'São Paulo', state: 'SP', zipCode: '01405030'})
      * @param income [number]: Income of the individual. ex: 5000
      * @param name [string]: Name of the individual. ex: 'John Doe'
      * @param taxId [string]: Tax ID of the individual. ex: '012.345.678-90'
+     * @param birthDate [string]: birth date of the individual. ex: '2012-03-06'
      * @param status [string]: Status of the individual account request. ex: 'processing'
      * @param tags [list of strings, default []]: list of strings for reference when searching for IndividualAccountRequests. ex: ['employees', 'monthly']
      * @param user [Organization/Project object]: Project object. Not necessary if starkinfra.user was set before function call
-     * 
+     *
      * Return:
      * @returns IndividualAccountRequest object with updated attributes
      *
@@ -180,6 +198,7 @@ exports.update = async function (id, { address, income, name, taxId, status, tag
         income: income,
         name: name,
         taxId: taxId,
+        birthDate: check.date(birthDate),
         status: status,
         tags: tags
     };

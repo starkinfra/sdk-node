@@ -130,3 +130,16 @@ describe("TestIndividualAccountRequestPatch", function () {
         }
     });
 });
+
+describe("TestIndividualAccountRequestBirthDate", function () {
+    this.timeout(10000);
+    it("test_success", async () => {
+        let example = generateExampleIndividualAccountRequest();
+        example.birthDate = "1990-05-15";
+        let requests = await starkinfra.individualAccountRequest.create([example]);
+        for (let request of requests) {
+            assert(typeof request.id == "string");
+            assert.strictEqual(request.birthDate, "1990-05-15");
+        }
+    });
+});

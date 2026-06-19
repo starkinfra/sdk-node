@@ -56,3 +56,15 @@ describe('TestIndividualIdentityPost', function() {
         assert(typeof identity.id == 'string');
     });
 });
+
+describe('TestIndividualIdentityBirthDate', function() {
+    this.timeout(10000);
+    it('test_success', async () => {
+        let example = generateExampleIndividualIdentityJson();
+        example.birthDate = "1990-05-15";
+        let identity = (await starkinfra.individualIdentity.create([example]))[0];
+        assert(typeof identity.id == 'string');
+        assert.strictEqual(identity.birthDate, "1990-05-15");
+        await starkinfra.individualIdentity.cancel(identity.id);
+    });
+});

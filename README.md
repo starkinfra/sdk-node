@@ -2970,6 +2970,7 @@ await (async() => {
         new starkinfra.IndividualIdentity({
             'name': "Walter White",
             'taxId': "012.345.678-90",
+            'birthDate': "1965-09-07",
             'tags': ["breaking", "bad"]
         })
     ]);
@@ -3194,7 +3195,8 @@ await (async() => {
                 state: "SP",
                 zipCode: "01405030"
             },
-            income: 50000
+            income: 50000,
+            birthDate: "1965-09-07"
         })
     ]);
   
