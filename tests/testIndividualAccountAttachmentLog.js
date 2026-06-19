@@ -4,11 +4,11 @@ const starkinfra = require('../index.js');
 starkinfra.user = require('./utils/user').exampleProject;
 
 
-describe('TestAccountRequestAttachmentLogGet', function(){
+describe('TestIndividualAccountAttachmentLogGet', function(){
     this.timeout(10000);
     it('test_success', async () => {
         let i = 0;
-        const logs = await starkinfra.accountRequestAttachment.log.query({limit: 5});
+        const logs = await starkinfra.individualAccountAttachment.log.query({limit: 5});
         for await (let log of logs) {
             assert(typeof log.id == 'string');
             i += 1;
@@ -18,26 +18,26 @@ describe('TestAccountRequestAttachmentLogGet', function(){
 });
 
 
-describe('TestAccountRequestAttachmentLogInfoGet', function(){
+describe('TestIndividualAccountAttachmentLogInfoGet', function(){
     this.timeout(10000);
     it('test_success', async () => {
-        let logs = await starkinfra.accountRequestAttachment.log.query({limit: 10});
+        let logs = await starkinfra.individualAccountAttachment.log.query({limit: 10});
         for await (let log of logs) {
             assert(typeof log.id == 'string');
-            log = await starkinfra.accountRequestAttachment.log.get(log.id);
+            log = await starkinfra.individualAccountAttachment.log.get(log.id);
             assert(typeof log.id == 'string');
         }
     });
 });
 
-describe('TestAccountRequestAttachmentLogGetPage', function () {
+describe('TestIndividualAccountAttachmentLogGetPage', function () {
     this.timeout(10000);
     it('test_success', async () => {
         let ids = [];
         let cursor = null;
         let page = null;
         for (let i = 0; i < 2; i++) {
-            [page, cursor] = await starkinfra.accountRequestAttachment.log.page({ limit: 5, cursor: cursor });
+            [page, cursor] = await starkinfra.individualAccountAttachment.log.page({ limit: 5, cursor: cursor });
             for (let entity of page) {
                 assert(!ids.includes(entity.id));
                 ids.push(entity.id);
@@ -50,10 +50,10 @@ describe('TestAccountRequestAttachmentLogGetPage', function () {
     });
 });
 
-describe('TestAccountRequestAttachmentLogQueryParams', function(){
+describe('TestIndividualAccountAttachmentLogQueryParams', function(){
     this.timeout(10000);
     it('test_success', async () => {
-        let logs = await starkinfra.accountRequestAttachment.log.query({
+        let logs = await starkinfra.individualAccountAttachment.log.query({
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',
@@ -64,12 +64,12 @@ describe('TestAccountRequestAttachmentLogQueryParams', function(){
     });
 });
 
-describe('TestAccountRequestAttachmentLogPageParams', function(){
+describe('TestIndividualAccountAttachmentLogPageParams', function(){
     this.timeout(10000);
     it('test_success', async () => {
         let cursor = null;
         let logs = null;
-        [logs, cursor] = await starkinfra.accountRequestAttachment.log.page({
+        [logs, cursor] = await starkinfra.individualAccountAttachment.log.page({
             limit: 2,
             after: '2020-04-01',
             before: '2021-04-30',

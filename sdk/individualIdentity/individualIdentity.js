@@ -23,21 +23,23 @@ class IndividualIdentity extends Resource {
      * @param taxId [string]: individual's tax ID (CPF). ex: '594.739.480-42'
      *
      * Parameters (optional):
+     * @param birthDate [string, default null]: birth date of the individual. ex: '2012-03-06'
      * @param tags [list of strings, default []]: list of strings for tagging. ex: ['travel', 'food']
-     * 
+     *
      * Attributes (return-only):
      * @param id [string]: unique id returned when IndividualIdentity is created. ex: '5656565656565656'
      * @param status [string]: current IndividualIdentity status. Options: 'created', 'canceled', 'processing', 'failed', 'success'
      * @param created [string]: creation datetime for the IndividualIdentity. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({ 
-                    name, taxId, tags = null, id = null, status = null, 
-                    created = null, 
+    constructor({
+                    name, taxId, birthDate = null, tags = null, id = null, status = null,
+                    created = null,
                 }) {
         super(id);
         this.name = name;
         this.taxId = taxId;
+        this.birthDate = check.date(birthDate);
         this.tags = tags;
         this.status = status;
         this.created = check.datetime(created);

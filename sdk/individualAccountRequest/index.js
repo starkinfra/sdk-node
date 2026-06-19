@@ -7,3 +7,4 @@ exports.query = individualAccountRequest.query;
 exports.page = individualAccountRequest.page;
 exports.update = individualAccountRequest.update;
 exports.IndividualAccountRequest = individualAccountRequest.IndividualAccountRequest;
+exports.Address = require('./address.js').Address;

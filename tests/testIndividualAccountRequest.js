@@ -125,8 +125,21 @@ describe("TestIndividualAccountRequestPatch", function () {
             const updatedRequest = await starkinfra.individualAccountRequest.update(request.id, patchData);
             
             for (let key in patchData) {
-                assert(updatedRequest[key] === patchData[key]);
+                assert.deepStrictEqual(updatedRequest[key], patchData[key]);
             }
+        }
+    });
+});
+
+describe("TestIndividualAccountRequestBirthDate", function () {
+    this.timeout(10000);
+    it("test_success", async () => {
+        let example = generateExampleIndividualAccountRequest();
+        example.birthDate = "1990-05-15";
+        let requests = await starkinfra.individualAccountRequest.create([example]);
+        for (let request of requests) {
+            assert(typeof request.id == "string");
+            assert.strictEqual(request.birthDate, "1990-05-15");
         }
     });
 });
