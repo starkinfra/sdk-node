@@ -13,6 +13,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Changed
+- starkcore version to v0.3.0
+- starkbank-ecdsa version to v1.2.0
 
 ### Changed
 - AccountRequestAttachment resource renamed to IndividualAccountAttachment
