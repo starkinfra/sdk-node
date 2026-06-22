@@ -13,13 +13,13 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
-### Changed
-- starkcore version to v0.3.0
-- starkbank-ecdsa version to v1.2.0
 
+## [0.18.0] - 2026-06-22
 ### Changed
 - AccountRequestAttachment resource renamed to IndividualAccountAttachment
 - IndividualAccountRequest address field changed from string to object
+- starkcore version to v0.3.0
+- starkbank-ecdsa version to v1.2.0
 ### Added
 - Deprecated create pix infraction
 - IndividualAccountAttachment delete method
