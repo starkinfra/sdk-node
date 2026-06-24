@@ -14,18 +14,20 @@ class IssuingStock extends Resource {
      * @param balance [integer]: [EXPANDABLE] current stock balance. ex: 1000
      * @param designId [string]: IssuingDesign unique id. ex: "5656565656565656"
      * @param embosserId [string]: Embosser unique id. ex: "5656565656565656"
-     * @param updated [string]: latest update datetime for the CreditNote. ex: '2020-03-10 10:30:00.000' 
+     * @param embosserName [string]: Embosser name. ex: "embosser-name"
+     * @param updated [string]: latest update datetime for the CreditNote. ex: '2020-03-10 10:30:00.000'
      * @param created [string]: creation datetime for the IssuingDesign. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({ 
-                    id = null, balance = null, designId = null, embosserId = null, 
-                    updated = null, created = null
+    constructor({
+                    id = null, balance = null, designId = null, embosserId = null,
+                    embosserName = null, updated = null, created = null
                 }) {
         super(id);
         this.balance = balance;
         this.designId = designId;
         this.embosserId = embosserId;
+        this.embosserName = embosserName;
         this.updated = updated;
         this.created = created;
     }

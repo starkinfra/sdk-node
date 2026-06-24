@@ -35,6 +35,7 @@ class IssuingCard extends Resource {
      * @param holderId [string]: cardholder unique id. ex: '5656565656565656'
      * @param type [string]: card type. ex: 'virtual'
      * @param status [string]: current IssuingCard status. Options: 'active', 'blocked', 'canceled', 'expired'
+     * @param isPinDefined [boolean]: true if the card PIN has been defined. ex: false
      * @param number [string]: [EXPANDABLE] masked card number. ex: '1234 5678 1234 5678'
      * @param securityCode [string]: [EXPANDABLE] masked card verification value (cvv). Expand to unmask the value. ex: '123'.
      * @param expiration [string]: [EXPANDABLE] masked card expiration datetime. ex: '2020-03-10 10:30:00.000'
@@ -46,8 +47,8 @@ class IssuingCard extends Resource {
                     holderName, holderTaxId, holderExternalId, displayName=null, 
                     rules=null, productId=null, tags=null, streetLine1=null, streetLine2=null, 
                     district=null, city=null, stateCode=null, zipCode=null, id=null, 
-                    holderId=null, type=null, status=null, number=null, securityCode=null, 
-                    expiration=null, created=null, updated=null 
+                    holderId=null, type=null, status=null, isPinDefined=null, number=null, securityCode=null,
+                    expiration=null, created=null, updated=null
                 }) {
         super(id);
         
@@ -67,6 +68,7 @@ class IssuingCard extends Resource {
         this.holderId = holderId;
         this.type = type;
         this.status = status;
+        this.isPinDefined = isPinDefined;
         this.number = number;
         this.securityCode = securityCode;
         this.expiration = check.datetime(expiration);

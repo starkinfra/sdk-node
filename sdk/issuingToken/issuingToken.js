@@ -17,7 +17,9 @@ class IssuingToken extends Resource {
      * @param walletId [string]: wallet provider which the token is bounded to. ex: 'google'
      * @param walletName [string]: wallet name. ex: 'GOOGLE'
      * @param merchantId [string]: merchant unique id. ex: '5656565656565656'
-     * 
+     * @param walletDeviceScore [number]: wallet device score. ex: 7.6
+     * @param walletAccountScore [number]: wallet account score. ex: 7.6
+     *
      * Attributes (IssuingToken only):
      * @param id [string]: unique id returned when IssuingToken is created. ex: '5656565656565656'
      * @param externalId [string]: a unique string among all your IssuingTokens, used to avoid resource duplication. ex: 'DSHRMC00002626944b0e3b539d4d459281bdba90c2588791'
@@ -41,7 +43,8 @@ class IssuingToken extends Resource {
      *
      */
     constructor({
-                    cardId=null, walletId=null, walletName=null, merchantId=null, id=null, externalId=null,
+                    cardId=null, walletId=null, walletName=null, merchantId=null, walletDeviceScore=null,
+                    walletAccountScore=null, id=null, externalId=null,
                     tags=null, status=null, created=null, updated=null, activationCode=null, methodCode=null,
                     deviceType=null, deviceName=null, deviceSerialNumber=null, deviceOsName=null, deviceOsVersion=null,
                     deviceImei=null, walletInstanceId=null, url=null
@@ -52,6 +55,8 @@ class IssuingToken extends Resource {
         this.walletId = walletId;
         this.walletName = walletName;
         this.merchantId = merchantId;
+        this.walletDeviceScore = walletDeviceScore;
+        this.walletAccountScore = walletAccountScore;
         this.externalId = externalId;
         this.tags = tags;
         this.status = status;
