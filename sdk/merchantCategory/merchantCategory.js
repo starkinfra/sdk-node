@@ -19,17 +19,19 @@ class MerchantCategory extends SubResource {
      * Attributes (return-only):
      * @param name [string]: category's name. ex: 'Veterinary services', 'Fast food restaurants'
      * @param number [string]: category's number. ex: '742', '5814'
+     * @param group [string]: category's group. ex: 'pets', 'food'
      *
      */
-    constructor({ 
-                    code=null, type=null, name=null, number=null 
+    constructor({
+                    code=null, type=null, name=null, number=null, group=null
                 }) {
         super();
-        
+
         this.code = code
         this.type = type
         this.name = name
         this.number = number
+        this.group = group
     }
 }
 
