@@ -13,6 +13,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+
+## [0.19.0] - 2026-06-25
 ### Added
 - PixPullSubscription resource
 - PixPullRequest resource
