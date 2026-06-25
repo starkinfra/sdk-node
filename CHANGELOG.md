@@ -24,6 +24,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - PixInternalTransactionReport resource
 - Business Identity resource
 - Business Attachment resource
+- Ledger resource
+- LedgerLog resource
+- LedgerTransaction resource
 
 ## [0.18.0] - 2026-06-22
 ### Changed
