@@ -1,4 +1,5 @@
 const rest = require('../utils/rest.js');
+const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
 
@@ -43,11 +44,11 @@ class IssuingBillingInvoice extends Resource {
         this.status = status;
         this.brcode = brcode;
         this.link = link;
-        this.due = due ? new Date(due) : null;
-        this.start = start ? new Date(start) : null;
-        this.end = end ? new Date(end) : null;
-        this.created = created ? new Date(created) : null;
-        this.updated = updated ? new Date(updated) : null;
+        this.due = check.datetime(due);
+        this.start = check.datetime(start);
+        this.end = check.datetime(end);
+        this.created = check.datetime(created);
+        this.updated = check.datetime(updated);
     }
 }
 
