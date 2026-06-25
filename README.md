@@ -29,6 +29,7 @@ This SDK version is compatible with the Stark Infra API v2.
         - [EmbossingKit](#query-issuingembossingkits): View your current embossing kits
         - [Stock](#query-issuingstocks): View your current stock of a certain IssuingDesign linked to an Embosser on the workspace
         - [Restock](#create-issuingrestocks): Create restock orders of a specific IssuingStock object
+        - [StockRule](#create-issuingstockrules): Create notification rules for a specific IssuingStock object
         - [EmbossingRequest](#create-issuingembossingrequests): Create embossing requests
         - [TokenRequest](#create-an-issuingtokenrequest): Generate the payload to create the token
         - [Token](#process-token-authorizations): Authorize and manage your tokens
@@ -748,6 +749,84 @@ await (async() => {
     let log = await starkinfra.issuingRestock.log.get('6310318875607040');
   
     console.log(log);
+})();
+```
+
+### Create IssuingStockRules
+
+You can create notification rules for a specific IssuingStock.
+When the linked stock balance reaches the minimumBalance, the listed emails and phones are notified.
+
+```javascript
+await (async() => {
+    let rules = await starkinfra.issuingStockRule.create([
+        new starkinfra.IssuingStockRule({
+            'minimumBalance': 10000,
+            'stockId': '5136459887542272',
+            'tags': ['card', 'corporate'],
+            'emails': ['john.doe@enterprise.com'],
+            'phones': ['+5511912345678']
+        })
+    ]);
+
+    for await (let rule of rules) {
+        console.log(rule);
+    }
+})();
+```
+
+### Query IssuingStockRules
+
+You can get a list of created stock rules given some filters.
+
+```javascript
+await (async() => {
+    let rules = await starkinfra.issuingStockRule.query({
+        'after': '2023-01-01',
+        'before': '2023-03-01'
+    });
+
+    for await (let rule of rules) {
+        console.log(rule);
+    }
+})();
+```
+
+### Get an IssuingStockRule
+
+After its creation, information on a stock rule may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let rule = await starkinfra.issuingStockRule.get('5664445921492992');
+
+    console.log(rule);
+})();
+```
+
+### Update an IssuingStockRule
+
+You can update a specific stock rule by its id.
+
+```javascript
+await (async() => {
+    let rule = await starkinfra.issuingStockRule.update('5664445921492992', {
+        'minimumBalance': 20000
+    });
+
+    console.log(rule);
+})();
+```
+
+### Cancel an IssuingStockRule
+
+You can cancel a stock rule by its id.
+
+```javascript
+await (async() => {
+    let rule = await starkinfra.issuingStockRule.cancel('5664445921492992');
+
+    console.log(rule);
 })();
 ```
 
