@@ -60,6 +60,9 @@ This SDK version is compatible with the Stark Infra API v2.
         - [PixFraud](#create-pixfrauds): Report a PixKey or taxId for confirmed fraud
         - [PixKeyHolmes](#create-pixkeyholmes): Investigate the registration status of a Pix Key
         - [PixInternalTransactionReport](#create-pixinternaltransactionreports): Report internal transactions to the Central Bank
+    - [Ledger](#ledger)
+        - [Ledger](#create-ledgers): Track the balance of a given amount
+        - [LedgerTransaction](#create-ledgertransactions): Move amounts in and out of a Ledger
     - [Lending](#lending)
         - [CreditNote](#create-creditnotes): Create credit notes
         - [CreditPreview](#create-creditpreviews): Create credit previews
@@ -3145,6 +3148,168 @@ const starkinfra = require('starkinfra');
 (async() => {
     let log = await starkinfra.pixInternalTransactionReport.log.get('5155165527080960');
     console.log(log);
+})();
+```
+
+## Ledger
+
+Ledgers are used to track the balance of a given amount by inserting LedgerTransactions to them.
+They can represent a bank account, a digital wallet, an inventory product, etc.
+
+### Create Ledgers
+
+Send a list of Ledger objects for creation in the Stark Infra API.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async () => {
+    let ledgers = await starkinfra.ledger.create([
+        new starkinfra.Ledger({
+            externalId: 'my-internal-id-123456',
+            tags: ['account/123', 'savings'],
+            rules: [
+                new starkinfra.ledger.Rule({key: 'minimumBalance', value: 0})
+            ]
+        })
+    ]);
+
+    for (let ledger of ledgers) {
+        console.log(ledger);
+    }
+})();
+```
+
+### Query Ledgers
+
+You can query multiple Ledgers according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let ledgers = await starkinfra.ledger.query({
+        after: '2020-01-01',
+        before: '2020-03-01'
+    });
+
+    for await (let ledger of ledgers) {
+        console.log(ledger);
+    }
+})();
+```
+
+### Get a Ledger
+
+After its creation, information on a Ledger may be retrieved by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let ledger = await starkinfra.ledger.get('5155165527080960');
+    console.log(ledger);
+})();
+```
+
+### Update a Ledger
+
+Update a Ledger by passing its id to change its rules, tags or metadata.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async () => {
+    let ledger = await starkinfra.ledger.update('5155165527080960', {
+        tags: ['account/123', 'updated']
+    });
+    console.log(ledger);
+})();
+```
+
+### Query Ledger logs
+
+You can query Ledger logs to better understand Ledger life cycles.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let logs = await starkinfra.ledger.log.query({limit: 50});
+
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a Ledger log
+
+You can also get a specific log by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.ledger.log.get('5155165527080960');
+    console.log(log);
+})();
+```
+
+### Create LedgerTransactions
+
+Send a list of LedgerTransaction objects to move amounts in and out of a Ledger.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async () => {
+    let transactions = await starkinfra.ledgerTransaction.create([
+        new starkinfra.LedgerTransaction({
+            amount: 11234,
+            ledgerId: '5656565656565656',
+            externalId: 'my-internal-id-123456',
+            source: 'bank-transfer/123',
+            tags: ['transfer/123', 'savings']
+        })
+    ]);
+
+    for (let transaction of transactions) {
+        console.log(transaction);
+    }
+})();
+```
+
+### Query LedgerTransactions
+
+You can query multiple LedgerTransactions according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let transactions = await starkinfra.ledgerTransaction.query({
+        ledgerId: '5656565656565656',
+        after: '2020-01-01',
+        before: '2020-03-01'
+    });
+
+    for await (let transaction of transactions) {
+        console.log(transaction);
+    }
+})();
+```
+
+### Get a LedgerTransaction
+
+After its creation, information on a LedgerTransaction may be retrieved by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let transaction = await starkinfra.ledgerTransaction.get('5155165527080960');
+    console.log(transaction);
 })();
 ```
 
