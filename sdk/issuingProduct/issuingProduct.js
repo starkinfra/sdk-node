@@ -17,19 +17,21 @@ class IssuingProduct extends Resource {
      * @param fundingType [string]: type of funding used for payment. ex: 'credit', 'debit'
      * @param holderType [string]: holder type. ex: 'business', 'individual'
      * @param code [string]: internal code from card flag informing the product. ex: 'MRW', 'MCO', 'MWB', 'MCS'
+     * @param customerType [string]: customer type. ex: 'business', 'individual'
      * @param created [string]: creation datetime for the IssuingProduct. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({ 
-                    id=null, network=null, fundingType=null, holderType=null, 
-                    code=null, created=null 
+    constructor({
+                    id=null, network=null, fundingType=null, holderType=null,
+                    code=null, customerType=null, created=null
                 }) {
         super(id);
-        
+
         this.network = network;
         this.fundingType = fundingType;
         this.holderType = holderType;
         this.code = code;
+        this.customerType = customerType;
         this.created = check.datetime(created);
     }
 }

@@ -4,7 +4,7 @@ const starkinfra = require('../index.js');
 starkinfra.user = require('./utils/user').exampleProject;
 
 
-describe('TestIssuingTokenQuery', function() {
+describe('TestIssuingTokenGet', function() {
     this.timeout(10000);
     it('test_success', async () => {
         let tokens = await starkinfra.issuingToken.query({'limit': 5});
@@ -14,7 +14,7 @@ describe('TestIssuingTokenQuery', function() {
     });
 }); 
 
-describe('TestIssuingTokenPage', function() {
+describe('TestIssuingTokenGetPage', function() {
     this.timeout(10000);
     it('test_success', async () => {
         let ids = [];
@@ -30,10 +30,11 @@ describe('TestIssuingTokenPage', function() {
                 break;
             }
         }
+        assert(ids.length === 10);
     });
 });
 
-describe('TestIssuingTokenGet', function() {
+describe('TestIssuingTokenInfoGet', function() {
     this.timeout(10000);
     it('test_success', async () => {
         let tokens = await starkinfra.issuingToken.query({'limit': 1});
@@ -45,7 +46,7 @@ describe('TestIssuingTokenGet', function() {
     });
 });
 
-describe('TestIssuingTokenPatch', function(){
+describe('TestIssuingTokenInfoPatch', function(){
     this.timeout(10000); 
     it('test_success', async () => {
         let tokens = await starkinfra.issuingToken.query({'limit': 1, 'status': 'active'});
@@ -123,5 +124,52 @@ describe('TestIssuingTokenResponseActivation', function() {
             'status': 'approved'
         });
         assert(typeof token === 'string');
+    });
+});
+
+describe('TestIssuingTokenActivationCode', function() {
+    this.timeout(10000);
+    it('test_success', async () => {
+        let token = new starkinfra.IssuingToken({
+            cardId: '5189831499972623',
+            activationCode: '481632'
+        });
+        assert(token.activationCode === '481632');
+    });
+
+    it('test_success_default_null', async () => {
+        let token = new starkinfra.IssuingToken({
+            cardId: '5189831499972623'
+        });
+        assert(token.activationCode === null);
+    });
+});
+
+describe('TestIssuingTokenUrl', function() {
+    this.timeout(10000);
+    it('test_success', async () => {
+        let token = new starkinfra.IssuingToken({
+            cardId: '5189831499972623',
+            url: 'https://token.starkinfra.com/5656565656565656'
+        });
+        assert(token.url === 'https://token.starkinfra.com/5656565656565656');
+    });
+
+    it('test_success_default_null', async () => {
+        let token = new starkinfra.IssuingToken({
+            cardId: '5189831499972623'
+        });
+        assert(token.url === null);
+    });
+});
+
+describe('TestIssuingTokenUrlQuery', function() {
+    this.timeout(10000);
+    it('test_success', async () => {
+        let tokens = await starkinfra.issuingToken.query({'limit': 5});
+        for await (let token of tokens) {
+            assert(typeof token.id == 'string');
+            assert(token.url === null || typeof token.url === 'string');
+        }
     });
 });
