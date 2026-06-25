@@ -4,6 +4,8 @@ const {CreditSigner} = require('../creditSigner/creditSigner.js');
 const creditSignerResource = require('../creditSigner/creditSigner.js').resource;
 const {Transfer} = require('./transfer.js');
 const transferResource = require('./transfer.js').resource;
+const {Rule} = require('./rule.js');
+const ruleResource = require('./rule.js').subResource;
 const rest = require('../utils/rest.js');
 const {parseObjects} = require('../utils/parse.js');
 const Resource = require('starkcore').Resource;
@@ -44,6 +46,7 @@ class CreditNote extends Resource {
      * @param rebateAmount [integer, default null]: credit analysis fee deducted from lent amount. ex: 11234 (= R$ 112.34)
      * @param tags [list of strings, default null]: list of strings for reference when searching for CreditNotes. ex: ['employees', 'monthly']
      * @param expiration [integer, default 604800 (7 days)]: time interval in seconds between due date and expiration date. ex 123456789
+     * @param rules [list of CreditNote.Rule objects or dictionaries, default []]: list of CreditNote.Rule objects for modifying transfer behavior. ex: [creditNote.Rule(key='invoiceCreationMode', value='scheduled')]
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the CreditNote is created. ex: '5656565656565656'
@@ -51,6 +54,7 @@ class CreditNote extends Resource {
      * @param status [string]: current status of the CreditNote. Options: 'canceled', 'created', 'expired', 'failed', 'processing', 'signed', 'success'
      * @param transactionIds [list of strings]: ledger transaction ids linked to this CreditNote. ex: ['19827356981273']
      * @param workspaceId [string]: ID of the Workspace that generated this CreditNote. ex: '4545454545454545'
+     * @param debtorWorkspaceId [string]: ID of the debtor's Workspace, when it differs from the Workspace that generated this CreditNote. ex: '4545454545454545'
      * @param taxAmount [integer]: tax amount included in the CreditNote. ex: 100
      * @param nominalInterest [float]: yearly nominal interest rate of the CreditNote, in percentage. ex: 11.5
      * @param interest [float]: yearly effective interest rate of the credit note, in percentage. ex: 12.5
@@ -58,11 +62,11 @@ class CreditNote extends Resource {
      * @param updated [string]: latest update datetime for the CreditNote. ex: '2020-03-10 10:30:00.000'
      */
     constructor({
-                    templateId, name, taxId, scheduled, invoices, payment, signers, 
-                    externalId, streetLine1, streetLine2, district, city, stateCode, 
-                    zipCode, paymentType=null, nominalAmount = null, amount=null, 
-                    rebateAmount=null, tags=null, expiration=null, id=null, documentId=null, 
-                    status=null, transactionIds=null, workspaceId=null, taxAmount=null, 
+                    templateId, name, taxId, scheduled, invoices, payment, signers,
+                    externalId, streetLine1, streetLine2, district, city, stateCode,
+                    zipCode, paymentType=null, nominalAmount = null, amount=null,
+                    rebateAmount=null, tags=null, expiration=null, rules=null, id=null, documentId=null,
+                    status=null, transactionIds=null, workspaceId=null, debtorWorkspaceId=null, taxAmount=null,
                     nominalInterest=null, interest=null, created=null, updated=null
                 }) {
         super(id);
@@ -73,6 +77,7 @@ class CreditNote extends Resource {
         this.scheduled = scheduled;
         this.invoices = parseObjects(invoices, invoiceResource, Invoice);
         this.signers = parseObjects(signers, creditSignerResource, CreditSigner);
+        this.rules = parseObjects(rules, ruleResource, Rule);
         this.externalId = externalId;
         this.streetLine1 = streetLine1;
         this.streetLine2 = streetLine2;
@@ -89,6 +94,7 @@ class CreditNote extends Resource {
         this.status = status;
         this.transactionIds = transactionIds;
         this.workspaceId = workspaceId;
+        this.debtorWorkspaceId = debtorWorkspaceId;
         this.taxAmount = taxAmount;
         this.nominalInterest = nominalInterest;
         this.interest = interest;
