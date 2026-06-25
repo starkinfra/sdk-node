@@ -1,4 +1,5 @@
 const rest = require('../utils/rest.js');
+const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
 
@@ -50,7 +51,7 @@ class IssuingBillingTransaction extends Resource {
         this.rate = rate;
         this.merchantAmount = merchantAmount;
         this.merchantCurrencyCode = merchantCurrencyCode;
-        this.created = created ? new Date(created) : null;
+        this.created = check.datetime(created);
     }
 }
 

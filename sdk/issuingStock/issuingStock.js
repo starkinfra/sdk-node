@@ -1,4 +1,5 @@
 const rest = require('../utils/rest.js');
+const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
 
@@ -28,8 +29,8 @@ class IssuingStock extends Resource {
         this.designId = designId;
         this.embosserId = embosserId;
         this.embosserName = embosserName;
-        this.updated = updated;
-        this.created = created;
+        this.updated = check.datetime(updated);
+        this.created = check.datetime(created);
     }
 }
 
