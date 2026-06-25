@@ -69,6 +69,8 @@ This SDK version is compatible with the Stark Infra API v2.
         - [IndividualDocument](#create-individualdocuments): Create individual documents
         - [IndividualAccountRequest](#create-individualaccountrequest): Create individual account requests
         - [IndividualAccountAttachment](#create-individualaccountattachment): Create individual account attachments
+        - [BusinessIdentity](#create-businessidentities): Create business identities
+        - [BusinessAttachment](#create-businessattachments): Create business attachments
     - [Webhook](#webhook):
         - [Webhook](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
         - [WebhookEvents](#process-webhook-events): Manage Webhook events
@@ -3981,6 +3983,211 @@ await (async() => {
 })();
 ```
 
+### Create BusinessIdentities
+
+You can create a BusinessIdentity to validate a company through its tax ID (CNPJ).
+
+```javascript
+await (async() => {
+    let identities = await starkinfra.businessIdentity.create([
+        new starkinfra.BusinessIdentity({
+            'taxId': "20.018.183/0001-80",
+            'tags': ["onboarding-123"]
+        })
+    ]);
+
+    for await (let identity of identities) {
+        console.log(identity);
+    }
+})();
+```
+
+**Note**: Instead of using BusinessIdentity objects, you can also pass each element in dictionary format
+
+### Query BusinessIdentity
+
+You can query multiple business identities according to filters.
+
+```javascript
+await (async() => {
+    let identities = await starkinfra.businessIdentity.query({
+        'limit': 10,
+        'after': '2022-01-01',
+        'before': '2022-04-01',
+        'status': "success",
+        'tags': ["onboarding-123"]
+    });
+
+    for await (let identity of identities) {
+        console.log(identity);
+    }
+})();
+```
+
+### Get a BusinessIdentity
+
+After its creation, information on a business identity may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let identity = await starkinfra.businessIdentity.get('5155165527080960');
+
+    console.log(identity);
+})();
+```
+
+### Update a BusinessIdentity
+
+You can update a specific business identity status to "processing" to send it to validation, and/or update its tags.
+
+```javascript
+await (async() => {
+   let identity = await starkinfra.businessIdentity.update('5155165527080960', {'status': 'processing'});
+
+    console.log(identity);
+})();
+```
+
+**Note**: Before sending your business identity to validation by patching its status, you must send all the required documents using the create method of the BusinessAttachment resource. Note that you must reference the business identity in the create method of the BusinessAttachment resource by its id.
+
+### Cancel a BusinessIdentity
+
+You can cancel a business identity before updating its status to processing.
+
+```javascript
+await (async () => {
+  let identity = await starkinfra.businessIdentity.cancel('5155165527080960');
+
+  console.log(identity);
+})();
+```
+
+### Query BusinessIdentity logs
+
+You can query business identity logs to better understand business identity life cycles.
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.businessIdentity.log.query({
+        'limit': 50,
+        'after': '2022-01-01',
+        'before': '2022-01-20'
+    });
+
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a BusinessIdentity log
+
+You can also get a specific log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.businessIdentity.log.get('5155165527080960');
+
+    console.log(log);
+})();
+```
+
+### Create BusinessAttachments
+
+You can create a business attachment to attach documents to a specific BusinessIdentity.
+You must reference the desired business identity by its id. A BusinessIdentity accepts at most 2 attachments.
+
+```javascript
+await (async() => {
+    let attachments = await starkinfra.businessAttachment.create([
+        new starkinfra.BusinessAttachment({
+            'name': "contrato-social.pdf",
+            'content': "data:application/pdf;base64,JVBERi0xLjQ...",
+            'businessIdentityId': '5155165527080960',
+            'tags': ["doc-principal"]
+        })
+    ]);
+
+    console.log(attachments[0]);
+})();
+```
+
+**Note**: Instead of using BusinessAttachment objects, you can also pass each element in dictionary format
+
+### Query BusinessAttachments
+
+You can query multiple business attachments according to filters.
+
+```javascript
+await (async() => {
+    let attachments = await starkinfra.businessAttachment.query({
+        'after': '2022-01-01',
+        'before': '2022-03-01',
+        'status': "approved",
+        'tags': ["doc-principal"],
+    });
+
+    for await (let attachment of attachments) {
+        console.log(attachment);
+    }
+})();
+```
+
+### Get a BusinessAttachment
+
+After its creation, information on a business attachment may be retrieved by its id.
+Pass `expand: ["content"]` to also retrieve the document content.
+
+```javascript
+await (async() => {
+    let attachment = await starkinfra.businessAttachment.get('5155165527080960', {'expand': ["content"]});
+
+    console.log(attachment);
+})();
+```
+
+### Cancel a BusinessAttachment
+
+You can cancel a business attachment that has not been sent to processing yet.
+
+```javascript
+await (async () => {
+  let attachment = await starkinfra.businessAttachment.cancel('5155165527080960');
+
+  console.log(attachment);
+})();
+```
+
+### Query BusinessAttachment logs
+
+You can query business attachment logs to better understand business attachment life cycles.
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.businessAttachment.log.query({
+        'limit': 50,
+        'after': '2022-01-01',
+        'before': '2022-01-20'
+    });
+
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a BusinessAttachment log
+
+You can also get a specific log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.businessAttachment.log.get('5155165527080960');
+
+    console.log(log);
+})();
+```
+
 ## Webhook
 
 ### Create a webhook subscription
@@ -3994,7 +4201,7 @@ const starkinfra = require('starkinfra');
     let webhook = await starkinfra.webhook.create({
         url: 'https://webhook.site/dd784f26-1d6a-4ca6-81cb-fda0267761ec',
         subscriptions: [
-            'contract', 'credit-note', 'signer',
+            'contract', 'credit-note', 'signer', 'business-identity',
             'issuing-card', 'issuing-invoice', 'issuing-purchase',
             'pix-request.in', 'pix-request.out', 'pix-reversal.in', 'pix-reversal.out', 'pix-claim', 'pix-key', 'pix-chargeback', 'pix-infraction',
         ],
@@ -4078,8 +4285,10 @@ app.post('/', async (req, res) => {
             console.log(event.log.reversal);
         } else if (event.subscription.includes('issuing-purchase')) {
             console.log(event.log.reversal);
-        res.end()
-      }
+        } else if (event.subscription.includes('business-identity')) {
+            console.log(event.log.identity);
+        }
+        res.end();
     }
     catch (err) {
         console.log(err)
