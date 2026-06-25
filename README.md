@@ -54,6 +54,8 @@ This SDK version is compatible with the Stark Infra API v2.
         - [DynamicBrcode](#create-dynamicbrcodes): Create dynamic Pix BR codes
         - [BrcodePreview](#create-brcodepreviews): Read data from BR Codes before
         - [PixDispute](#create-pixdisputes): Create PixDisputes
+        - [PixPullSubscription](#create-pixpullsubscriptions): Set up recurring Pix debit authorizations
+        - [PixPullRequest](#create-pixpullrequests): Trigger automatic Pix debits against a subscription
     - [Lending](#lending)
         - [CreditNote](#create-creditnotes): Create credit notes
         - [CreditPreview](#create-creditpreviews): Create credit previews
@@ -2539,6 +2541,271 @@ const starkinfra = require('starkinfra');
 
 (async() => {
     let log = await starkinfra.pixDispute.log.get('5155165527080960');
+    console.log(log);
+})();
+```
+
+### Create PixPullSubscriptions
+
+You can create recurring Pix debit authorizations to allow a receiver to pull a series of Pix payments from a sender.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let subscriptions = await starkinfra.pixPullSubscription.create([
+        new starkinfra.PixPullSubscription({
+            bacenId: 'RR2017032900000000000000003',
+            externalId: 'my-subscription-001',
+            installmentStart: '2026-04-01T12:00:00+00:00',
+            interval: 'month',
+            receiverName: 'Edward Stark',
+            receiverTaxId: '20.018.183/0001-80',
+            senderAccountNumber: '876543-2',
+            senderBankCode: '20018183',
+            senderBranchCode: '1357-9',
+            senderTaxId: '01234567890',
+            type: 'push',
+            amount: 11234,
+            description: 'Monthly subscription',
+            tags: ['employees', 'monthly'],
+        }),
+    ]);
+
+    for (let subscription of subscriptions) {
+        console.log(subscription);
+    }
+})();
+```
+
+### Query PixPullSubscriptions
+
+You can query multiple PixPullSubscriptions according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let subscriptions = await starkinfra.pixPullSubscription.query({
+        limit: 10,
+        after: '2026-01-01',
+        before: '2026-04-30',
+        status: ['active'],
+        tags: ['monthly'],
+    });
+
+    for await (let subscription of subscriptions) {
+        console.log(subscription);
+    }
+})();
+```
+
+### Get a PixPullSubscription
+
+After its creation, information on a PixPullSubscription may be retrieved by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let subscription = await starkinfra.pixPullSubscription.get('5656565656565656');
+    console.log(subscription);
+})();
+```
+
+### Update a PixPullSubscription
+
+You can update a PixPullSubscription by passing its id. When patching `status` to `"confirmed"`, `senderCityCode` MUST be present.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let subscription = await starkinfra.pixPullSubscription.update(
+        '5656565656565656',
+        {status: 'confirmed', senderCityCode: '3550308'}
+    );
+    console.log(subscription);
+})();
+```
+
+### Cancel a PixPullSubscription
+
+Cancel a specific PixPullSubscription using its id and a reason. The reason is sent as a query parameter on the DELETE request.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let subscription = await starkinfra.pixPullSubscription.cancel(
+        '5656565656565656',
+        'accountClosed'
+    );
+    console.log(subscription);
+})();
+```
+
+### Query PixPullSubscription logs
+
+You can query PixPullSubscription logs to better understand PixPullSubscription life cycles.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let logs = await starkinfra.pixPullSubscription.log.query({
+        limit: 50,
+        after: '2026-01-01',
+        before: '2026-04-30',
+        subscriptionIds: ['5656565656565656'],
+    });
+
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a PixPullSubscription log
+
+You can also get a specific log by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.pixPullSubscription.log.get('5155165527080960');
+    console.log(log);
+})();
+```
+
+### Process inbound PixPullSubscription events
+
+Inbound PixPullSubscription events will be POSTed at your registered endpoint. You can use the `parse` function to verify the digital signature and reconstruct the PixPullSubscription object.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let subscription = await starkinfra.pixPullSubscription.parse(
+        '{"bacenId": "RR2017032900000000000000003", ...}',
+        'MEUCIQC7FVhXdripx/aXg5yNLxmNoZlehpyvX3QYDXJ8o3PAZQIgVe1omKFh7Vd54ML4U1z7L+kpx+GHl+G2XLeFTLZeBJk='
+    );
+    console.log(subscription);
+})();
+```
+
+### Create PixPullRequests
+
+You can create PixPullRequests to trigger automatic debits against an active PixPullSubscription.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let requests = await starkinfra.pixPullRequest.create([
+        new starkinfra.PixPullRequest({
+            amount: 11234,
+            due: '2026-04-15T12:00:00+00:00',
+            endToEndId: 'E00002649202201172211u34srod19le',
+            receiverAccountNumber: '876543-2',
+            receiverAccountType: 'checking',
+            receiverBankCode: '20018183',
+            reconciliationId: 'cycle-202604',
+            subscriptionId: '5656565656565656',
+            tags: ['monthly'],
+        }),
+    ]);
+
+    for (let request of requests) {
+        console.log(request);
+    }
+})();
+```
+
+### Query PixPullRequests
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let requests = await starkinfra.pixPullRequest.query({
+        limit: 10,
+        status: ['created', 'active'],
+        subscriptionIds: ['5656565656565656'],
+    });
+
+    for await (let request of requests) {
+        console.log(request);
+    }
+})();
+```
+
+### Get a PixPullRequest
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let request = await starkinfra.pixPullRequest.get('5656565656565656');
+    console.log(request);
+})();
+```
+
+### Update a PixPullRequest
+
+Change status to `"scheduled"` or `"denied"`. When denying, `reason` is required.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let request = await starkinfra.pixPullRequest.update(
+        '5656565656565656',
+        {status: 'denied', reason: 'senderAccountClosed'}
+    );
+    console.log(request);
+})();
+```
+
+### Cancel a PixPullRequest
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let request = await starkinfra.pixPullRequest.cancel(
+        '5656565656565656',
+        'senderUserRequested'
+    );
+    console.log(request);
+})();
+```
+
+### Query PixPullRequest logs
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let logs = await starkinfra.pixPullRequest.log.query({
+        limit: 50,
+        requestIds: ['5656565656565656'],
+    });
+
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a PixPullRequest log
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.pixPullRequest.log.get('5155165527080960');
     console.log(log);
 })();
 ```
