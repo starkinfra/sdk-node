@@ -22,6 +22,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - PixFraud resource
 - PixKeyHolmes resource
 - PixInternalTransactionReport resource
+- Business Identity resource
+- Business Attachment resource
 
 ## [0.18.0] - 2026-06-22
 ### Changed
