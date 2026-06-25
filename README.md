@@ -57,6 +57,9 @@ This SDK version is compatible with the Stark Infra API v2.
         - [PixDispute](#create-pixdisputes): Create PixDisputes
         - [PixPullSubscription](#create-pixpullsubscriptions): Set up recurring Pix debit authorizations
         - [PixPullRequest](#create-pixpullrequests): Trigger automatic Pix debits against a subscription
+        - [PixFraud](#create-pixfrauds): Report a PixKey or taxId for confirmed fraud
+        - [PixKeyHolmes](#create-pixkeyholmes): Investigate the registration status of a Pix Key
+        - [PixInternalTransactionReport](#create-pixinternaltransactionreports): Report internal transactions to the Central Bank
     - [Lending](#lending)
         - [CreditNote](#create-creditnotes): Create credit notes
         - [CreditPreview](#create-creditpreviews): Create credit previews
@@ -2887,6 +2890,258 @@ const starkinfra = require('starkinfra');
 
 (async() => {
     let log = await starkinfra.pixPullRequest.log.get('5155165527080960');
+    console.log(log);
+})();
+```
+
+### Create PixFrauds
+
+Pix frauds are used to report a PixKey or taxId to the Central Bank when a fraud has been confirmed.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let frauds = await starkinfra.pixFraud.create([
+        new starkinfra.PixFraud({
+            externalId: 'my_external_id_1234',
+            type: 'scam',
+            taxId: '012.345.678-90',
+            tags: ['fraudulent']
+        })
+    ]);
+
+    for (let fraud of frauds) {
+        console.log(fraud);
+    }
+})();
+```
+
+### Query PixFrauds
+
+You can query multiple PixFrauds according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let frauds = await starkinfra.pixFraud.query({
+        limit: 1,
+        after: '2022-01-01',
+        before: '2022-01-12',
+        status: ['registered'],
+        ids: ['5729405850615808']
+    });
+
+    for await (let fraud of frauds) {
+        console.log(fraud);
+    }
+})();
+```
+
+### Get a PixFraud
+
+After its creation, information on a PixFraud may be retrieved by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let fraud = await starkinfra.pixFraud.get('5155165527080960');
+    console.log(fraud);
+})();
+```
+
+### Cancel a PixFraud
+
+Cancel a specific PixFraud using its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async () => {
+    let fraud = await starkinfra.pixFraud.cancel('5155165527080960');
+    console.log(fraud);
+})();
+```
+
+### Query PixFraud logs
+
+You can query PixFraud logs to better understand their life cycles.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    const logs = await starkinfra.pixFraud.log.query({
+        limit: 50,
+        ids: ['5729405850615808'],
+        after: '2022-01-01',
+        before: '2022-01-20',
+        types: ['registered'],
+        fraudIds: ['5719405850615809']
+    });
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a PixFraud log
+
+You can also get a specific log by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.pixFraud.log.get('5155165527080960');
+    console.log(log);
+})();
+```
+
+### Create PixKeyHolmes
+
+PixKeyHolmes are used to investigate the registration status of a Pix Key in the Central Bank's DICT.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let holmes = await starkinfra.pixKeyHolmes.create([
+        new starkinfra.PixKeyHolmes({
+            keyId: 'valid@sandbox.com',
+            tags: ['pix', 'key']
+        })
+    ]);
+
+    for (let sherlock of holmes) {
+        console.log(sherlock);
+    }
+})();
+```
+
+### Query PixKeyHolmes
+
+You can query multiple PixKeyHolmes according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let holmes = await starkinfra.pixKeyHolmes.query({
+        limit: 1,
+        after: '2022-01-01',
+        before: '2022-01-12',
+        status: ['solved'],
+        ids: ['5729405850615808']
+    });
+
+    for await (let sherlock of holmes) {
+        console.log(sherlock);
+    }
+})();
+```
+
+### Create PixInternalTransactionReports
+
+Transactions that happen internally, outside of the SPI, must be reported to the Central Bank so they are reflected in the participant's statements.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let reports = await starkinfra.pixInternalTransactionReport.create([
+        new starkinfra.PixInternalTransactionReport({
+            amount: 1234,
+            created: '2020-03-10 10:30:00.000',
+            endToEndId: 'E20018183202201201213u34sav898j',
+            method: 'manual',
+            referenceType: 'request',
+            senderAccountNumber: '76543',
+            senderBranchCode: '1234',
+            senderAccountType: 'checking',
+            senderBankCode: '20018183',
+            senderTaxId: '012.345.678-90',
+            receiverAccountNumber: '76544',
+            receiverBranchCode: '1235',
+            receiverAccountType: 'checking',
+            receiverBankCode: '60701190',
+            receiverTaxId: '20.018.183/0001-80',
+            receiverKeyId: '+5511989898989'
+        })
+    ]);
+
+    for (let report of reports) {
+        console.log(report);
+    }
+})();
+```
+
+### Query PixInternalTransactionReports
+
+You can query multiple PixInternalTransactionReports according to filters.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let reports = await starkinfra.pixInternalTransactionReport.query({
+        limit: 1,
+        after: '2022-01-01',
+        before: '2022-01-12',
+        status: ['success'],
+        ids: ['5656565656565656']
+    });
+
+    for await (let report of reports) {
+        console.log(report);
+    }
+})();
+```
+
+### Get a PixInternalTransactionReport
+
+After its creation, information on a PixInternalTransactionReport may be retrieved by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let report = await starkinfra.pixInternalTransactionReport.get('5656565656565656');
+    console.log(report);
+})();
+```
+
+### Query PixInternalTransactionReport logs
+
+You can query PixInternalTransactionReport logs to better understand their life cycles.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let logs = await starkinfra.pixInternalTransactionReport.log.query({
+        limit: 50,
+        after: '2022-01-01',
+        before: '2022-01-20'
+    });
+
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a PixInternalTransactionReport log
+
+You can also get a specific log by its id.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let log = await starkinfra.pixInternalTransactionReport.log.get('5155165527080960');
     console.log(log);
 })();
 ```
