@@ -39,8 +39,9 @@ class PixRequest extends Resource {
      * @param cashierBankCode [string, default null]: Cashier's bank code. ex: '00000000'
      * @param cashierType [string, default null]: Cashier's type. ex: [merchant, other, participant]
      * @param tags [list of strings, default null]: list of strings for reference when searching for PixRequests. ex: ['employees', 'monthly']
-     * @param method [string, default null]: execution  method for thr creation of the Pix. ex: 'manual', 'payerQrcode', 'dynamicQrcode'.
+     * @param method [string, default null]: execution  method for the creation of the Pix. ex: 'manual', 'payerQrcode', 'dynamicQrcode'.
      * @param priority [string, default null]: Defines the channel through which the entities will be processed. Options: 'low', 'high'
+     * @param reason [string, default "customerRequest"]: underlying reason for the payment transaction. ex: 'customerRequest', 'fraud', 'subscriptionFlaw'
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the PixRequest is created. ex: '5656565656565656'
@@ -59,8 +60,8 @@ class PixRequest extends Resource {
                     receiverAccountType, endToEndId, receiverKeyId = null, description = null, 
                     reconciliationId = null, initiatorTaxId = null, cashAmount = null, 
                     cashierBankCode = null, cashierType = null, tags = null, 
-                    method = null, id = null, fee = null, status = null, flow = null, 
-                    senderBankCode = null, created = null, updated = null, priority = null
+                    method = null, priority = null, reason = null, id = null, fee = null, status = null, 
+                    flow = null, senderBankCode = null, created = null, updated = null
                 }) {
         super(id);
 
@@ -87,13 +88,14 @@ class PixRequest extends Resource {
         this.cashierType = cashierType;
         this.tags = tags;
         this.method = method;
+        this.priority = priority;
+        this.reason = reason;
         this.fee = fee;
         this.status = status;
         this.flow = flow;
         this.senderBankCode = senderBankCode;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
-        this.priority = priority;
     }
 }
 

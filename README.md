@@ -1448,7 +1448,9 @@ const starkinfra = require('starkinfra');
             receiverAccountType: 'checking',
             receiverName: 'Daenerys Targaryen Stormborn',
             receiverTaxId: '012.345.678-90',
-            endToEndId: endToEndId.create('20018183')
+            endToEndId: endToEndId.create('20018183'),
+            priority: 'low',
+            reason: "subscriptionFlaw",
         }
     ])
 

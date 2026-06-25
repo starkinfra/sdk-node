@@ -4,6 +4,7 @@ const uniqueId = require("./utils/uniqueId.js")
 const endToEndId = require("../sdk/utils/endToEndId.js");
 
 starkinfra.user = require("./utils/user").exampleProject;
+const bankCode = require("./utils/user").bankCode;
 
 
 describe("TestPixRequestPost", function(){
@@ -187,22 +188,23 @@ describe("TestPixRequestResponse", function(){
 let examplePixRequest = {
     amount: 1000,
     externalId: uniqueId.create(),
-    senderAccountNumber: "00000-0",
+    senderAccountNumber: "00000",
     senderBranchCode: "0000",
     senderAccountType: "checking",
     senderName: "jamie Lannister",
     senderTaxId: "012.345.678-90",
     receiverBankCode: "00000000",
-    receiverAccountNumber: "00000-1",
+    receiverAccountNumber: "00000",
     receiverBranchCode: "0001",
     receiverAccountType: "checking",
     receiverName: "Daenerys Targaryen Stormborn",
     receiverTaxId: "012.345.678-90",
-    endToEndId: endToEndId.create(process.env.SANDBOX_ISPB),
+    endToEndId: endToEndId.create(bankCode),
     description: "A Lannister always pays his debts",
     cashAmount: 1000,
     cashierBankCode: "00000000",
     cashierType: "merchant",
     tags: ["lannister","chargeback"],
-    priority: "high"
+    priority: "high",
+    reason: "subscriptionFlaw"
 }
