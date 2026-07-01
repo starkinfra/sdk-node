@@ -31,16 +31,14 @@ class IssuingRule extends Resource {
      * @param counterAmount [integer]: current rule spent amount. ex: 1000
      * @param currencySymbol [string]: currency symbol. ex: 'R$'
      * @param currencyName [string]: currency name. ex: 'Brazilian Real'
-     * @param schedule [string]: schedule time. ex: 'every monday, wednesday from 00:00 to 23:59 in America/Sao_Paulo'
-     * @param purposes [list of strings]: rule purposes. ex: ['purchase', 'withdrawal']
-     * @param merchants [list of strings]: merchants accepted by the rule. ex: ['5656565656565656', '4545454545454545']
+     * @param schedule [string]: Optional schedule dictating when the rule can be used. Some examples: 'everyday from 09:00 to 18:00 in America/Sao_Paulo' - every day, 09:00-18:00 Sao Paulo time; 'every monday, wednesday, friday from 08:00 to 12:00 in America/Sao_Paulo' - only those weekdays, mornings; 'every saturday, sunday' - weekends, all day, in UTC
+     * @param purposes [list of strings]: Optional list of transaction purposes the rule applies to. Options: 'purchase', 'withdrawal', 'verification'. The rule then limits only purchases of those purposes; omit it to allow any purposes. Example: ['purchase', 'verification'] if you want us to automatically deny withdrawal.
      *
      */
     constructor({
                     name, amount, id=null, interval=null, currencyCode=null,
                     categories=null, countries=null, methods=null, counterAmount=null,
-                    currencySymbol=null, currencyName=null, schedule=null, purposes=null,
-                    merchants=null
+                    currencySymbol=null, currencyName=null, schedule=null, purposes=null
                 }) {
         super(id);
 
@@ -56,7 +54,6 @@ class IssuingRule extends Resource {
         this.currencyName = currencyName;
         this.schedule = schedule;
         this.purposes = purposes;
-        this.merchants = merchants;
     }
 }
 
