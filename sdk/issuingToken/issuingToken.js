@@ -17,8 +17,8 @@ class IssuingToken extends Resource {
      * @param walletId [string]: wallet provider which the token is bounded to. ex: 'google'
      * @param walletName [string]: wallet name. ex: 'GOOGLE'
      * @param merchantId [string]: merchant unique id. ex: '5656565656565656'
-     * @param walletDeviceScore [number]: wallet device score. ex: 7.6
-     * @param walletAccountScore [number]: wallet account score. ex: 7.6
+     * @param walletDeviceScore [number]: Device score informed by the digital wallet.
+     * @param walletAccountScore [number]: Account score informed by the digital wallet
      *
      * Attributes (IssuingToken only):
      * @param id [string]: unique id returned when IssuingToken is created. ex: '5656565656565656'
@@ -27,8 +27,6 @@ class IssuingToken extends Resource {
      * @param status [string]: current IssuingToken status. ex: 'active', 'blocked', 'canceled', 'frozen' or 'pending'
      * @param created [string]: creation datetime for the IssuingToken. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the IssuingToken. ex: '2020-03-10 10:30:00.000'
-     * 
-     * @param url [string]: token URL. ex: 'https://token.starkinfra.com/5656565656565656'
      *
      * Attributes (Authorization request only):
      * @param activationCode [string]: activation code received through the bank app or sms. ex: '481632'
@@ -47,7 +45,7 @@ class IssuingToken extends Resource {
                     walletAccountScore=null, id=null, externalId=null,
                     tags=null, status=null, created=null, updated=null, activationCode=null, methodCode=null,
                     deviceType=null, deviceName=null, deviceSerialNumber=null, deviceOsName=null, deviceOsVersion=null,
-                    deviceImei=null, walletInstanceId=null, url=null
+                    deviceImei=null, walletInstanceId=null
                 }) {
         super(id);
 
@@ -71,7 +69,6 @@ class IssuingToken extends Resource {
         this.deviceOsVersion = deviceOsVersion;
         this.deviceImei = deviceImei;
         this.walletInstanceId = walletInstanceId;
-        this.url = url;
     }
 }
 
