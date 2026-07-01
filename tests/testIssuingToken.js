@@ -144,32 +144,3 @@ describe('TestIssuingTokenActivationCode', function() {
         assert(token.activationCode === null);
     });
 });
-
-describe('TestIssuingTokenUrl', function() {
-    this.timeout(10000);
-    it('test_success', async () => {
-        let token = new starkinfra.IssuingToken({
-            cardId: '5189831499972623',
-            url: 'https://token.starkinfra.com/5656565656565656'
-        });
-        assert(token.url === 'https://token.starkinfra.com/5656565656565656');
-    });
-
-    it('test_success_default_null', async () => {
-        let token = new starkinfra.IssuingToken({
-            cardId: '5189831499972623'
-        });
-        assert(token.url === null);
-    });
-});
-
-describe('TestIssuingTokenUrlQuery', function() {
-    this.timeout(10000);
-    it('test_success', async () => {
-        let tokens = await starkinfra.issuingToken.query({'limit': 5});
-        for await (let token of tokens) {
-            assert(typeof token.id == 'string');
-            assert(token.url === null || typeof token.url === 'string');
-        }
-    });
-});

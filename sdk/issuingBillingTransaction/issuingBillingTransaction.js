@@ -22,8 +22,8 @@ class IssuingBillingTransaction extends Resource {
      * @param externalId [string]: external transaction id. ex: 'my-external-id-123456'
      * @param description [string]: transaction description. ex: 'Office Supplies'
      * @param cardEnding [string]: last 4 digits of the card number. ex: '1234'
-     * @param tax [float]: tax amount in cents. ex: 1234 (= R$ 12.34)
-     * @param rate [float]: tax rate as a percentage. ex: 1.5
+     * @param tax [integer]: IOF amount in cents applied to the transaction
+     * @param rate [float]: Conversion rate applied to international transactions
      * @param merchantAmount [integer]: merchant amount in cents. ex: 1234 (= R$ 12.34)
      * @param merchantCurrencyCode [string]: merchant currency code (ISO 4217). ex: 'USD'
      * @param created [string]: creation datetime for the IssuingBillingTransaction. ex: '2020-03-10 10:30:00.000'

@@ -35,7 +35,7 @@ class IssuingCard extends Resource {
      * @param holderId [string]: cardholder unique id. ex: '5656565656565656'
      * @param type [string]: card type. ex: 'virtual'
      * @param status [string]: current IssuingCard status. Options: 'active', 'blocked', 'canceled', 'expired'
-     * @param isPinDefined [boolean]: true if the card PIN has been defined. ex: false
+     * @param isPinDefined [boolean]: Whether the card has a PIN defined. Returned only when "expand=isPinDefined" is informed in the request
      * @param number [string]: [EXPANDABLE] masked card number. ex: '1234 5678 1234 5678'
      * @param securityCode [string]: [EXPANDABLE] masked card verification value (cvv). Expand to unmask the value. ex: '123'.
      * @param expiration [string]: [EXPANDABLE] masked card expiration datetime. ex: '2020-03-10 10:30:00.000'

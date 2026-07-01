@@ -14,8 +14,8 @@ class IssuingBillingInvoice extends Resource {
      * @param id [string]: unique id returned when IssuingBillingInvoice is created. ex: '5656565656565656'
      * @param taxId [string]: payer tax ID. ex: '012.345.678-90'
      * @param name [string]: payer name. ex: 'Tony Stark'
-     * @param fine [float]: fine amount charged in the invoice. ex: 1234 (= R$ 12.34)
-     * @param interest [float]: interest amount charged in the invoice. ex: 1234 (= R$ 12.34)
+     * @param fine [float]: Fine percentage applied when paid after the due date. ex: 2.0
+     * @param interest [float]: Monthly interest percentage applied when paid after the due date. ex: 1.0
      * @param amount [integer]: invoice value in cents. ex: 1234 (= R$ 12.34)
      * @param nominalAmount [integer]: nominal amount in cents. ex: 1234 (= R$ 12.34)
      * @param status [string]: current IssuingBillingInvoice status. ex: 'paid'

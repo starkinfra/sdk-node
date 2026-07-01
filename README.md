@@ -1096,7 +1096,7 @@ await (async() => {
 })();
 ```
 
-The returned tokens carry a return-only `url` attribute, and you may supply an `activationCode` received through the bank app or SMS when building one.
+You may supply an `activationCode` received through the bank app or SMS when building one.
 
 ```javascript
 await (async() => {
@@ -1106,7 +1106,6 @@ await (async() => {
     });
 
     console.log(token.activationCode);
-    console.log(token.url);
 })();
 ```
 
