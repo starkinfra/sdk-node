@@ -13,10 +13,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
 - IssuingBillingInvoice resource
 - IssuingBillingTransaction resource
 - activationCode and url attributes to IssuingToken resource
-### Added
 - installmentCount attribute to IssuingPurchase resource
 ### Fixed
 - docstrings to reflect current business rules across Pix, Issuing and Credit resources
