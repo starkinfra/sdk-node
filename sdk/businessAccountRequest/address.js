@@ -6,19 +6,19 @@ class Address extends SubResource {
      *
      * Address object
      *
-     * @description The Address object is the structured residential address of the individual referenced by an
-     * IndividualAccountRequest. It is embedded on the parent's address field and has no endpoints of its own.
+     * @description The Address object is the structured address of the company referenced by a
+     * BusinessAccountRequest. It is embedded on the parent's address field and has no endpoints of its own.
      *
      * Parameters (required):
-     * @param street [string]: street name. ex: 'Rua do Estilo Barroco'
-     * @param number [string]: street number. ex: '648'
-     * @param neighborhood [string]: neighborhood / district. ex: 'Santo Amaro'
+     * @param street [string]: street name. ex: 'Av. Faria Lima'
+     * @param number [string]: street number. ex: '2000'
+     * @param neighborhood [string]: neighborhood / district. ex: 'Itaim Bibi'
      * @param city [string]: city. ex: 'São Paulo'
      * @param state [string]: state (BR 2-letter code). ex: 'SP'
-     * @param zipCode [string]: ZIP code (BR CEP), formatted or digit-only. ex: '05724005'
+     * @param zipCode [string]: ZIP code (BR CEP), formatted or digit-only. ex: '04538-132'
      *
      * Parameters (optional):
-     * @param complement [string, default null]: address complement. ex: 'Apto. 123'
+     * @param complement [string, default null]: address complement. ex: 'Sala 42'
      *
      */
     constructor({

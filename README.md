@@ -74,6 +74,7 @@ This SDK version is compatible with the Stark Infra API v2.
         - [IndividualAccountAttachment](#create-individualaccountattachment): Create individual account attachments
         - [BusinessIdentity](#create-businessidentities): Create business identities
         - [BusinessAttachment](#create-businessattachments): Create business attachments
+        - [BusinessAccountRequest](#create-businessaccountrequest): Create business account requests
     - [Webhook](#webhook):
         - [Webhook](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
         - [WebhookEvents](#process-webhook-events): Manage Webhook events
@@ -4349,6 +4350,103 @@ You can also get a specific log by its id.
 await (async() => {
     let log = await starkinfra.businessAttachment.log.get('5155165527080960');
 
+    console.log(log);
+})();
+```
+
+### Create BusinessAccountRequest
+
+You can create a business account request to request an account for a specific company, opening the account with identity verification by webview for each of its owners.
+
+```javascript
+await (async() => {
+    let accounts = await starkinfra.businessAccountRequest.create([
+        new starkinfra.BusinessAccountRequest({
+            name: "Stark Bank S.A.",
+            taxId: "12.345.678/0001-90",
+            address: {
+                street: "Av. Faria Lima",
+                number: "2000",
+                neighborhood: "Itaim Bibi",
+                city: "São Paulo",
+                state: "SP",
+                zipCode: "04538-132"
+            },
+            revenue: 100000000,
+            owners: [
+                {taxId: "012.345.678-90", name: "Jamie Lannister", role: "partner"},
+                {taxId: "098.765.432-10", name: "Cersei Lannister", role: "representative"}
+            ]
+        })
+    ]);
+  
+    for await (let account of accounts) {
+        console.log(account);
+    }
+})();
+```
+
+**Note**: Instead of using BusinessAccountRequest objects, you can also pass each element in dictionary format
+
+### Query BusinessAccountRequest
+
+You can query multiple business account request according to filters.
+
+```javascript
+await (async() => {
+    let accounts = await starkinfra.businessAccountRequest.query({
+        'limit': 10,
+        'after': '2022-01-01',
+        'before': '2022-04-01',
+        'status': "approved",
+        'tags': ["breaking", "bad"],
+        'ids': ["5656565656565656"]
+    });
+  
+    for await (let account of accounts) {
+        console.log(account);
+    }
+})();
+```
+
+### Get a BusinessAccountRequest
+
+After its creation, information on a business account request may be retrieved by its id. Use it to read the per-owner status and validatorLinks.
+
+```javascript
+await (async() => {
+    let account = await starkinfra.businessAccountRequest.get('5155165527080960');
+  
+    console.log(account);
+})();
+```
+
+### Query BusinessAccountRequest logs
+
+You can query business account request logs to better understand account request life cycles. 
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.businessAccountRequest.log.query({
+        'limit': 50,
+        'after': '2022-01-01',
+        'before': '2022-01-20'
+    });
+  
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a BusinessAccountRequest log
+
+You can also get a specific log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.businessAccountRequest.log.get('5155165527080960');
+  
     console.log(log);
 })();
 ```

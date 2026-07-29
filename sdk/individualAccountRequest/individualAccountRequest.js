@@ -27,16 +27,17 @@ class IndividualAccountRequest extends Resource {
      *
      * Attributes (return-only):
      * @param accountType [string]: type of the account. ex: "individual"
-     * @param flags [string]: flags associated with the IndividualAccountRequest.
+     * @param flags [list of dictionaries]: flags that motivated the decision, populated when the request is denied. Each flag has a code and a message.
+     * @param validatorLink [string]: webview link to be delivered to the taker to complete biometrics and document capture.
      * @param id [string]: unique id returned when IndividualAccountRequest is created. ex: '5656565656565656'
-     * @param status [string]: current status of the IndividualAccountRequest. Options: 'created', 'canceled', 'processing', 'failed', 'success'
+     * @param status [string]: current status of the IndividualAccountRequest. Options: 'created', 'processing', 'approved', 'denied'
      * @param created [string]: creation datetime for the IndividualAccountRequest. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the IndividualAccountRequest. ex: '2020-03-10 10:30:00.000'
      *
      */
     constructor({
                     address, income, name, taxId, birthDate = null, tags = null, accountType = null, flags = null,
-                    id = null, status = null, created = null, updated = null
+                    validatorLink = null, id = null, status = null, created = null, updated = null
                 }) {
         super(id);
         this.address = _parseAddress(address);
@@ -46,6 +47,7 @@ class IndividualAccountRequest extends Resource {
         this.birthDate = check.date(birthDate);
         this.accountType = accountType;
         this.flags = flags;
+        this.validatorLink = validatorLink;
         this.tags = tags;
         this.status = status;
         this.created = check.datetime(created);
@@ -61,7 +63,8 @@ const _parseAddress = (address) => {
             neighborhood: address.neighborhood,
             city: address.city,
             state: address.state,
-            zipCode: address.zipCode
+            zipCode: address.zipCode,
+            complement: address.complement
         });
     }
     return null;
@@ -121,7 +124,7 @@ exports.query = async function ({ limit, after, before, status, tags, ids, user 
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null]: date filter for objects created after this date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created before this date. ex: '2020-03-10'
-     * @param status [string, default null]: filter for status of the retrieved objects. ex: 'created', 'canceled', 'processing', 'failed', 'success'
+     * @param status [string, default null]: filter for status of the retrieved objects. ex: 'created', 'processing', 'approved', 'denied'
      * @param tags [list of strings, default null]: list of strings for reference when searching for IndividualAccountRequests. ex: ['employees', 'monthly']
      * @param ids [list of strings, default null]: list of IndividualAccountRequest ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
@@ -153,7 +156,7 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null]: date filter for objects created after this date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created before this date. ex: '2020-03-10'
-     * @param status [string, default null]: filter for status of the retrieved objects. ex: 'created', 'canceled', 'processing', 'failed', 'success'
+     * @param status [string, default null]: filter for status of the retrieved objects. ex: 'created', 'processing', 'approved', 'denied'
      * @param tags [list of strings, default null]: list of strings for reference when searching for IndividualAccountRequests. ex: ['employees', 'monthly']
      * @param ids [list of strings, default null]: list of IndividualAccountRequest ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
