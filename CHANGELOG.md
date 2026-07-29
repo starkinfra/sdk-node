@@ -13,6 +13,10 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Added
+- BusinessAccountRequest resource
+- validatorLink attribute to IndividualAccountRequest resource
+- complement attribute to IndividualAccountRequest address
 
 ## [0.19.0] - 2026-06-25
 ### Added
