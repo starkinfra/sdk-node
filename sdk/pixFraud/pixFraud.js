@@ -14,8 +14,8 @@ class PixFraud extends Resource {
      * to the Stark Infra API and returns the list of created objects.
      *
      * Parameters (required):
-     * @param externalId [string]: endToEndId or returnId of the transaction being reported. ex: 'my_external_id'
-     * @param type [string]: type of PixFraud. Options: 'identity', 'mule', 'scam', 'other'
+     * @param externalId [string]: unique string to prevent duplicates among your PixFrauds. ex: 'my-internal-id-123456'
+     * @param type [string]: type of PixFraud. Options: 'identity', 'mule', 'scam', 'other', 'unknown'
      * @param taxId [string]: user tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
      *
      * Parameters (optional):

@@ -127,7 +127,7 @@ exports.update = async function (id, { isDelivered, user } = {}) {
      * If isDelivered is true, the event will no longer be returned on queries with isDelivered=false.
      *
      * Parameters (required):
-     * @param id [list of strings]: Event unique ids. ex: '5656565656565656'
+     * @param id [string]: Event unique id. ex: '5656565656565656'
      * @param isDelivered [bool]: If True and event hasn't been delivered already, event will be set as delivered. ex: true
      *
      * Parameters (optional):
@@ -151,7 +151,7 @@ exports.delete = async function (id, {user} = {}) {
      * @description Delete a notification Event entity previously created in the Stark Infra API by its ID
      *
      * Parameters (required):
-     * @param id [string]: IssuingCard unique id. ex: '5656565656565656'
+     * @param id [string]: Event unique id. ex: '5656565656565656'
      *
      * Parameters (optional):
      * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call

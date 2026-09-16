@@ -59,7 +59,7 @@ exports.create = async function(previews, {user}={}) {
      * 
      * Create CreditPreviews
      * 
-     * @description Send a list of CreditPreview objects for creation at the Stark Infra API
+     * @description Send a list of up to 100 CreditPreview objects for creation at the Stark Infra API
      *
      * Parameters (required):
      * @param previews [list of CreditPreview objects]: list of CreditPreview objects to be created in the API

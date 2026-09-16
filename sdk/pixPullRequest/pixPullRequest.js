@@ -19,13 +19,13 @@ class PixPullRequest extends Resource {
      * @param endToEndId [string]: Central Bank's unique transaction id. ex: 'E32160637202617031917FXbuEOeqxTE'
      * @param receiverAccountNumber [string]: receiver's bank account number. ex: '00000000'
      * @param receiverAccountType [string]: receiver's account type. Options: 'checking', 'savings', 'salary', 'payment'
-     * @param receiverBankCode [string]: receiver's bank code. ex: '32160637'
      * @param reconciliationId [string]: id used for conciliation of the resulting Pix transaction. ex: '20260317191744.382994-03001917VKqeyyGMWvK'
      * @param subscriptionId [string]: unique id of the parent PixPullSubscription. ex: '6366699370577920'
      *
      * Parameters (optional):
-     * @param attemptType [string, default null]: Options: 'default', 'instantRetry', 'scheduledRetry'
+     * @param attemptType [string, default null]: pull attempt type. Options: 'default', 'instantRetry', 'scheduledRetry'
      * @param description [string, default null]: additional information delivered to the sender. ex: 'Monthly fare'
+     * @param receiverBankCode [string, default null]: receiver's bank code. ex: '32160637'
      * @param receiverBranchCode [string, default null]: receiver's branch code. ex: '1357-9'
      * @param tags [list of strings, default null]: list of strings for reference. ex: ['test', 'pix-pull']
      *
@@ -87,7 +87,7 @@ exports.create = async function (requests, {user} = {}) {
      *
      * Create PixPullRequests
      *
-     * @description Send a list of PixPullRequest objects for creation in the Stark Infra API
+     * @description Send up to 100 PixPullRequest objects (min 1) for creation in the Stark Infra API. Each is validated against its PixPullSubscription: subscription must be approved, amount within the authorized limit, settlement date matching the cycle, payer/receiver details matching the contract, request submitted between 10 and 2 days before settlement, and no other scheduled request already covering the same cycle.
      *
      * Parameters (required):
      * @param requests [list of PixPullRequest objects]: list of PixPullRequest objects to be created in the API
@@ -199,13 +199,13 @@ exports.update = async function (id, {status, reason, user} = {}) {
      *
      * Update PixPullRequest entity
      *
-     * @description Update a PixPullRequest's status by passing its id. Change status to 'scheduled' or 'denied'.
+     * @description Update a PixPullRequest's status by passing its id. Only the payer may update a pull request.
      *
      * Parameters (required):
      * @param id [string]: PixPullRequest unique id. ex: '5656565656565656'
+     * @param status [string]: new status to set. Options: 'scheduled', 'denied'. Only the payer may update a pull request.
      *
      * Parameters (optional):
-     * @param status [string, default null]: new status to set. ex: 'scheduled' or 'denied'.
      * @param reason [string, default null]: reason for the patch. Required when denying. Options: 'senderAccountClosed', 'senderAccountBlocked', 'amountNotAllowed'.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
@@ -229,7 +229,7 @@ exports.cancel = async function (id, reason, {user} = {}) {
      *
      * Parameters (required):
      * @param id [string]: object unique id. ex: '5656565656565656'
-     * @param reason [string]: reason why the PixPullRequest is being cancelled. Options as receiver: 'accountClosed', 'receiverOrganizationClosed', 'receiverInternalError', 'fraud', 'receiverUserRequested'. Options as sender: 'accountClosed', 'senderDeceased', 'fraud', 'senderUserRequested'.
+     * @param reason [string]: cancellation reason. As sender: 'accountClosed', 'accountBlocked', 'pixRequestFailed', 'other', 'senderUserRequested'. As receiver: 'accountClosed', 'accountBlocked', 'other', 'receiverUserRequested'.
      *
      * Parameters (optional):
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call

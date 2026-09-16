@@ -23,7 +23,7 @@ class IssuingRestock extends Resource {
      * 
      * Attributes (return-only):
      * @param id [string]: unique id returned when IssuingRestock is created. ex: '5656565656565656'
-     * @param status [string]: current IssuingRestock status. ex: "created", "processing", "confirmed"
+     * @param status [string]: current IssuingRestock status. Options: 'created', 'processing', 'confirmed', 'canceled'
      * @param updated [string]: latest update datetime for the CreditNote. ex: '2020-03-10 10:30:00.000' 
      * @param created [string]: creation datetime for the IssuingDesign. ex: '2020-03-10 10:30:00.000'
      *
@@ -51,7 +51,7 @@ exports.create = async function (restocks, { user } = {}) {
      *
      * Create IssuingRestocks
      *
-     * @description Send a list of IssuingRestock objects for creation in the Stark Infra API
+     * @description Send a list of up to 100 IssuingRestock objects for creation in the Stark Infra API
      *
      * Parameters (required):
      * @param restocks [list of IssuingRestock objects]: list of IssuingRestock objects to be created in the API

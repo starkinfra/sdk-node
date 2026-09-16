@@ -1010,7 +1010,7 @@ app.use(express.raw({type: '*/*'}));
 const port = 3000
 app.post('/', async (req, res) => {
     try {
-        let authorization = await starkinfra.issuingToken.parse({
+        let authorization = await starkinfra.issuingTokenActivation.parse({
             content: req.body.toString(),
             signature: req.headers['digital-signature']
         });

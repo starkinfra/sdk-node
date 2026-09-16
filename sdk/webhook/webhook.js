@@ -7,7 +7,11 @@ class Webhook extends Resource {
      *
      * Webhook subscription object
      *
-     * @description A Webhook is used to subscribe to notification events on a user-selected endpoint.
+     * @description A Webhook subscribes a URL to notification events. Events are POSTed with a Digital-Signature
+     * header you can verify with the Stark Infra public key. If your endpoint does not answer 200, delivery is
+     * retried up to 3 times (after 5, 30 and 120 minutes); registered webhooks only cover the API version in use
+     * when subscribed. Because delivery is not guaranteed, run a periodic job that lists events with
+     * isDelivered=false and marks them delivered after processing.
      * Currently available services for subscription are contract, credit-note, signer, issuing-card, issuing-invoice, issuing-purchase, pix-request.in, pix-request.out, pix-reversal.in, pix-reversal.out, pix-claim, pix-key, pix-chargeback, pix-infraction.
      *
      * Parameters (required):

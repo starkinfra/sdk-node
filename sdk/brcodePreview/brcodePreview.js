@@ -21,7 +21,7 @@ class BrcodePreview extends Resource {
      * 
      * Attributes (return-only):
      * @param accountNumber [string]: Payment receiver account number. ex: "1234567"
-     * @param accountType [string]: Payment receiver account type. Options: "checking", "savings" and "salary"
+     * @param accountType [string]: Payment receiver account type. Options: "checking", "savings", "salary" or "payment"
      * @param amount [integer]: Value in cents that this payment is expecting to receive. If 0, any value is accepted. ex: 123 (= R$1,23)
      * @param amountType [string]: amount type of the Brcode. If the amount type is "custom" the Brcode's amount can be changed by the sender at the moment of payment. Options: "fixed" or "custom"
      * @param bankCode [string]: Payment receiver bank code. ex: "20018183"
@@ -124,6 +124,8 @@ exports.create = async function (previews, {user} = {}) {
      *
      * Return:
      * @returns list of BrcodePreview objects with updated attributes
+     *
+     * Note: this SDK does not currently expose the cityCode or expand=jws request options described on the docs site.
      *
      */
     return rest.post(resource, previews, user);

@@ -13,7 +13,11 @@ class CreditNotePreview extends SubResource {
      * When you initialize a CreditNotePreview, the entity will not be automatically
      * send in the Stark Infra API. The 'create' function sends the objects
      * to the Stark Infra API and returns the list of preview data.
-     * 
+     * Required fields depend on type: 'sac'/'price' need nominalInterest, scheduled, initialDue, taxId and
+     * exactly one of count or initialAmount; 'american' needs nominalInterest, scheduled, initialDue, count,
+     * taxId; 'bullet' needs nominalInterest, scheduled, initialDue, taxId; 'custom' needs scheduled, taxId,
+     * invoices. For every type except 'custom', provide exactly one of nominalAmount or amount.
+     *
      * Parameters (required):
      * @param type [string]: table type that defines the amortization system. Options: "sac", "price", "american", "bullet", "custom"
      * @param nominalAmount [integer]: amount in cents transferred to the credit receiver, before deductions. ex: nominalAmount=11234 (= R$ 112.34)

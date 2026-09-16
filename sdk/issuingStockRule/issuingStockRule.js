@@ -56,7 +56,7 @@ exports.create = async function (rules, { user } = {}) {
      *
      * Create IssuingStockRules
      *
-     * @description Send a list of IssuingStockRule objects for creation in the Stark Infra API
+     * @description Send a list of IssuingStockRule objects for creation in the Stark Infra API. Each IssuingStock may have only one active rule at a time; at least one of emails or phones must be informed per rule (max 10 each), and minimumBalance must be a positive integer.
      *
      * Parameters (required):
      * @param rules [list of IssuingStockRule objects]: list of IssuingStockRule objects to be created in the API

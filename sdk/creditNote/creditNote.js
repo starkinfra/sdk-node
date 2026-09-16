@@ -137,7 +137,7 @@ exports.create = async function (requests, {user} = {}) {
      *
      * Create CreditNotes
      *
-     * @description Send a list of CreditNote objects for creation in the Stark Infra API
+     * @description Send a list of up to 100 CreditNote objects for creation in the Stark Infra API. Provide either nominalAmount (pre-tax) or amount (net disbursed) on each note -- the other one, plus taxAmount and the interest rates, is computed from the invoice schedule.
      *
      * Parameters (required):
      * @param requests [list of CreditNote objects]: list of CreditNote objects to be created in the API
@@ -242,7 +242,7 @@ exports.cancel = async function (id, {user} = {}) {
      *
      * Cancel a CreditNote entity
      *
-     * @description Cancel a CreditNote entity previously created in the Stark Infra API
+     * @description Cancel a CreditNote that has not reached a final status. Only notes with status 'created', 'signed' or 'processing' can be canceled (which also cancels the signing document); notes already 'success', 'failed', 'expired' or 'canceled' are returned unchanged.
      *
      * Parameters (required):
      * @param id [string]: CreditNote unique id. ex: '5656565656565656'
@@ -262,7 +262,7 @@ exports.pdf = async function (id, {user} = {}) {
      *
      * Retrieve a specific CreditNote pdf file
      *
-     * @description Receive a single CreditNote pdf file generated in the Stark Bank API by passing its id.
+     * @description Receive a single CreditNote pdf file generated in the Stark Infra API by passing its id.
      *
      * Parameters (required):
      * @param id [string]: object unique id. ex: '5656565656565656'
@@ -282,7 +282,7 @@ exports.payment = async function (id, {user} = {}) {
      *
      * Retrieve a specific CreditNote Payment pdf file
      *
-     * @description Receive a single CreditNote Payment pdf file generated in the Stark Bank API by passing its id.
+     * @description Receive a single CreditNote Payment pdf file generated in the Stark Infra API by passing its id.
      *
      * Parameters (required):
      * @param id [string]: object unique id. ex: '5656565656565656'

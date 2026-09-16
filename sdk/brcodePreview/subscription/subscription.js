@@ -17,7 +17,7 @@ class Subscription extends SubResource {
      * @param description [string]: description of the subscription.
      * @param installmentEnd [string]: end datetime for the installments. ex: '2020-03-10 10:30:00.000'
      * @param installmentStart [string]: start datetime for the installments. ex: '2020-03-10 10:30:00.000'
-     * @param interval [string]: interval for the recurring charge. ex: 'monthly'
+     * @param interval [string]: interval for the recurring charge. Options: 'week', 'month', 'quarter', 'semester', 'year'. ex: 'month'
      * @param pullRetryLimit [number]: maximum number of retries for pulling the payment.
      * @param receiverBankCode [string]: bank code of the receiver.
      * @param receiverName [string]: name of the receiver.

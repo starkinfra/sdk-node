@@ -18,7 +18,7 @@ class PixChargeback extends Resource {
      * Parameters (required):
      * @param amount [integer]: amount in cents to be reversed. ex: 11234 (= R$ 112.34).
      * @param referenceId [string]: endToEndId or returnId of the transaction to be reversed. ex: 'E20018183202201201450u34sDGd19lz'.
-     * @param reason [string]: reason why the reversal was requested. Options: 'fraud', 'flaw', 'reversalChargeback'.
+     * @param reason [string]: reason why the reversal was requested. Options: 'flaw', 'fraud', 'subscriptionFlaw' (the API also assigns 'reversalChargeback' automatically when a chargeback stems from a closed Pix Infraction, but it cannot be passed on creation).
      * @param description [string, default null]: description for the PixChargeback. Required if reason is 'flaw'.
      *
      * Parameters (optional):
@@ -29,7 +29,7 @@ class PixChargeback extends Resource {
      * @param analysis [string]: analysis that led to the result.
      * @param senderBankCode [string]: bankCode of the Pix participant that created the PixChargeback. ex: '20018183'.
      * @param receiverBankCode [string]: bankCode of the Pix participant that received the PixChargeback. ex: '20018183'.
-     * @param rejectionReason [string]: reason for the rejection of the Pix chargeback. Options: 'noBalance', 'accountClosed', 'invalidRequest', 'unableToReverse'.
+     * @param rejectionReason [string]: reason for the rejection of the Pix chargeback. Options: 'other', 'noBalance', 'accountClosed', 'invalidRequest'.
      * @param reversalReferenceId [string]: returnId or endToEndId of the reversal transaction. ex: 'D20018183202202030109X3OoBHG74wo'.
      * @param result [string]: result after the analysis of the PixChargeback by the receiving party. Options: 'rejected', 'accepted', 'partiallyAccepted'.
      * @param flow [string]: direction of the Pix Chargeback. Options: 'in' for received chargebacks, 'out' for chargebacks you requested.
@@ -91,7 +91,7 @@ exports.create = async function (chargebacks, {user} = {}) {
      *
      * Create PixChargeback objects
      *
-     * @description Create PixChargebacks in the Stark Infra API
+     * @description Create PixChargebacks in the Stark Infra API. A chargeback should only be created after a corresponding PixInfraction is completed (or on a system malfunction), and the other participant must answer within 24 hours.
      *
      * Parameters (required):
      * @param chargebacks [list of PixChargebacks]: list of PixChargeback objects to be created in the API.
@@ -207,7 +207,7 @@ exports.update = async function ( id, result, { rejectionReason, reversalReferen
      * @param result [string]: result after the analysis of the PixChargeback. Options: 'rejected', 'accepted', 'partiallyAccepted'.
      *
      * Parameters (conditionally required):
-     * @param rejectionReason [string, default null]: if the PixChargeback is rejected a reason is required. Options: 'noBalance', 'accountClosed', 'invalidRequest', 'unableToReverse'.
+     * @param rejectionReason [string, default null]: if the PixChargeback's result is 'rejected', a reason is required. Options: 'other', 'noBalance', 'accountClosed', 'invalidRequest' ('unableToReverse' is not a valid value).
      * @param reversalReferenceId [string, default null]: returnId of the reversal transaction. ex: 'D20018183202201201450u34sDGd19lz'.
      * @param analysis [string, default null]: description of the analysis that led to the result. . Required if rejection_reason is 'invalidRequest'.
      *

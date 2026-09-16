@@ -18,7 +18,7 @@ class PixReversal extends Resource {
      * @param amount [integer]: amount in cents to be transferred. ex: 11234 (= R$ 112.34)
      * @param externalId [string]: url safe string that must be unique among all your PixReversals. Duplicated external IDs will cause failures. By default, this parameter will block any PixReversals that repeats amount and receiver information on the same date. ex: 'my-internal-id-123456'
      * @param endToEndId [string]: central bank's unique transaction ID. ex: 'E79457883202101262140HHX553UPqeq'
-     * @param reason [string]: reason why the PixReversal is being reversed. Options are 'bankError', 'fraud', 'chashierError', 'customerRequest'
+     * @param reason [string]: reason why the PixReversal is being reversed. Options are 'bankError', 'fraud', 'cashierError', 'customerRequest'
      *
      * Parameters (optional):
      * @param tags [list of strings, default null]: list of strings for reference when searching for PixReversals. ex: ['employees', 'monthly']
@@ -63,7 +63,11 @@ exports.create = async function (reversals, {user} = {}) {
      *
      * Create PixReversals
      *
-     * @description Send a list of PixReversal objects for creation in the Stark Infra API
+     * @description Send a list of PixReversal objects for creation in the Stark Infra API. A reversal can only
+     * target an inbound PixRequest with status 'success' (referenced by its endToEndId). Reversals against you
+     * trigger a synchronous POST to your pixReversalUrl (distinct from pixRequestUrl); reply within 1 second
+     * (HTTP 200) or it is denied by default -- if no pixReversalUrl is registered, inbound reversals are
+     * accepted by default.
      *
      * Parameters (required):
      * @param reversals [list of PixReversal objects]: list of PixReversal objects to be created in the API
@@ -206,7 +210,9 @@ exports.response = async function ({
                                     }) {
     /**
      *
-     * Helps you respond to a PixReversal authorization
+     * Helps you respond to a PixReversal authorization callback sent to your pixReversalUrl. Reply within
+     * 1 second (HTTP 200), or the reversal is denied by default; note that unlike PixRequest, an inbound
+     * reversal is accepted by default when no pixReversalUrl is registered.
      *
      * Parameters (required):
      * @param status [string]: response to the authorization. Options: 'approved' or 'denied'

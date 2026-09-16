@@ -54,7 +54,7 @@ exports.create = async function (holmes, { user } = {}) {
      *
      * Create CreditHolmes
      *
-     * @description Send a list of CreditHolmes objects for creation in the Stark Infra API
+     * @description Send a list of up to 100 CreditHolmes objects for creation in the Stark Infra API
      *
      * Parameters (required):
      * @param holmes [list of CreditHolmes objects]: list of CreditHolmes objects to be created in the API

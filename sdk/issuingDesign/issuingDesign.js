@@ -108,7 +108,7 @@ exports.pdf = async function (id, {user} = {}) {
      *
      * Retrieve a specific IssuingDesign pdf file
      *
-     * @description Receive a single IssuingDesign pdf file generated in the Stark Bank API by passing its id.
+     * @description Receive a single IssuingDesign pdf file generated in the Stark Infra API by passing its id.
      *
      * Parameters (required):
      * @param id [string]: object unique id. ex: '5656565656565656'

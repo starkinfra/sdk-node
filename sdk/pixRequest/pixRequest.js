@@ -107,7 +107,10 @@ exports.create = async function (requests, {user} = {}) {
      *
      * Create PixRequests
      *
-     * @description Send a list of PixRequest objects for creation in the Stark Infra API
+     * @description Send a list of PixRequest objects for creation in the Stark Infra API. Note: every inbound
+     * Pix creates a PixRequest and triggers a synchronous POST authorization call to your pixRequestUrl -- you
+     * must answer with approval or denial within 1 second (HTTP 200), or it is denied by default; use response()
+     * below to build that reply.
      *
      * Parameters (required):
      * @param requests [list of PixRequest objects]: list of PixRequest objects to be created in the API
@@ -250,7 +253,9 @@ exports.response = async function ({
                                     }) {
     /**
      *
-     * Helps you respond to a PixRequest authorization
+     * Helps you respond to a PixRequest authorization callback. Your registered pixRequestUrl receives a
+     * synchronous POST for every inbound Pix and must reply within 1 second (HTTP 200) with the JSON string
+     * this function returns, or the request is denied by default.
      *
      * Parameters (required):
      * @param status [string]: response to the authorization. ex: 'approved' or 'denied'

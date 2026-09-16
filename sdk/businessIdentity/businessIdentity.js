@@ -27,7 +27,7 @@ class BusinessIdentity extends Resource {
      * Attributes (return-only):
      * @param id [string]: unique id returned when BusinessIdentity is created. ex: '5656565656565656'
      * @param name [string]: company's corporate name retrieved from the tax ID bureau. ex: 'Stark Bank S.A.'
-     * @param taxIdStatus [string]: status of the tax ID (CNPJ) at the bureau. ex: 'active', 'blocked', 'pending'
+     * @param taxIdStatus [string]: normalized status of the CNPJ at the Receita Federal bureau. Options: 'active' (ATIVA), 'blocked' (SUSPENSA), 'pending' (INAPTA), 'canceled' (BAIXADA), 'voided' (NULA).
      * @param insightTaxId [string]: tax ID (CNPJ) extracted from the document by the insight. ex: '20.018.183/0001-80'
      * @param insightDocumentType [string]: type of document detected by the insight. ex: 'incorporation'
      * @param numPages [integer]: number of pages of the document. ex: 12
@@ -70,7 +70,7 @@ exports.create = async function (identities, { user } = {}) {
      *
      * Create BusinessIdentities
      *
-     * @description Send a list of BusinessIdentity objects for creation in the Stark Infra API
+     * @description Send a list of BusinessIdentity objects for creation in the Stark Infra API. Each is created in 'pending' status; the CNPJ must be valid, active at the official bureau, and return non-empty representatives (socios).
      *
      * Parameters (required):
      * @param identities [list of BusinessIdentity objects]: list of BusinessIdentity objects to be created in the API
@@ -185,7 +185,7 @@ exports.update = async function (id, { status, tags, user } = {}) {
      * @param id [string]: BusinessIdentity id. ex: '5656565656565656'
      *
      * Parameters (optional):
-     * @param status [string]: You may send BusinessAttachments to validation by passing 'processing' in the status
+     * @param status [string]: only 'processing' is accepted, triggering the AI Model analysis. The identity must be in 'created' or 'pending' status and must already have at least one BusinessAttachment associated with it.
      * @param tags [list of strings, default null]: list of strings for tagging
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
@@ -205,7 +205,7 @@ exports.cancel = async function (id, { user } = {}) {
      *
      * Cancel a BusinessIdentity entity
      *
-     * @description Cancel a BusinessIdentity entity previously created in the Stark Infra API
+     * @description Cancel a BusinessIdentity entity. Only identities in 'created' or 'pending' status can be canceled.
      *
      * Parameters (required):
      * @param id [string]: BusinessIdentity unique id. ex: '5656565656565656'
