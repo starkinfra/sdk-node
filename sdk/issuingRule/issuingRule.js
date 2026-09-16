@@ -31,15 +31,17 @@ class IssuingRule extends Resource {
      * @param counterAmount [integer]: current rule spent amount. ex: 1000
      * @param currencySymbol [string]: currency symbol. ex: 'R$'
      * @param currencyName [string]: currency name. ex: 'Brazilian Real'
+     * @param schedule [string]: Days and hours in which the rule is active. Empty when the rule is always active. Example: 'every monday, wednesday from 00:00 to 23:59 in America/Sao_Paulo'.
+     * @param purposes [list of strings]: Purchase purposes accepted by the rule. Use it to restrict ATM withdrawals. An empty list accepts every purpose. Options: 'purchase', 'withdrawal', 'verification'. Example: ['purchase', 'withdrawal'].
      *
      */
-    constructor({ 
-                    name, amount, id=null, interval=null, currencyCode=null, 
-                    categories=null, countries=null, methods=null, counterAmount=null, 
-                    currencySymbol=null, currencyName=null
+    constructor({
+                    name, amount, id=null, interval=null, currencyCode=null,
+                    categories=null, countries=null, methods=null, counterAmount=null,
+                    currencySymbol=null, currencyName=null, schedule=null, purposes=null
                 }) {
         super(id);
-        
+
         this.name = name;
         this.amount = amount;
         this.interval = interval;
@@ -50,6 +52,8 @@ class IssuingRule extends Resource {
         this.counterAmount = counterAmount;
         this.currencySymbol = currencySymbol;
         this.currencyName = currencyName;
+        this.schedule = schedule;
+        this.purposes = purposes;
     }
 }
 
