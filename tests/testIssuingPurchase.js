@@ -10,6 +10,9 @@ describe('TestIssuingPurchaseQuery', function() {
         for await (let purchase of purchases) {
             assert(typeof purchase.id == 'string')
             assert(typeof purchase.metadata == typeof {})
+            assert('installmentCount' in purchase);
+            assert('merchantCategoryNumber' in purchase);
+            assert('confirmed' in purchase);
         }
     });
 });
@@ -24,6 +27,9 @@ describe('TestIssuingPurchaseGet', function() {
             purchase = await starkinfra.issuingPurchase.get(purchase.id);
             assert(typeof purchase.id == 'string');
             assert(typeof purchase.metadata == typeof {})
+            assert('installmentCount' in purchase);
+            assert('merchantCategoryNumber' in purchase);
+            assert('confirmed' in purchase);
         }
     });
 });
