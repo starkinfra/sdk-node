@@ -10,6 +10,9 @@ describe('TestIssuingProductQuery', function() {
         const products = await starkinfra.issuingProduct.query({});
         for await (let product of products) {
             assert(typeof product.id == 'string');
+            assert('customerType' in product);
+            assert('settlement' in product);
+            assert('client' in product);
         }
     });
 });
