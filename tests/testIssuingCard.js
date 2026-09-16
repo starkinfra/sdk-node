@@ -11,6 +11,7 @@ describe('TestIssuingCardQuery', function(){
         let cards = await starkinfra.issuingCard.query({'limit': 10});
         for await (let card of cards) {
             assert(typeof card.id == 'string');
+            assert('isPinDefined' in card);
         }
     });
 });
