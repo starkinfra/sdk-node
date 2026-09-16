@@ -18,6 +18,7 @@ class IssuingPurchase extends Resource {
      * @param cardId [string]: unique id returned when IssuingCard is created. ex: '5656565656565656'
      * @param cardEnding [string]: last 4 digits of the card number. ex: '1234'
      * @param purpose [string]: purchase purpose. ex: 'purchase'
+     * @param installmentCount [integer]: quantity of installments to be confirmed. Minimum = 1. ex: 12
      * @param amount [integer]: IssuingPurchase value in cents. Minimum = 0. ex: 1234 (= R$ 12.34)
      * @param tax [integer]: IOF amount taxed for international purchases. ex: 1234 (= R$ 12.34)
      * @param issuerAmount [integer]: issuer amount. ex: 1234 (= R$ 12.34)
@@ -28,6 +29,7 @@ class IssuingPurchase extends Resource {
      * @param merchantCurrencySymbol [string]: merchant currency symbol. ex: '$'
      * @param merchantCategoryCode [string]: merchant category code. ex: 'eatingPlacesRestaurants'
      * @param merchantCategoryType [string]: merchant category type. ex: 'food'
+     * @param merchantCategoryNumber [integer]: MCC number of the merchant category. ex: 5814
      * @param merchantCountryCode [string]: merchant country code. ex: 'USA'
      * @param acquirerId [string]: acquirer ID. ex: '5656565656565656'
      * @param merchantId [string]: merchant ID. ex: '5656565656565656'
@@ -43,6 +45,7 @@ class IssuingPurchase extends Resource {
      * @param id [string]: unique id returned when IssuingPurchase is created. ex: '5656565656565656'
      * @param issuingTransactionIds [string]: ledger transaction ids linked to this Purchase
      * @param status [string]: current IssuingCard status. Options: 'approved', 'canceled', 'denied', 'confirmed' or 'voided'
+     * @param confirmed [string]: Confirmation datetime. Null until the purchase is confirmed. ex: '2020-03-10 10:30:00.000'
      * @param description [string]: IssuingPurchase description. ex: 'Office Supplies'
      * @param metadata [dictionary object]: dictionary object used to store additional information about the IssuingPurchase object. ex: { authorizationId: 'OjZAqj' }.
      * @param zipCode [string]: zip code of the merchant location. ex: '02101234'
@@ -56,16 +59,16 @@ class IssuingPurchase extends Resource {
      * @param holderTags [list of strings]: tags of the IssuingHolder responsible for this purchase. ex: ['technology', 'john snow']
      *
      */
-    constructor({ 
-                    holderName=null, productId=null, cardId=null, cardEnding=null, purpose=null, 
-                    amount=null, tax=null, issuerAmount=null, issuerCurrencyCode=null, 
-                    issuerCurrencySymbol=null, merchantAmount=null, merchantCurrencyCode=null, 
-                    merchantCurrencySymbol=null, merchantCategoryCode=null, merchantCategoryType=null, 
-                    merchantCountryCode=null, acquirerId=null, merchantId=null, merchantName=null, 
-                    merchantFee=null, walletId=null, methodCode=null, score=null, endToEndId=null, 
-                    tags=null, id=null, issuingTransactionIds=null, status=null, description=null, 
-                    metadata=null, zipCode=null, created=null, updated=null, isPartialAllowed=null, 
-                    cardTags=null, holderId=null, holderTags=null 
+    constructor({
+                    holderName=null, productId=null, cardId=null, cardEnding=null, purpose=null,
+                    installmentCount=null, amount=null, tax=null, issuerAmount=null, issuerCurrencyCode=null,
+                    issuerCurrencySymbol=null, merchantAmount=null, merchantCurrencyCode=null,
+                    merchantCurrencySymbol=null, merchantCategoryCode=null, merchantCategoryType=null,
+                    merchantCategoryNumber=null, merchantCountryCode=null, acquirerId=null, merchantId=null, merchantName=null,
+                    merchantFee=null, walletId=null, methodCode=null, score=null, endToEndId=null,
+                    tags=null, id=null, issuingTransactionIds=null, status=null, confirmed=null, description=null,
+                    metadata=null, zipCode=null, created=null, updated=null, isPartialAllowed=null,
+                    cardTags=null, holderId=null, holderTags=null
                 }) {
         super(id);
 
@@ -74,6 +77,7 @@ class IssuingPurchase extends Resource {
         this.cardId = cardId;
         this.cardEnding = cardEnding;
         this.purpose = purpose;
+        this.installmentCount = installmentCount;
         this.amount = amount;
         this.tax = tax;
         this.issuerAmount = issuerAmount;
@@ -84,6 +88,7 @@ class IssuingPurchase extends Resource {
         this.merchantCurrencySymbol = merchantCurrencySymbol;
         this.merchantCategoryCode = merchantCategoryCode;
         this.merchantCategoryType = merchantCategoryType;
+        this.merchantCategoryNumber = merchantCategoryNumber;
         this.merchantCountryCode = merchantCountryCode;
         this.acquirerId = acquirerId;
         this.merchantId = merchantId;
@@ -96,6 +101,7 @@ class IssuingPurchase extends Resource {
         this.tags = tags;
         this.issuingTransactionIds = issuingTransactionIds;
         this.status = status;
+        this.confirmed = check.datetime(confirmed);
         this.description = description;
         this.metadata = metadata;
         this.zipCode = zipCode;
