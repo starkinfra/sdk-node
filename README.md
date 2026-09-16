@@ -51,6 +51,7 @@ This SDK version is compatible with the Stark Infra API v2.
         - [PixClaim](#create-a-pixclaim): Claim a Pix Key
         - [PixDirector](#create-a-pixdirector): Create a Pix Director
         - [PixInfraction](#create-pixinfractions): Create Pix Infraction reports
+        - [PixUser](#get-a-pixuser): Get fraud statistics of a user
         - [PixChargeback](#create-pixchargebacks): Create Pix Chargeback requests
         - [PixDomain](#query-pixdomains): View registered SPI participants certificates
         - [StaticBrcode](#create-staticbrcodes): Create static Pix BR codes
@@ -2168,6 +2169,20 @@ const starkinfra = require('starkinfra');
 (async() => {
     let log = await starkinfra.pixInfraction.log.get('5155165527080960');
     console.log(log);
+})();
+```
+
+### Get a PixUser
+
+You can get a specific user's fraud statistics with their taxId. The `statistics` list entries carry
+`value`, `type`, `source`, `after` and `updated`.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let user = await starkinfra.pixUser.get('01234567890');
+    console.log(user);
 })();
 ```
 
