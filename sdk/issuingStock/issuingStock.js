@@ -1,4 +1,5 @@
 const rest = require('../utils/rest.js');
+const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
 
@@ -14,20 +15,22 @@ class IssuingStock extends Resource {
      * @param balance [integer]: [EXPANDABLE] current stock balance. ex: 1000
      * @param designId [string]: IssuingDesign unique id. ex: "5656565656565656"
      * @param embosserId [string]: Embosser unique id. ex: "5656565656565656"
-     * @param updated [string]: latest update datetime for the CreditNote. ex: '2020-03-10 10:30:00.000' 
+     * @param embosserName [string]: Name of the embosser that holds this stock
+     * @param updated [string]: latest update datetime for the CreditNote. ex: '2020-03-10 10:30:00.000'
      * @param created [string]: creation datetime for the IssuingDesign. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({ 
-                    id = null, balance = null, designId = null, embosserId = null, 
-                    updated = null, created = null
+    constructor({
+                    id = null, balance = null, designId = null, embosserId = null,
+                    embosserName = null, updated = null, created = null
                 }) {
         super(id);
         this.balance = balance;
         this.designId = designId;
         this.embosserId = embosserId;
-        this.updated = updated;
-        this.created = created;
+        this.embosserName = embosserName;
+        this.updated = check.datetime(updated);
+        this.created = check.datetime(created);
     }
 }
 
@@ -54,9 +57,9 @@ exports.get = async function (id, { user } = {}) {
     return rest.getId(resource, id, user);
 };
 
-exports.query = async function ({ 
-    limit = null, after = null, before = null, designIds = null, embosserIds = null, 
-    ids = null, expand = null, user = null 
+exports.query = async function ({
+    limit = null, after = null, before = null, designIds = null, embosserIds = null,
+    ids = null, expand = null, user
 } = {}) {
     /**
      *
@@ -90,9 +93,9 @@ exports.query = async function ({
     return rest.getList(resource, query, user);
 };
 
-exports.page = async function ({ 
-    cursor = null, limit = null, after = null, before = null, designIds = null, embosserIds = null, 
-    ids = null, expand = null, user = null 
+exports.page = async function ({
+    cursor = null, limit = null, after = null, before = null, designIds = null, embosserIds = null,
+    ids = null, expand = null, user
 } = {}) {
     /**
      *
