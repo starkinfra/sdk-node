@@ -1,6 +1,9 @@
 const { key } = require('../../index.js');
 const rest = require('../utils/rest.js');
 const Resource = require('starkcore').Resource;
+const parseObjects = require('../utils/parse.js').parseObjects;
+const { Statistics } = require('./statistics/statistics.js');
+const statisticsResource = require('./statistics/statistics.js').subResource;
 
 
 class PixUser extends Resource {
@@ -12,7 +15,7 @@ class PixUser extends Resource {
      *
      * Parameters (return-only):
      * @param id [string]: tax ID (CPF/CNPJ) queried.
-     * @param statistics [list of objects]: {value, type, source, after, updated} entries; type depends on source ('registered'/'unique' for pix-key, 'settled' for pix-request, 'identity'/'mule'/'scam'/'other'/'unknown'/'amount'/'unique' for pix-fraud, 'open'/'denied'/'unique' for pix-infraction); source Options: 'pix-key', 'pix-fraud', 'pix-request', 'pix-infraction'.
+     * @param statistics [list of PixUser.Statistics]: type depends on source ('registered'/'unique' for pix-key, 'settled' for pix-request, 'identity'/'mule'/'scam'/'other'/'unknown'/'amount'/'unique' for pix-fraud, 'open'/'denied'/'unique' for pix-infraction); source Options: 'pix-key', 'pix-fraud', 'pix-request', 'pix-infraction'.
      *
      * Check out our API Documentation at https://starkinfra.com/docs/api#pix-user
      */
@@ -20,7 +23,7 @@ class PixUser extends Resource {
                     id, statistics = null
                 }) {
         super(id);
-        this.statistics = statistics;
+        this.statistics = parseObjects(statistics, statisticsResource, Statistics);
     }
 }
 

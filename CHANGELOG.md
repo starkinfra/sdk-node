@@ -16,6 +16,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ### Added
 - IssuingBillingInvoice resource
 - IssuingBillingTransaction resource
+- Statistics sub-resource parsing to PixUser
 
 ### Fixed
 - docstrings to reflect current business rules across Pix, Issuing and Credit resources
