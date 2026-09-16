@@ -9,5 +9,7 @@ describe('TestBalanceGet', function(){
     it('test_success', async () => {
         let balance = await starkinfra.issuingBalance.get();
         assert(typeof balance.amount == 'number');
+        assert('limit' in balance);
+        assert('maxLimit' in balance);
     });
 });

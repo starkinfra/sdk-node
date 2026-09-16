@@ -22,11 +22,13 @@ class IssuingBalance extends Resource {
      * @param maxLimit [integer]: maximum spending limit (currently always equal to limit).
      *
      */
-    constructor(id, amount, currency, updated) {
+    constructor(id, amount, currency, limit, maxLimit, updated) {
         super(id);
-        
+
         this.amount = amount;
         this.currency = currency;
+        this.limit = limit;
+        this.maxLimit = maxLimit;
         this.updated = check.datetime(updated);
     }
 }
