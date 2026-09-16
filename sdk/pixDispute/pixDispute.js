@@ -18,7 +18,7 @@ class PixDispute extends Resource {
      *
      * Parameters (required):
      * @param referenceId [string]: endToEndId of the transaction being reported. ex: "E20018183202201201450u34sDGd19lz"
-     * @param method [string]: method used to perform the fraudulent action. Options: "scam", "unauthorized", "coercion", "invasion", "other"
+     * @param method [string]: method used to perform the fraudulent action. Options: 'scam', 'unauthorized', 'coercion', 'invasion', 'other', 'unknown'.
      * @param operatorEmail [string]: contact email of the operator responsible for the dispute.
      * @param operatorPhone [string]: contact phone number of the operator responsible for the dispute.
      *
@@ -123,7 +123,7 @@ exports.query = async function ({limit, after, before, status, tags, ids, user} 
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null]: date filter for objects created or updated only after specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created or updated only before specified date. ex: '2020-03-10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. ex: 'success' or 'failed'
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'delivered', 'analysed', 'processing', 'closed', 'failed', 'canceled'.
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
@@ -156,7 +156,7 @@ exports.page = async function ({cursor, limit, after, before, status, tags, ids,
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null]: date filter for objects created or updated only after specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created or updated only before specified date. ex: '2020-03-10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. ex: 'success' or 'failed'
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'delivered', 'analysed', 'processing', 'closed', 'failed', 'canceled'.
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call

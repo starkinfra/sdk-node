@@ -12,7 +12,7 @@ class IssuingTransaction extends Resource {
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when IssuingTransaction is created. ex: '5656565656565656'
-     * @param amount [integer]: IssuingTransaction value in cents. Minimum = 0. ex: 1234 (= R$ 12.34)
+     * @param amount [integer]: IssuingTransaction value in cents. Positive for credits, negative for debits. ex: 1234 (= R$ 12.34) or -1234 for a debit.
      * @param balance [integer]: balance amount of the workspace at the instant of the Transaction in cents. ex: 200 (= R$ 2.00)
      * @param description [string]: IssuingTransaction description. ex: 'Buying food'
      * @param source [string]: source of the transaction. ex: 'issuing-purchase/5656565656565656'
@@ -70,7 +70,7 @@ exports.query = async function ({ source, tags, externalIds, after, before, ids,
      * @param externalIds [list of strings, default []]: external IDs. ex: ['5656565656565656', '4545454545454545']
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
-     * @param status [string, default null]: filter for status of retrieved objects. ex: 'approved', 'canceled', 'denied', 'confirmed' or 'voided'
+     * @param source [string, default null]: filter by the entity that generated the transaction. ex: 'issuing-purchase/5656565656565656'
      * @param ids [list of strings, default [], default null]: purchase IDs
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
@@ -106,7 +106,7 @@ exports.page = async function ({ cursor, source, tags, externalIds, after, befor
      * @param externalIds [list of strings, default []]: external IDs. ex: ['5656565656565656', '4545454545454545']
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
-     * @param status [string, default null]: filter for status of retrieved objects. ex: 'approved', 'canceled', 'denied', 'confirmed' or 'voided'
+     * @param source [string, default null]: filter by the entity that generated the transaction. ex: 'issuing-purchase/5656565656565656'
      * @param ids [list of strings, default []]: purchase IDs
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call

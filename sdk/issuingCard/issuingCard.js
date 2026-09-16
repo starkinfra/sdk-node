@@ -83,7 +83,7 @@ exports.create = async function (cards, {expand, user} = {}) {
      *
      * Create IssuingCards
      *
-     * @description Send a list of IssuingCard objects for creation in the Stark Infra API
+     * @description Send a list of up to 100 IssuingCard objects for creation in the Stark Infra API
      *
      * Parameters (required):
      * @param cards [list of IssuingCard objects]: list of IssuingCard objects to be created in the API
@@ -128,7 +128,7 @@ exports.query = async function ({ status, types, holderIds, after, before, tags,
      * @description Receive a generator of IssuingCard objects previously created in the Stark Infra API
      *
      * Parameters (optional):
-     * @param status [string, default null]: filter for status of retrieved objects. ex: 'active', 'blocked', 'expired' or 'canceled'
+     * @param status [string, default null]: filter for status of retrieved objects. Options: 'pending', 'active', 'blocked', 'canceled', 'expired'
      * @param types [list of strings, default null]: card type. ex: ['virtual']
      * @param holderIds [list of strings]: cardholder IDs. ex: ['5656565656565656', '4545454545454545']
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
@@ -167,7 +167,7 @@ exports.page = async function ({ cursor, status, types, holderIds, after, before
      *
      * Parameters (optional):
      * @param cursor [string, default null]: cursor returned on the previous page function call
-     * @param status [string, default null]: filter for status of retrieved objects. ex: 'paid' or 'registered'
+     * @param status [string, default null]: filter for status of retrieved objects. Options: 'pending', 'active', 'blocked', 'canceled', 'expired'
      * @param types [list of strings, default null]: card type. ex: ['virtual']
      * @param holderIds [list of strings, default null]: cardholder IDs. ex: ['5656565656565656', '4545454545454545']
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
@@ -212,7 +212,7 @@ exports.update = async function (id, { status, displayName, rules, tags, pin, us
      * @param displayName [string, default null]: card displayed name
      * @param rules [list of dictionaries, default null]: list of dictionaries with 'amount': int, 'currencyCode': string, 'id': string, 'interval': string, 'name': string pairs.
      * @param tags [list of strings, default null]: list of strings for tagging
-     * @param pin [string, default null]: You may unlock your physical card by passing its PIN. This is also the PIN you use to authorize a purchase.
+     * @param pin [string, default null]: Card PIN, used to unlock a physical card and authorize purchases. A pending physical card must also receive this PIN to be activated: passing it alone activates the card, and setting status to 'active' on a pending physical card without a PIN is rejected.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
      * Return:

@@ -18,7 +18,7 @@ class StaticBrcode extends Resource {
      * Parameters (required):
      * @param name [string]: receiver's name. ex: 'Tony Stark'
      * @param keyId [string]: receiver's PixKey id. ex: '+5541999999999'
-     * @param city [string, default São Paulo]: receiver's city name. ex: 'Rio de Janeiro'
+     * @param city [string]: receiver's city name. ex: 'Rio de Janeiro'
      * 
      * Parameters (optional):
      * @param amount [integer, default 0]: positive integer that represents the amount in cents of the resulting Pix transaction. ex: 1234 (= R$ 12.34)

@@ -82,7 +82,7 @@ exports.create = async function (requests, { user } = {}) {
      *
      * Create IssuingEmbossingRequests
      *
-     * @description Send a list of IssuingEmbossingRequest objects for creation in the Stark Infra API
+     * @description Send a list of up to 100 IssuingEmbossingRequest objects for creation in the Stark Infra API
      *
      * Parameters (required):
      * @param requests [list of IssuingEmbossingRequest objects]: list of IssuingEmbossingRequest objects to be created in the API

@@ -17,7 +17,7 @@ class PixKey extends Resource {
      * Parameters (required):
      * @param accountCreated [string]: opening Date or DateTime for the linked account. ex: '2022-01-01T12:00:00:00'.
      * @param accountNumber [string]: number of the linked account. ex: '76543'.
-     * @param accountType [string]: type of the linked account. Options: 'checking', 'savings', 'salary' or 'payment'.
+     * @param accountType [string]: type of the linked account. Options: 'checking', 'savings', 'salary', 'payment' or 'other'.
      * @param branchCode [string]: branch code of the linked account. ex: 1234'.
      * @param name [string]: holder's name of the linked account. ex: 'Jamie Lannister'.
      * @param taxId [string]: holder's taxId (CPF/CNPJ) of the linked account. ex: '012.345.678-90'.
@@ -117,7 +117,7 @@ exports.query = async function ({ limit, after, before, status, tags, ids, type,
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
      * @param after [string, default null]: date filter for objects created after a specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'registered', 'canceled', 'failed'.
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param type [string, default null]: filter for the type of retrieved PixKeys. Options: 'cpf', 'cnpj', 'phone', 'email' and 'evp'
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
@@ -151,7 +151,7 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null]: date filter for objects created after a specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created before a specified date. ex: '2020-03-10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'failed', 'delivered', 'closed', 'canceled'.
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'registered', 'canceled', 'failed'.
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param type [string, default null]: filter for the type of retrieved PixKeys. Options: 'cpf', 'cnpj', 'phone', 'email' and 'evp'
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
@@ -187,7 +187,7 @@ exports.update = async function ( id, reason, { accountCreated, accountNumber, a
      * Parameters (optional):
      * @param accountCreated [string, default null]: opening Date or DateTime for the account to be linked. ex: '2022-01-01.
      * @param accountNumber [string, default null]: number of the account to be linked. ex: '76543'.
-     * @param accountType [string, default null]: type of the account to be linked. Options: 'checking', 'savings', 'salary' or 'payment'.
+     * @param accountType [string, default null]: type of the account to be linked. Options: 'checking', 'savings', 'salary', 'payment' or 'other'.
      * @param branchCode [string, default null]: branch code of the account to be linked. ex: 1234'.
      * @param name [string, default null]: holder's name of the account to be linked. ex: 'Jamie Lannister'.
      *

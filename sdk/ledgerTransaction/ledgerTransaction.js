@@ -25,6 +25,7 @@ class LedgerTransaction extends Resource {
      * @param rules [list of Ledger.Rule objects, default []]: list of Rule objects linked to the LedgerTransaction. Rules are used to overwrite the Ledger's rules for this transaction. ex: [new starkinfra.ledger.Rule({key: 'minimumBalance', value: 0})]
      * @param metadata [dictionary object, default {}]: dictionary object used to store additional information about the LedgerTransaction object. ex: { orderId: '123', orderType: 'purchase' }
      * @param tags [list of strings, default []]: list of strings for reference when searching for LedgerTransactions. ex: ['transfer/123', 'savings']
+     * @param created [string, default: now]: datetime used to import an existing transaction history, in ISO format; cannot be in the future. When creating multiple transactions in one request, their created datetimes must be in chronological order.
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the LedgerTransaction is created. ex: '5656565656565656'
@@ -59,7 +60,7 @@ exports.create = async function (transactions, {user} = {}) {
      *
      * Create LedgerTransactions
      *
-     * @description Send a list of LedgerTransaction objects for creation in the Stark Infra API
+     * @description Send a list of up to 500 LedgerTransaction objects for creation in the Stark Infra API. A single request may target different Ledgers; each transaction is applied to its Ledger in the order sent and validated against that Ledger's balance rules.
      *
      * Parameters (required):
      * @param transactions [list of LedgerTransaction objects]: list of LedgerTransaction objects to be created in the API

@@ -21,6 +21,7 @@ class PixPullSubscription extends Resource {
      * @param interval [string]: cycle definition. Options: 'week', 'month', 'quarter', 'semester', 'year'
      * @param receiverName [string]: receiver's full name. ex: 'Edward Stark'
      * @param receiverTaxId [string]: receiver's tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
+     * @param referenceCode [string]: free reference code for the subscription (commercial-relation identifier). ex: '36135971'
      * @param senderAccountNumber [string]: sender's bank account number. Use '-' before the verifier digit. ex: '876543-2'
      * @param senderBankCode [string]: sender's bank institution code in Brazil. ex: '20018183'
      * @param senderBranchCode [string]: sender's bank account branch code. Use '-' in case there is a verifier digit. ex: '1357-9'
@@ -36,7 +37,6 @@ class PixPullSubscription extends Resource {
      * @param due [string, default null]: due date for the sender's answer. ISO 8601. ex: '2026-04-17T02:59:59.999000+00:00'
      * @param installmentEnd [string, default null]: end datetime of settlements allowed for this subscription. ISO 8601. ex: '2026-12-18T02:59:59.999999+00:00'
      * @param receiverBankCode [string, default null]: receiver's bank institution code. Defaults to the workspace's primary institution when omitted. ex: '32160637'
-     * @param referenceCode [string, default null]: commercial-relation identifier. ex: '36135971'
      * @param pullRetryLimit [integer, default null]: max number of retries the receiver may issue for a single failed pull cycle. ex: 3
      * @param senderCityCode [string, default null]: IBGE code of the payer's city. Required when patching status to 'confirmed'. ex: '1100015'
      * @param senderFinalName [string, default null]: final sender name when the sender differs from the originating institution. ex: 'STARK SCD S.A.'
@@ -204,15 +204,15 @@ exports.update = async function (id, {status, senderCityCode, reason, amount, am
      * Update PixPullSubscription entity
      *
      * @description Update a PixPullSubscription's mutable parameters by passing its id.
-     * When patching `status` to 'confirmed', `senderCityCode` MUST be present in the patch.
+     * When patching `status` to 'approved', `senderCityCode` MUST be present in the patch.
      *
      * Parameters (required):
      * @param id [string]: PixPullSubscription unique id. ex: '5656565656565656'
      *
      * Parameters (optional):
-     * @param status [string, default null]: new status to set. ex: 'confirmed'. When set to 'confirmed', senderCityCode is required.
-     * @param senderCityCode [string, default null]: IBGE code of the payer's city. Required when status is being set to 'confirmed'. ex: "3550308"
-     * @param reason [string, default null]: reason for the patch. Options: 'accountClosed', 'accountBlocked', 'invalidBranchCode', 'notRecognizedBySender', 'userRejected', 'notOffered'.
+     * @param status [string, default null]: new status to set. The payer may set 'approved' or 'denied'; the receiver may set 'active'. When set to 'approved', senderCityCode is required.
+     * @param senderCityCode [string, default null]: IBGE code of the payer's city. Required when status is being set to 'approved'. ex: '3550308'
+     * @param reason [string, default null]: reason for the patch. Required when denying. Options: 'invalidSenderAccountNumber', 'accountClosed', 'accountBlocked', 'invalidBranchCode', 'notRecognizedBySender', 'userRejected', 'notOffered'.
      * @param amount [integer, default null]: new amount in cents. ex: 11234 (= R$ 112.34)
      * @param amountMinLimit [integer, default null]: new amount minimum limit. ex: 1000 (= R$ 10.00)
      * @param due [string, default null]: new due date for the sender's answer. ex: "2026-04-03T12:00:00+00:00"
@@ -246,7 +246,7 @@ exports.cancel = async function (id, reason, {user} = {}) {
      *
      * Parameters (required):
      * @param id [string]: object unique id. ex: '5656565656565656'
-     * @param reason [string]: reason why the PixPullSubscription is being cancelled. Options as receiver: 'accountClosed', 'receiverOrganizationClosed', 'receiverInternalError', 'fraud', 'receiverUserRequested'. Options as sender: 'accountClosed', 'senderDeceased', 'fraud', 'senderUserRequested'.
+     * @param reason [string]: reason why the PixPullSubscription is being cancelled. As receiver: 'accountClosed', 'receiverOrganizationClosed', 'receiverInternalError', 'fraud', 'receiverUserRequested', 'paymentNotFound'. As sender: 'accountClosed', 'senderDeceased', 'fraud', 'senderUserRequested', 'paymentNotFound'.
      *
      * Parameters (optional):
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call

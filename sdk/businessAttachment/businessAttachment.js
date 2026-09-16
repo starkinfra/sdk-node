@@ -65,10 +65,10 @@ exports.create = async function (attachments, { user } = {}) {
      *
      * Create BusinessAttachments
      *
-     * @description Send a list of BusinessAttachment objects for creation in the Stark Infra API
+     * @description Send a list of BusinessAttachment objects for creation in the Stark Infra API.
      *
      * Parameters (required):
-     * @param attachments [list of BusinessAttachment objects]: list of BusinessAttachment objects to be created in the API
+     * @param attachments [list of BusinessAttachment objects]: exactly one BusinessAttachment per call -- Stark Infra enforces a limit of 1 attachment per request and 2 attachments per Business Identity. Each file must be PDF, JPG or PNG and <= 64 MB, its name must be unique among the identity's other 'created' attachments, and the identity must be in 'created' or 'pending' status.
      *
      * Parameters (optional):
      * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call

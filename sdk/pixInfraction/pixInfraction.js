@@ -16,7 +16,7 @@ class PixInfraction extends Resource {
      *
      * Parameters (required):
      * @param referenceId [string]: endToEndId or returnId of the transaction being reported. ex: 'E20018183202201201450u34sDGd19lz'
-     * @param type [string]: type of infraction report. Options: 'reversal', 'reversalChargeback'
+     * @param type [string]: type of infraction report. Options: 'fraud', 'reversal', 'reversalChargeback'
      * @param method [string]:  method of Pix Infraction. Options: "scam", "unauthorized", "coercion", "invasion", "other", "unknown"
      * @param operatorEmail [string]: contact email of the operator responsible for the PixInfraction.
      * @param operatorPhone [string]: contact phone number of the operator responsible for the PixInfraction.
@@ -201,7 +201,7 @@ exports.update = async function ( id, result, { fraudType, analysis, user } = {}
      * @param result [string]: result after the analysis of the PixInfraction. Options: 'agreed', 'disagreed'
      * 
      * Parameters (conditionally required):
-     * @param fraudType [string, default null]: type of Pix Fraud. Options: "identity", "mule", "scam", "unknown", "other"
+     * @param fraudType [string, default null]: type of Pix Fraud; required when result is 'agreed', optional when result is 'disagreed'. Options: 'identity', 'mule', 'scam', 'other'
      *
      * Parameters (optional):
      * @param analysis [string, default null]: analysis that led to the result.

@@ -13,6 +13,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 
 ## [Unreleased]
+### Fixed
+- docstrings to reflect current business rules across Pix, Issuing and Credit resources
+- Readme parse method call for IssuingTokenActivation
 
 ## [0.20.0] - 2026-07-29
 ### Added

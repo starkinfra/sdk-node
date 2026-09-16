@@ -51,7 +51,7 @@ exports.create = async function (ledgers, {user} = {}) {
      *
      * Create Ledgers
      *
-     * @description Send a list of Ledger objects for creation in the Stark Infra API
+     * @description Send a list of up to 100 Ledger objects for creation in the Stark Infra API
      *
      * Parameters (required):
      * @param ledgers [list of Ledger objects]: list of Ledger objects to be created in the API

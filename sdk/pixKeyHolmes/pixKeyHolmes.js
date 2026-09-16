@@ -50,7 +50,7 @@ exports.create = async function (holmes, {user} = {}) {
      *
      * Create PixKeyHolmes objects
      *
-     * @description Send a list of PixKeyHolmes objects for creation in the Stark Infra API
+     * @description Send a list of up to 100 PixKeyHolmes objects for creation in the Stark Infra API
      *
      * Parameters (required):
      * @param holmes [list of PixKeyHolmes objects]: list of PixKeyHolmes objects to be created in the API

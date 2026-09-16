@@ -9,8 +9,8 @@ class Rule extends SubResource {
      * @description The CreditNote.Rule object modifies the behavior of CreditNotes when passed as an argument upon their creation.
      *
      * Parameters (required):
-     * @param key [string]: Rule to be customized, describes what CreditNote behavior will be altered. ex: 'invoiceCreationMode'
-     * @param value [string]: value of the rule. ex: 'scheduled'
+     * @param key [string]: Rule to be customized. Currently the only available key is 'invoiceCreationMode'.
+     * @param value [string]: value of the rule. For 'invoiceCreationMode', options are 'scheduled' (default; each invoice is issued a few days before its due date), 'instant' (all invoices issued as soon as the note is disbursed) or 'never' (invoices not issued automatically).
      *
      */
     constructor({

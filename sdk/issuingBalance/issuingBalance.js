@@ -18,6 +18,8 @@ class IssuingBalance extends Resource {
      * @param amount [integer]: current balance amount of the workspace in cents. ex: 200 (= R$ 2.00)
      * @param currency [string]: currency of the current workspace. Expect others to be added eventually. ex: 'BRL', 'USD'
      * @param updated [string]: datetime for the IssuingBalance. ex: '2020-03-10 10:30:00.000'u
+     * @param limit [integer]: spending limit of the balance.
+     * @param maxLimit [integer]: maximum spending limit (currently always equal to limit).
      *
      */
     constructor(id, amount, currency, updated) {

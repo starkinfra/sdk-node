@@ -54,7 +54,7 @@ exports.create = async function (holders, { expand, user } = {}) {
      *
      * Create IssuingHolder
      *
-     * @description Send a list of IssuingHolder objects for creation in the Stark Infra API
+     * @description Send a list of up to 100 IssuingHolder objects for creation in the Stark Infra API
      *
      * Parameters (required):
      * @param holders [list of IssuingHolder objects]: list of IssuingHolder objects to be created in the API
@@ -102,7 +102,7 @@ exports.query = async function ({ limit, after, before, status, tags, ids, expan
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
-     * @param status [string, default null]: filter for status of retrieved objects. ex: 'paid' or 'registered'
+     * @param status [string, default null]: filter for status of retrieved objects. Options: 'active', 'blocked', 'canceled'
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param expand [string, default null]: fields to expand information. ex: 'rules'
@@ -136,7 +136,7 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
-     * @param status [string, default null]: filter for status of retrieved objects. ex: 'paid' or 'registered'
+     * @param status [string, default null]: filter for status of retrieved objects. Options: 'active', 'blocked', 'canceled'
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param expand [string, default null]: fields to expand information. ex: 'rules'

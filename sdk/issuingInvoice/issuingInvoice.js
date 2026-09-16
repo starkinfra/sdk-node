@@ -23,7 +23,7 @@ class IssuingInvoice extends Resource {
      * @param brcode [string]: BR Code for the Invoice payment. ex: "00020101021226930014br.gov.bcb.pix2571brcode-h.development.starkinfra.com/v2/d7f6546e194d4c64a153e8f79f1c41ac5204000053039865802BR5925Stark Bank S.A. - Institu6009Sao Paulo62070503***63042109"
      * @param due [string]: Invoice due and expiration date in UTC ISO format. ex: "2020-10-28T17:59:26.249976+00:00"
      * @param link [string]: public Invoice webpage URL. ex: "https://starkbank-card-issuer.development.starkbank.com/invoicelink/d7f6546e194d4c64a153e8f79f1c41ac"
-     * @param status [string]: current IssuingInvoice status. ex: 'created', 'paid', 'canceled' or 'overdue'
+     * @param status [string]: current IssuingInvoice status. ex: 'created', 'paid', 'overdue', 'expired' or 'canceled'
      * @param issuingTransactionId [string]: ledger transaction ids linked to this IssuingInvoice. ex: 'issuing-invoice/5656565656565656'
      * @param created [string]: creation datetime for the IssuingInvoice. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the IssuingInvoice. ex: '2020-03-10 10:30:00.000'
@@ -56,18 +56,21 @@ let resource = {'class': exports.IssuingInvoice, 'name': 'IssuingInvoice'};
 exports.create = async function ({ amount, name=null, taxId=null, tags=null, user = null } = {}) {
     /**
      *
-     * Create Invoices
+     * Create an Invoice
      *
-     * @description Send a list of IssuingInvoice objects for creation in the Stark Infra API
+     * @description Send a single IssuingInvoice for creation in the Stark Infra API.
      *
      * Parameters (required):
-     * @param invoices [list of IssuingInvoice objects]: list of IssuingInvoice objects to be created in the API
+     * @param amount [integer]: amount in cents to be transferred.
      *
      * Parameters (optional):
+     * @param taxId [string, default null]: payer tax ID (CPF or CNPJ) with or without formatting. ex: '01234567890' or '20.018.183/0001-80'
+     * @param name [string, default null]: payer name. ex: 'Iron Bank S.A.'
+     * @param tags [list of strings, default []]: list of strings for tagging
      * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
-     * @returns list of IssuingInvoice objects with updated attributes
+     * @returns the created IssuingInvoice object with updated attributes
      *
      */
     let options = {
@@ -111,7 +114,7 @@ exports.query = async function ({ status, after, before, tags, limit, user } = {
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
-     * @param status [string, default null]: filter for status of retrieved objects. ex: 'created', 'paid', 'canceled' or 'overdue'
+     * @param status [string, default null]: filter for status of retrieved objects. ex: 'created', 'paid', 'overdue', 'expired' or 'canceled'
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *
@@ -142,7 +145,7 @@ exports.page = async function ({ cursor, status, after, before, tags, limit, use
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
-     * @param status [string, default null]: filter for status of retrieved objects. ex: 'created', 'paid', 'canceled' or 'overdue'
+     * @param status [string, default null]: filter for status of retrieved objects. ex: 'created', 'paid', 'overdue', 'expired' or 'canceled'
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      *

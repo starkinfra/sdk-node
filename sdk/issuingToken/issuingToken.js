@@ -22,7 +22,7 @@ class IssuingToken extends Resource {
      * @param id [string]: unique id returned when IssuingToken is created. ex: '5656565656565656'
      * @param externalId [string]: a unique string among all your IssuingTokens, used to avoid resource duplication. ex: 'DSHRMC00002626944b0e3b539d4d459281bdba90c2588791'
      * @param tags [list of string]: list of strings for reference when searching for IssuingToken. ex: ['employees', 'monthly']
-     * @param status [string]: current IssuingToken status. ex: 'active', 'blocked', 'canceled', 'frozen' or 'pending'
+     * @param status [string]: current IssuingToken status. Options: 'active', 'blocked', 'canceled', 'frozen', 'pending' or 'denied'
      * @param created [string]: creation datetime for the IssuingToken. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the IssuingToken. ex: '2020-03-10 10:30:00.000'
      * 
@@ -99,10 +99,10 @@ exports.query = async function ({ limit, after, before, status, cardIds, tags, i
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
-     * @param status [string, default null]: filter for status of retrieved objects. ex: 'approved', 'canceled', 'denied', 'confirmed' or 'voided'
+     * @param status [string, default null]: filter for status of retrieved objects. Options: 'active', 'blocked', 'canceled', 'frozen', 'pending' or 'denied'
      * @param cardIds [list of strings, default []]: card  IDs. ex: ['5656565656565656', '4545454545454545']
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
-     * @param ids [list of strings, default [], default null]: purchase IDs
+     * @param ids [list of strings, default null]: list of ids to filter retrieved IssuingToken objects. ex: ['5656565656565656', '4545454545454545']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      * @param externalIds [list of strings, default []]:  external IDs. ex: ['my_external_id1', 'my_external_id2']
      *
@@ -128,7 +128,7 @@ exports.page = async function ({ cursor, limit, after, before, status, cardIds, 
      *
      * Retrieve paged IssuingTokens
      *
-     * @description Receive a list of up to 100 Purchase objects previously created in the Stark Infra API and the cursor to the next page.
+     * @description Receive a list of up to 100 IssuingToken objects previously created in the Stark Infra API and the cursor to the next page.
      * Use this function instead of query if you want to manually page your requests.
      *
      * Parameters (optional):
@@ -136,10 +136,10 @@ exports.page = async function ({ cursor, limit, after, before, status, cardIds, 
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null] date filter for objects created only after specified date. ex: '2020-04-03'
      * @param before [string, default null] date filter for objects created only before specified date. ex: '2020-04-03'
-     * @param status [string, default null]: filter for status of retrieved objects. ex: 'approved', 'canceled', 'denied', 'confirmed' or 'voided'
+     * @param status [string, default null]: filter for status of retrieved objects. Options: 'active', 'blocked', 'canceled', 'frozen', 'pending' or 'denied'
      * @param cardIds [list of strings, default []]: card  IDs. ex: ['5656565656565656', '4545454545454545']
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
-     * @param ids [list of strings, default [], default null]: purchase IDs
+     * @param ids [list of strings, default null]: list of ids to filter retrieved IssuingToken objects. ex: ['5656565656565656', '4545454545454545']
      * @param user [Organization/Project object, default null]: Project object. Not necessary if starkinfra.user was set before function call
      * @param externalIds [list of strings, default []]: external IDs. ex: ['my_external_id1', 'my_external_id2']
      *

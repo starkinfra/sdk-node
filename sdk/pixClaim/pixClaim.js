@@ -28,7 +28,7 @@ class PixClaim extends Resource {
      * @param id [string]: unique id returned when the PixClaim is created. ex: '5656565656565656'
      * @param status [string]: current PixClaim status. Options: 'created', 'failed', 'delivered', 'confirmed', 'success', 'canceled'
      * @param type [string]: type of Pix Claim. Options: 'ownership', 'portability'.
-     * @param keyType [string]: keyType of the claimed PixKey. Options: 'CPF', 'CNPJ', 'phone' or 'email'
+     * @param keyType [string]: keyType of the claimed PixKey. Options: 'cpf', 'cnpj', 'phone', 'email' or 'evp'
      * @param flow [string]: direction of the Pix Claim. Options: 'in' if you received the PixClaim or 'out' if you created the PixClaim.
      * @param claimerBankCode [string]: bankCode of the Pix participant that created the PixClaim. ex: '20018183'.
      * @param claimedBankCode [string]: bankCode of the account donating the PixKey. ex: '20018183'.
@@ -72,7 +72,9 @@ exports.create = async function (claim, {user} = {}) {
      * Create a PixClaim object
      *
      * @description Create a Pix Claim to request the transfer of a Pix Key from an account
-     * hosted at another Pix participant to an account under your bank code.
+     * hosted at another Pix participant to an account under your bank code. An ownership claim
+     * changes the key holder and only applies to the phone keyType; a portability claim keeps the
+     * same holder and applies to phone, email or taxId keyTypes.
      *
      * Parameters (required):
      * @param claim [PixClaim object]: PixClaim object to be created in the API.
@@ -193,7 +195,11 @@ exports.update = async function ( id, status, { reason, user } = {}) {
      *
      * Update PixClaim entity
      *
-     * @description Update a PixClaim parameters by passing id.
+     * @description Confirm or cancel an incoming PixClaim by passing its id. You must answer an inbound claim
+     * within 7 days of its status changing to 'delivered' -- otherwise a portability claim is rejected and an
+     * ownership claim is accepted automatically, both with reason 'defaultBehavior'. Only claims with status
+     * 'delivered' can be confirmed (confirming deletes the referenced PixKey from Stark Infra and the Central
+     * Bank); only claims with status 'delivered' or 'confirmed' can be canceled.
      *
      * Parameters (required):
      * @param id [string]: PixClaim id. ex: '5656565656565656'

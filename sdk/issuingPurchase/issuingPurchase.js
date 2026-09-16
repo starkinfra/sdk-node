@@ -216,8 +216,8 @@ exports.update = async function (id, {tags, description, user}) {
      * @description Update an IssuingPurchase by passing id.
      *
      * Parameters (optional):
-     * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
-     * @param description [string, default null]: additional information to the IssuingPurchase.
+     * @param tags [list of strings, default null]: new array of strings to tag the purchase. ex: ['tony', 'stark']
+     * @param description [string, default null]: new description for the purchase. Max of 140 characters.
      *
      * Return:
      * @returns IssuingPurchase object with updated attributes 
