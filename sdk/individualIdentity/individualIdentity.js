@@ -9,8 +9,7 @@ class IndividualIdentity extends Resource {
      * IndividualIdentity object
      *
      * @description An IndividualIdentity represents an end-to-end identity verification of a Brazilian individual.
-     * It is created already carrying the proofs the holder must submit through the returned validatorLink -- there
-     * is no separate individual-document resource, and no 'created' method on such a resource to attach documents to.
+     * It is created already carrying the proofs the holder must submit through the returned validatorLink.
      * When you initialize a IndividualIdentity, the entity will not be automatically
      * created in the Stark Infra API. The 'create' function sends the objects
      * to the Stark Infra API and returns the list of created objects.
