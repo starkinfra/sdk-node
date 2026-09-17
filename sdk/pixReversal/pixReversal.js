@@ -31,12 +31,13 @@ class PixReversal extends Resource {
      * @param flow [string]: direction of money flow. ex: 'in' or 'out'
      * @param created [string]: creation datetime for the PixReversal. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the PixReversal. ex: '2020-03-10 10:30:00.000'
+     * @param description [string]: description of the reversal.
      *
      */
-    constructor({ 
-                    amount, externalId, endToEndId, reason, tags=null, id=null, 
-                    returnId=null, fee=null, status=null, flow=null, created=null, 
-                    updated=null
+    constructor({
+                    amount, externalId, endToEndId, reason, tags=null, id=null,
+                    returnId=null, fee=null, status=null, flow=null, created=null,
+                    updated=null, description=null
                 }) {
         super(id);
 
@@ -52,6 +53,7 @@ class PixReversal extends Resource {
         this.flow = flow;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
+        this.description = description;
     }
 }
 

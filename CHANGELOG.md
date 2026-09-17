@@ -28,6 +28,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - data, description, expired and jws attributes to BrcodePreview resource
 - bacenId attribute to PixClaim resource
 - fraudId attribute to PixInfraction resource
+- description attribute to PixReversal resource
 
 ### Fixed
 - user default in IssuingStock query and page, which ignored the user set with starkinfra.user
