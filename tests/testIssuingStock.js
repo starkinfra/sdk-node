@@ -10,6 +10,7 @@ describe('TestIssuingIssuingStockQuery', function() {
         let stocks = await starkinfra.issuingStock.query({'limit': 10});
         for await (let stock of stocks) {
             assert(typeof stock.id == 'string');
+            assert('embosserName' in stock);
         }
     });
 });

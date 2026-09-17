@@ -12,6 +12,7 @@ describe('TestMerchantCategoryGet', function(){
         });
         for await (let category of categories) {
             assert.notEqual(category.name, null);
+            assert('group' in category);
         }
     });
 });

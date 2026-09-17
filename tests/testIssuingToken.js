@@ -10,6 +10,8 @@ describe('TestIssuingTokenQuery', function() {
         let tokens = await starkinfra.issuingToken.query({'limit': 5});
         for await (let token of tokens) {
             assert(typeof token.id == 'string');
+            assert('walletDeviceScore' in token);
+            assert('walletAccountScore' in token);
         }
     });
 }); 
@@ -123,5 +125,23 @@ describe('TestIssuingTokenResponseActivation', function() {
             'status': 'approved'
         });
         assert(typeof token === 'string');
+    });
+});
+
+describe('TestIssuingTokenActivationCode', function() {
+    this.timeout(10000);
+    it('test_success', async () => {
+        let token = new starkinfra.IssuingToken({
+            cardId: '5189831499972623',
+            activationCode: '481632'
+        });
+        assert(token.activationCode === '481632');
+    });
+
+    it('test_success_default_null', async () => {
+        let token = new starkinfra.IssuingToken({
+            cardId: '5189831499972623'
+        });
+        assert(token.activationCode === null);
     });
 });

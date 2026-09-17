@@ -23,16 +23,19 @@ class IssuingProduct extends Resource {
      * @param customerType [string]: same as holderType, kept for backward compatibility.
      *
      */
-    constructor({ 
-                    id=null, network=null, fundingType=null, holderType=null, 
-                    code=null, created=null 
+    constructor({
+                    id=null, network=null, fundingType=null, holderType=null,
+                    code=null, settlement=null, client=null, customerType=null, created=null
                 }) {
         super(id);
-        
+
         this.network = network;
         this.fundingType = fundingType;
         this.holderType = holderType;
         this.code = code;
+        this.settlement = settlement;
+        this.client = client;
+        this.customerType = customerType;
         this.created = check.datetime(created);
     }
 }

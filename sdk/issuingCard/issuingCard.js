@@ -35,6 +35,7 @@ class IssuingCard extends Resource {
      * @param holderId [string]: cardholder unique id. ex: '5656565656565656'
      * @param type [string]: card type. ex: 'virtual'
      * @param status [string]: current IssuingCard status. Options: 'active', 'blocked', 'canceled', 'expired'
+     * @param isPinDefined [boolean]: [EXPANDABLE] whether the card has a PIN defined. Returned only when "expand=isPinDefined" is informed in the request
      * @param number [string]: [EXPANDABLE] masked card number. ex: '1234 5678 1234 5678'
      * @param securityCode [string]: [EXPANDABLE] masked card verification value (cvv). Expand to unmask the value. ex: '123'.
      * @param expiration [string]: [EXPANDABLE] masked card expiration datetime. ex: '2020-03-10 10:30:00.000'
@@ -46,8 +47,8 @@ class IssuingCard extends Resource {
                     holderName, holderTaxId, holderExternalId, displayName=null, 
                     rules=null, productId=null, tags=null, streetLine1=null, streetLine2=null, 
                     district=null, city=null, stateCode=null, zipCode=null, id=null, 
-                    holderId=null, type=null, status=null, number=null, securityCode=null, 
-                    expiration=null, created=null, updated=null 
+                    holderId=null, type=null, status=null, isPinDefined=null, number=null, securityCode=null,
+                    expiration=null, created=null, updated=null
                 }) {
         super(id);
         
@@ -67,6 +68,7 @@ class IssuingCard extends Resource {
         this.holderId = holderId;
         this.type = type;
         this.status = status;
+        this.isPinDefined = isPinDefined;
         this.number = number;
         this.securityCode = securityCode;
         this.expiration = check.datetime(expiration);
@@ -89,7 +91,7 @@ exports.create = async function (cards, {expand, user} = {}) {
      * @param cards [list of IssuingCard objects]: list of IssuingCard objects to be created in the API
      *
      * Parameters (optional):
-     * @param expand [list of strings, default []]: fields to expand information. ex: ['rules', 'securityCode', 'number', 'expiration']
+     * @param expand [list of strings, default []]: fields to expand information. ex: ['rules', 'securityCode', 'number', 'expiration', 'isPinDefined']
      * @param user [Organization/Project object]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
@@ -136,7 +138,7 @@ exports.query = async function ({ status, types, holderIds, after, before, tags,
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
-     * @param expand [list of strings, default []]: fields to expand information. ex: ['rules', 'securityCode', 'number', 'expiration']
+     * @param expand [list of strings, default []]: fields to expand information. ex: ['rules', 'securityCode', 'number', 'expiration', 'isPinDefined']
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
      * Return:
@@ -175,7 +177,7 @@ exports.page = async function ({ cursor, status, types, holderIds, after, before
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
-     * @param expand [list of strings, default []]: fields to expand information. ex: ['rules', 'securityCode', 'number', 'expiration']
+     * @param expand [list of strings, default []]: fields to expand information. ex: ['rules', 'securityCode', 'number', 'expiration', 'isPinDefined']
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was used before function call
      *
      * Return:

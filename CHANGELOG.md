@@ -17,8 +17,17 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - IssuingBillingInvoice resource
 - IssuingBillingTransaction resource
 - Statistics sub-resource parsing to PixUser
+- limit and maxLimit attributes to IssuingBalance resource
+- isPinDefined attribute to IssuingCard resource
+- settlement, client and customerType attributes to IssuingProduct resource
+- installmentCount, merchantCategoryNumber and confirmed attributes to IssuingPurchase resource
+- schedule and purposes attributes to IssuingRule resource
+- embosserName, created and updated attributes to IssuingStock resource
+- walletDeviceScore, walletAccountScore and activationCode attributes to IssuingToken resource
+- group attribute to MerchantCategory resource
 
 ### Fixed
+- user default in IssuingStock query and page, which ignored the user set with starkinfra.user
 - docstrings to reflect current business rules across Pix, Issuing and Credit resources
 - Readme parse method call for IssuingTokenActivation
 

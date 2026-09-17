@@ -17,7 +17,9 @@ class IssuingToken extends Resource {
      * @param walletId [string]: wallet provider which the token is bounded to. ex: 'google'
      * @param walletName [string]: wallet name. ex: 'GOOGLE'
      * @param merchantId [string]: merchant unique id. ex: '5656565656565656'
-     * 
+     * @param walletDeviceScore [float]: Device score informed by the digital wallet.
+     * @param walletAccountScore [float]: Account score informed by the digital wallet
+     *
      * Attributes (IssuingToken only):
      * @param id [string]: unique id returned when IssuingToken is created. ex: '5656565656565656'
      * @param externalId [string]: a unique string among all your IssuingTokens, used to avoid resource duplication. ex: 'DSHRMC00002626944b0e3b539d4d459281bdba90c2588791'
@@ -25,8 +27,9 @@ class IssuingToken extends Resource {
      * @param status [string]: current IssuingToken status. Options: 'active', 'blocked', 'canceled', 'frozen', 'pending' or 'denied'
      * @param created [string]: creation datetime for the IssuingToken. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the IssuingToken. ex: '2020-03-10 10:30:00.000'
-     * 
+     *
      * Attributes (Authorization request only):
+     * @param activationCode [string]: activation code received through the bank app or sms. ex: '481632'
      * @param methodCode [string]: provisioning method. Options: 'app', 'token', 'manual', 'server' or 'browser'
      * @param deviceType [string]: device type used for tokenization. ex: 'Phone'
      * @param deviceName [string]: device name used for tokenization. ex: 'My phone' 
@@ -37,10 +40,11 @@ class IssuingToken extends Resource {
      * @param walletInstanceId [string]: unique id referred to the wallet app in the current device. ex: '71583be4777eb89aaf0345eebeb82594f096615ed17862d0'
      *
      */
-    constructor({ 
-                    cardId=null, walletId=null, walletName=null, merchantId=null, id=null, externalId=null, 
-                    tags=null, status=null, created=null, updated=null, methodCode=null, deviceType=null, 
-                    deviceName=null, deviceSerialNumber=null, deviceOsName=null, deviceOsVersion=null, 
+    constructor({
+                    cardId=null, walletId=null, walletName=null, merchantId=null, walletDeviceScore=null,
+                    walletAccountScore=null, id=null, externalId=null,
+                    tags=null, status=null, created=null, updated=null, activationCode=null, methodCode=null,
+                    deviceType=null, deviceName=null, deviceSerialNumber=null, deviceOsName=null, deviceOsVersion=null,
                     deviceImei=null, walletInstanceId=null
                 }) {
         super(id);
@@ -49,11 +53,14 @@ class IssuingToken extends Resource {
         this.walletId = walletId;
         this.walletName = walletName;
         this.merchantId = merchantId;
+        this.walletDeviceScore = walletDeviceScore;
+        this.walletAccountScore = walletAccountScore;
         this.externalId = externalId;
         this.tags = tags;
         this.status = status;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
+        this.activationCode = activationCode;
         this.methodCode = methodCode;
         this.deviceType = deviceType;
         this.deviceName = deviceName;
