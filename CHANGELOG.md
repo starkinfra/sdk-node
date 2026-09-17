@@ -27,6 +27,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - group attribute to MerchantCategory resource
 - data, description, expired and jws attributes to BrcodePreview resource
 - bacenId attribute to PixClaim resource
+- fraudId attribute to PixInfraction resource
 
 ### Fixed
 - user default in IssuingStock query and page, which ignored the user set with starkinfra.user
