@@ -42,6 +42,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - user default in Webhook create, query and page and in IssuingInvoice create, which ignored the user set with starkinfra.user
 - date component in bacenId.create, which used the weekday and a zero-indexed month instead of the day and month of the date, producing invalid ids
 
+### Removed
+- IndividualDocument resource and its Log: no API route serves them
+
 ## [0.20.0] - 2026-07-29
 ### Added
 - BusinessAccountRequest resource
@@ -171,7 +174,6 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ## [0.3.0] - 2023-05-11
 ### Added
 - CreditHolmes resource
-- IndividualDocument resource
 - IndividualIdentity resource
 - IssuingRestock resource
 - IssuingStock resource
