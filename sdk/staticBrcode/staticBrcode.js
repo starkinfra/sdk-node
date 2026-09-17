@@ -26,23 +26,24 @@ class StaticBrcode extends Resource {
      * @param cashierBankCode [string, default null]: Cashier's bank code. ex: "20018183".
      * @param description [string, default null]: optional description to override default description to be shown in the bank statement. ex: "Payment for service #1234"
      * @param tags [list of strings, default []]: list of strings for tagging. ex: ["travel", "food"]
-     * 
+     * @param type [string, default "instant"]: type of the StaticBrcode. Options: "instant", "instantAndOrSubscription"
+     *
      * Attributes (return-only):
      * @param id [string]: id returned on creation, this is the BR Code. ex: '00020126360014br.gov.bcb.pix0114+552840092118152040000530398654040.095802BR5915Jamie Lannister6009Sao Paulo620705038566304FC6C'
      * @param uuid [string]: unique UUID returned when a StaticBrcode is created. ex: '97756273400d42ce9086404fe10ea0d6'
      * @param url [string]: url link to the BR Code image. ex: 'https://brcode-h.development.starkinfra.com/static-qrcode/97756273400d42ce9086404fe10ea0d6.png'
      * @param updated [string]: latest update datetime for the StaticBrcode. ex: '2020-03-10 10:30:00.000'
      * @param created [string]: creation datetime for the StaticBrcode. ex: '2020-03-10 10:30:00.000'
-     * 
+     *
      */
-    constructor({   
-                    name, keyId, city, amount=null, reconciliationId=null, 
-                    cashierBankCode=null, description=null, tags=null, 
-                    id=null, uuid=null, url=null, updated=null, 
-                    created=null
+    constructor({
+                    name, keyId, city, amount=null, reconciliationId=null,
+                    cashierBankCode=null, description=null, tags=null,
+                    id=null, uuid=null, url=null, updated=null,
+                    created=null, type=null
                 }) {
         super(id);
-        
+
         this.name = name;
         this.keyId = keyId;
         this.city = city;
@@ -55,6 +56,7 @@ class StaticBrcode extends Resource {
         this.url = url;
         this.updated = check.datetime(updated);
         this.created = check.datetime(created);
+        this.type = type;
     }
 }
 
