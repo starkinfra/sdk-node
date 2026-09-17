@@ -152,5 +152,5 @@ exports.csv = async function (id, {user} = {}) {
      * @returns PixStatement csv file
      *
      */
-    return rest.getContent(resource, id, {}, user, 'csv');
+    return rest.getContent(resource, id, user, null, 'csv');
 };

@@ -118,5 +118,5 @@ exports.pdf = async function (id, {user} = {}) {
      * @returns IssuingTokenDesign pdf file
      *
      */
-    return rest.getPdf(exports.resource, id, null, user);
+    return rest.getContent(exports.resource, id, user, null, 'pdf');
 };

@@ -5,7 +5,7 @@ exports.getPixInfractionToPatch = async function () {
     const pixInfractions = [];
     let infractions = null;
     let cursor = null;
-    while (pixInfractions < 1) {
+    while (pixInfractions.length < 1) {
         [infractions, cursor] = await starkinfra.pixInfraction.page({
             status: 'delivered',
             limit: 5,
@@ -19,6 +19,9 @@ exports.getPixInfractionToPatch = async function () {
         if (!cursor) {
             break;
         }
+    }
+    if (pixInfractions.length === 0) {
+        return null;
     }
     return pixInfractions[Math.floor(Math.random()*pixInfractions.length)];
 };

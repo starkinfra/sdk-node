@@ -45,13 +45,13 @@ describe('TestIssuingTokenDesignGet', function() {
     });
 });
 
-describe('TestIssuingDesignPdfGet', function(){
+describe('TestIssuingTokenDesignPdfGet', function(){
     this.timeout(30000);
     it('test_success', async () => {
-        let designs = await starkinfra.issuingDesign.query({'limit': 1});
+        let designs = await starkinfra.issuingTokenDesign.query({'limit': 1});
         for await (let design of designs) {
             assert(typeof design.id == 'string');
-            let pdf = await starkinfra.issuingDesign.pdf(design.id);
+            let pdf = await starkinfra.issuingTokenDesign.pdf(design.id);
             assert(Buffer.isBuffer(pdf));
         }
     });

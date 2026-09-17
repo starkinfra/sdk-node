@@ -12,8 +12,8 @@ exports.create = function (bankCode) {
         .replace('{bankCode}', bankCode)
         .replace('{date}',
             String(now.getFullYear()) +
-            String(now.getMonth()).padStart(2, '0') +
-            String(now.getDay()).padStart(2, '0') +
+            String(now.getMonth() + 1).padStart(2, '0') +
+            String(now.getDate()).padStart(2, '0') +
             String(now.getHours()).padStart(2, '0') +
             String(now.getMinutes()).padStart(2, '0'))
         .replace('{randomString}', randomString)

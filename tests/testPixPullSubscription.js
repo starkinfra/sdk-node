@@ -119,7 +119,7 @@ describe("TestPixPullSubscriptionParse", function () {
 describe("TestPixPullSubscriptionNormalization", function () {
     it("test_empty_due_and_installment_end_become_null", () => {
         const subscription = new starkinfra.pixPullSubscription.PixPullSubscription({
-            ...examplePixPullSubscription,
+            ...pixPullSubscription.examplePixPullSubscription(),
             due: "",
             installmentEnd: "",
         });
@@ -141,7 +141,7 @@ describe("TestPixPullSubscriptionPatch", function () {
         if (!subscriptionId) return;
         try {
             const updated = await starkinfra.pixPullSubscription.update(subscriptionId, {
-                status: "confirmed",
+                status: "approved",
                 senderCityCode: "1100015",
             });
             assert(typeof updated.id === "string");

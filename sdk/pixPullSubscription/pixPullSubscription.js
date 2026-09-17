@@ -38,7 +38,7 @@ class PixPullSubscription extends Resource {
      * @param installmentEnd [string, default null]: end datetime of settlements allowed for this subscription. ISO 8601. ex: '2026-12-18T02:59:59.999999+00:00'
      * @param receiverBankCode [string, default null]: receiver's bank institution code. Defaults to the workspace's primary institution when omitted. ex: '32160637'
      * @param pullRetryLimit [integer, default null]: max number of retries the receiver may issue for a single failed pull cycle. ex: 3
-     * @param senderCityCode [string, default null]: IBGE code of the payer's city. Required when patching status to 'confirmed'. ex: '1100015'
+     * @param senderCityCode [string, default null]: IBGE code of the payer's city. Required when patching status to 'approved'. ex: '1100015'
      * @param senderFinalName [string, default null]: final sender name when the sender differs from the originating institution. ex: 'STARK SCD S.A.'
      * @param senderFinalTaxId [string, default null]: final sender tax ID. ex: '39.908.427/0001-28'
      * @param tags [list of strings, default null]: list of strings for reference when searching for PixPullSubscriptions. ex: ['test', 'pix-pull']
