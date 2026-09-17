@@ -37,6 +37,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - user default in IssuingStock query and page, which ignored the user set with starkinfra.user
 - docstrings to reflect current business rules across Pix, Issuing and Credit resources
 - Readme parse method call for IssuingTokenActivation
+- user argument order in IssuingDesign.pdf and PixStatement.csv
+- IssuingTokenDesign.pdf, which called a helper that does not exist
 
 ## [0.20.0] - 2026-07-29
 ### Added

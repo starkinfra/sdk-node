@@ -120,5 +120,5 @@ exports.pdf = async function (id, {user} = {}) {
      * @returns IssuingDesign pdf file
      *
      */
-    return rest.getContent(exports.resource, id, null, user, 'pdf');
+    return rest.getContent(exports.resource, id, user, null, 'pdf');
 };
