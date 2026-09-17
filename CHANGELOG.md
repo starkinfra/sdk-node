@@ -31,6 +31,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - description attribute to PixReversal resource
 - chunkCount attribute to PixStatement resource
 - type attribute to StaticBrcode resource
+- tags attribute to IndividualAccountAttachment resource
 
 ### Fixed
 - user default in IssuingStock query and page, which ignored the user set with starkinfra.user

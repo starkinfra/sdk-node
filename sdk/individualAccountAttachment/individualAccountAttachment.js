@@ -31,12 +31,13 @@ class IndividualAccountAttachment extends Resource {
      *
      */
     constructor({
-        type, content = null, accountRequestId, contentType, created = null, status = null, id = null
+        type, content = null, accountRequestId, contentType, tags = null, created = null, status = null, id = null
     }) {
         super(id);
         this.type = type;
         this.content = content;
         this.accountRequestId = accountRequestId;
+        this.tags = tags;
         this.created = check.datetime(created);
         this.status = status;
 
