@@ -40,13 +40,15 @@ class PixInfraction extends Resource {
      * @param amount [integer]: amount in cents of the reported transaction.
      * @param bacenId [string]: unique id returned by the Central Bank for the PixInfraction. ex: "3b10c3ef-3117-4ab8-815d-d3867ada7560"
      * @param disputeId [string]: id of the PixDispute associated with the PixInfraction.
+     * @param fraudId [string]: id of the Pix Fraud. ex: "5741774970552320"
      *
      */
-    constructor({ 
+    constructor({
                     referenceId, type, method, operatorEmail, operatorPhone, description = null,
                     tags = null, fraudType = null, id = null, creditedBankCode = null, debitedBankCode = null,
-                    flow = null, analysis = null, reportedBy = null, result = null, status = null,  
-                    created = null, updated = null, amount = null, bacenId = null, disputeId = null
+                    flow = null, analysis = null, reportedBy = null, result = null, status = null,
+                    created = null, updated = null, amount = null, bacenId = null, disputeId = null,
+                    fraudId = null
                 }) {
         super(id);
 
@@ -70,6 +72,7 @@ class PixInfraction extends Resource {
         this.amount = amount;
         this.bacenId = bacenId;
         this.disputeId = disputeId;
+        this.fraudId = fraudId;
     }
 }
 
