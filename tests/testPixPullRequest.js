@@ -1,5 +1,6 @@
 const assert = require("assert");
 const starkinfra = require("../index.js");
+const starkcoreError = require("starkcore/starkcore/error.js");
 const pixPullRequest = require("./utils/pixPullRequest.js");
 
 starkinfra.user = require("./utils/user").exampleProject;
@@ -30,7 +31,7 @@ describe("TestPixPullRequestPost", function () {
             return;
         }
         let requests = [];
-        requests.push(new starkinfra.pixPullRequest.PixPullRequest(examplePixPullRequest(subscriptionId)));
+        requests.push(pixPullRequest.examplePixPullRequest(subscriptionId));
         requests = await starkinfra.pixPullRequest.create(requests);
         for (let request of requests) {
             assert(typeof request.id == "string");
@@ -195,7 +196,7 @@ describe("TestPixPullRequestEventParse", function () {
             await starkinfra.event.parse({content: content, signature: invalidSignature});
             throw new Error("Oops, signature was accepted!");
         } catch (e) {
-            if (!(e instanceof starkinfra.error.InvalidSignatureError))
+            if (!(e instanceof starkcoreError.InvalidSignatureError))
                 throw e;
         }
     });

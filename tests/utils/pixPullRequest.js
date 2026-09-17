@@ -1,6 +1,6 @@
 const starkinfra = require('../../index.js');
 const uniqueId = require("./uniqueId.js");
-const endToEndId = require("./endToEndId.js");
+const endToEndId = require("../../sdk/utils/endToEndId.js");
 const {bankCode} = require("./user.js");
 
 exports.examplePixPullRequest = function (subscriptionId = "5656565656565656") {
