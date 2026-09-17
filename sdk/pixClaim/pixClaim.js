@@ -34,13 +34,15 @@ class PixClaim extends Resource {
      * @param claimedBankCode [string]: bankCode of the account donating the PixKey. ex: '20018183'.
      * @param created [string]: creation datetime for the PixClaim. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the PixClaim. ex: '2020-03-10 10:30:00.000'
+     * @param bacenId [string, default null]: unique transaction id returned from Central Bank. ex: 'ccf9bd9c-e99d-999e-bab9-b999ca999f99'
      *
      */
-    constructor({ 
-                    accountCreated, accountNumber, accountType, branchCode, name, 
-                    taxId, keyId = null, tags = null, id = null, status = null, 
-                    type = null, keyType = null, flow = null, claimerBankCode = null, 
-                    claimedBankCode = null, created = null, updated = null
+    constructor({
+                    accountCreated, accountNumber, accountType, branchCode, name,
+                    taxId, keyId = null, tags = null, id = null, status = null,
+                    type = null, keyType = null, flow = null, claimerBankCode = null,
+                    claimedBankCode = null, created = null, updated = null,
+                    bacenId = null
                 }) {
         super(id);
 
@@ -60,6 +62,7 @@ class PixClaim extends Resource {
         this.claimedBankCode = claimedBankCode;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
+        this.bacenId = bacenId;
     }
 }
 

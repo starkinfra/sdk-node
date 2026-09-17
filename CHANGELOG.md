@@ -26,6 +26,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - walletDeviceScore, walletAccountScore and activationCode attributes to IssuingToken resource
 - group attribute to MerchantCategory resource
 - data, description, expired and jws attributes to BrcodePreview resource
+- bacenId attribute to PixClaim resource
 
 ### Fixed
 - user default in IssuingStock query and page, which ignored the user set with starkinfra.user
