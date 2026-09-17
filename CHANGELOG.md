@@ -29,6 +29,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - bacenId attribute to PixClaim resource
 - fraudId attribute to PixInfraction resource
 - description attribute to PixReversal resource
+- chunkCount attribute to PixStatement resource
 
 ### Fixed
 - user default in IssuingStock query and page, which ignored the user set with starkinfra.user

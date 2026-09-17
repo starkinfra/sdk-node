@@ -23,14 +23,15 @@ class PixStatement extends Resource {
      * @param transactionCount [integer]: number of transactions that happened during the day that the PixStatement was requested. ex 11
      * @param created [string]: creation datetime for the PixStatement. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the PixStatement. ex: '2020-03-10 10:30:00.000'
+     * @param chunkCount [integer]: number of chunks the statement file is split into. ex: 2
      *
      */
-    constructor({ 
-                    before, after, type, id=null, status = null, transactionCount = null, 
-                    created = null, updated = null 
+    constructor({
+                    before, after, type, id=null, status = null, transactionCount = null,
+                    created = null, updated = null, chunkCount = null
                 }) {
         super(id);
-        
+
         this.before = check.date(before);
         this.after = check.date(after);
         this.type = type;
@@ -38,6 +39,7 @@ class PixStatement extends Resource {
         this.transactionCount = transactionCount;
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
+        this.chunkCount = chunkCount;
     }
 }
 
