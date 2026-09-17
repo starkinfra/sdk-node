@@ -39,6 +39,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - Readme parse method call for IssuingTokenActivation
 - user argument order in IssuingDesign.pdf and PixStatement.csv
 - IssuingTokenDesign.pdf, which called a helper that does not exist
+- user default in Webhook create, query and page and in IssuingInvoice create, which ignored the user set with starkinfra.user
 
 ## [0.20.0] - 2026-07-29
 ### Added

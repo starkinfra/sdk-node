@@ -53,7 +53,7 @@ class IssuingInvoice extends Resource {
 exports.IssuingInvoice = IssuingInvoice;
 let resource = {'class': exports.IssuingInvoice, 'name': 'IssuingInvoice'};
 
-exports.create = async function ({ amount, name=null, taxId=null, tags=null, user = null } = {}) {
+exports.create = async function ({ amount, name=null, taxId=null, tags=null, user } = {}) {
     /**
      *
      * Create an Invoice
