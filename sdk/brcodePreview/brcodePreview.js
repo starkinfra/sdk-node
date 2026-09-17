@@ -42,15 +42,20 @@ class BrcodePreview extends Resource {
      * @param status [string]: Payment status. ex: "active", "paid", "canceled" or "unknown"
      * @param subscription [Subscription object]: BR code subscription information
      * @param taxId [string]: Payment receiver tax ID. ex: "012.345.678-90"
-     * 
+     * @param data [list of dictionaries]: additional data of the dynamic QR code, in key/value pairs. ex: [{"key": "additional-info", "value": "order #12345"}]
+     * @param description [string]: description of the payment.
+     * @param expired [string]: date and time after which the dynamic QR code is considered expired. ex: "2020-04-23T23:00:00.000000+00:00"
+     * @param jws [string]: JWS of the dynamic QR code. Returned only when "jws" is passed in the expand query parameter. ex: "eyJhbGciOiJFUzI1NiIsInR5cCI6IkpXVCJ9..."
+     *
      */
     constructor({
-                    id, payerId, endToEndId=null, accountNumber=null, accountType=null, amount=null, 
-                    amountType=null, bankCode=null, branchCode=null, cashAmount=null, 
+                    id, payerId, endToEndId=null, accountNumber=null, accountType=null, amount=null,
+                    amountType=null, bankCode=null, branchCode=null, cashAmount=null,
                     cashierBankCode=null, cashierType=null, discountAmount=null, due=null,
-                    fineAmount=null, interestAmount=null, keyId=null, name=null, 
-                    nominalAmount=null, reconciliationId=null, reductionAmount=null, 
-                    scheduled=null, status=null, subscription=null, taxId=null
+                    fineAmount=null, interestAmount=null, keyId=null, name=null,
+                    nominalAmount=null, reconciliationId=null, reductionAmount=null,
+                    scheduled=null, status=null, subscription=null, taxId=null,
+                    data=null, description=null, expired=null, jws=null
                 }) {
         super(id);
 
@@ -78,6 +83,10 @@ class BrcodePreview extends Resource {
         this.status = status
         this.subscription = _parseSubscription(subscription)
         this.taxId = taxId
+        this.data = data
+        this.description = description
+        this.expired = check.datetime(expired)
+        this.jws = jws
     }
 }
 

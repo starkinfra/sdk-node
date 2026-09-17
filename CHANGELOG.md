@@ -25,6 +25,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - embosserName, created and updated attributes to IssuingStock resource
 - walletDeviceScore, walletAccountScore and activationCode attributes to IssuingToken resource
 - group attribute to MerchantCategory resource
+- data, description, expired and jws attributes to BrcodePreview resource
 
 ### Fixed
 - user default in IssuingStock query and page, which ignored the user set with starkinfra.user
