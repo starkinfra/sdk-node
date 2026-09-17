@@ -61,6 +61,7 @@ This SDK version is compatible with the Stark Infra API v2.
         - [PixPullSubscription](#create-pixpullsubscriptions): Set up recurring Pix debit authorizations
         - [PixPullRequest](#create-pixpullrequests): Trigger automatic Pix debits against a subscription
         - [PixFraud](#create-pixfrauds): Report a PixKey or taxId for confirmed fraud
+        - [PixUser](#get-a-pixuser): Get fraud statistics of a user
         - [PixKeyHolmes](#create-pixkeyholmes): Investigate the registration status of a Pix Key
         - [PixInternalTransactionReport](#create-pixinternaltransactionreports): Report internal transactions to the Central Bank
     - [Ledger](#ledger)
@@ -3069,6 +3070,19 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
+### Get a PixUser
+
+You can get a specific fraud statistics of a user with his taxId.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let user = await starkinfra.pixUser.get('01234567890');
+    console.log(user);
+})();
+```
+
 ### Create PixKeyHolmes
 
 PixKeyHolmes are used to investigate the registration status of a Pix Key in the Central Bank's DICT.
@@ -3481,6 +3495,21 @@ const starkinfra = require('starkinfra');
 (async() => {
     let note = await starkinfra.creditNote.get('5155165527080960');
     console.log(note);
+})();
+```
+
+### CCB Token Resend
+
+You can resend the CCB token to the signers in case they missed the original email or link.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let note = await starkinfra.creditNote.get('5155165527080960');
+    for (let signer of note.signers) {
+        await starkinfra.creditSigner.resendToken(signer.id);
+    }
 })();
 ```
 
