@@ -4241,6 +4241,36 @@ await (async() => {
 })();
 ```
 
+### Query IndividualAccountAttachment logs
+
+You can query individual account attachment logs to better understand individual account attachment life cycles.
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.individualAccountAttachment.log.query({
+        'limit': 50,
+        'after': '2022-01-01',
+        'before': '2022-01-20'
+    });
+
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get an IndividualAccountAttachment log
+
+You can also get a specific log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.individualAccountAttachment.log.get('5155165527080960');
+
+    console.log(log);
+})();
+```
+
 ### Create BusinessIdentities
 
 You can create a BusinessIdentity to validate a company through its tax ID (CNPJ).
