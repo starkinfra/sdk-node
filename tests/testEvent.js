@@ -1,4 +1,5 @@
 const starkinfra = require("../index.js");
+const starkcoreError = require("starkcore/starkcore/error.js");
 const assert = require("assert");
 
 starkinfra.user = require("./utils/user").exampleProject;
@@ -28,7 +29,7 @@ describe("TestEventParse", function(){
             });
             throw new Error("Oops, signature was accepted!");
         } catch (e) {
-            if (!(e instanceof starkinfra.error.InvalidSignatureError))
+            if (!(e instanceof starkcoreError.InvalidSignatureError))
                 throw e;
         }
     });
@@ -44,7 +45,7 @@ describe("TestEventParse", function(){
             });
             throw new Error("Oops, signature was accepted!");
         } catch (e) {
-            if (!(e instanceof starkinfra.error.InvalidSignatureError))
+            if (!(e instanceof starkcoreError.InvalidSignatureError))
                 throw e;
         }
     });

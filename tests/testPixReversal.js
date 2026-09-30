@@ -1,5 +1,6 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
+const starkcoreError = require("starkcore/starkcore/error.js");
 const {generateExamplePixReversalJson} = require('./utils/pixReversal');
 
 starkinfra.user = require('./utils/user').exampleProject;
@@ -137,7 +138,7 @@ describe('TestAuthorizationParse', function(){
             await starkinfra.pixReversal.parse(content, invalid_signature);
             throw new Error('Oops, signature was accepted!');
         } catch (e) {
-            if (!(e instanceof starkinfra.error.InvalidSignatureError))
+            if (!(e instanceof starkcoreError.InvalidSignatureError))
                 throw e;
         }
     });
@@ -150,7 +151,7 @@ describe('TestAuthorizationParse', function(){
             await starkinfra.pixReversal.parse(content, malformed_signature);
             throw new Error('Oops, signature was accepted!');
         } catch (e) {
-            if (!(e instanceof starkinfra.error.InvalidSignatureError))
+            if (!(e instanceof starkcoreError.InvalidSignatureError))
                 throw e;
         }
     });

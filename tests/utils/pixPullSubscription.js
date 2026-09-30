@@ -2,22 +2,17 @@ const starkinfra = require('../../index.js');
 const uniqueId = require("./uniqueId.js");
 const {bankCode} = require("./user");
 
-function generateBacenId(code) {
-    const now = new Date();
-    const datePart = String(now.getFullYear()) +
-        String(now.getMonth() + 1).padStart(2, '0') +
-        String(now.getDate()).padStart(2, '0') +
-        String(now.getHours()).padStart(2, '0') +
-        String(now.getMinutes()).padStart(2, '0');
-    const randomPart = String(Math.floor(1000000 + Math.random() * 9000000));
-    return 'RR' + code + datePart + randomPart;
+function generateInstallmentStart() {
+    const start = new Date();
+    start.setDate(start.getDate() + 7);
+    return start.toISOString().replace("Z", "+00:00");
 }
 
 exports.examplePixPullSubscription = function () {
     return new starkinfra.pixPullSubscription.PixPullSubscription({
-    bacenId: generateBacenId(bankCode),
+    bacenId: starkinfra.pixSubscriptionBacenId.create(bankCode, 'RR'),
     externalId: uniqueId.create(),
-    installmentStart: new Date().toISOString().replace("Z", "+00:00"),
+    installmentStart: generateInstallmentStart(),
     interval: "month",
     receiverBankCode: bankCode,
     receiverName: "Stark Bank",
