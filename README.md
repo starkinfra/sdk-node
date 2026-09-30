@@ -78,6 +78,14 @@ This SDK version is compatible with the Stark Infra API v2.
         - [BusinessIdentity](#create-businessidentities): Create business identities
         - [BusinessAttachment](#create-businessattachments): Create business attachments
         - [BusinessAccountRequest](#create-businessaccountrequest): Create business account requests
+    - [AI](#ai)
+        - [AiKnowledgeBase](#create-an-aiknowledgebase): Turn a website into knowledge your agents can answer from
+        - [AiVoice](#create-an-aivoice): Clone a voice from a recording
+        - [AiSpeech](#create-an-aispeech): Read a text out loud with a cloned voice
+        - [AiTranscript](#create-an-aitranscript): Transcribe an audio file
+        - [AiAgent](#create-an-aiagent): Configure an assistant
+        - [AiChat](#create-an-aichat): Open a conversation with an agent
+        - [AiMessage](#create-an-aimessage): Talk to an agent
     - [Webhook](#webhook):
         - [Webhook](#create-a-webhook-subscription): Configure your webhook endpoints and subscriptions
         - [WebhookEvents](#process-webhook-events): Manage Webhook events
@@ -4561,6 +4569,467 @@ await (async() => {
     let log = await starkinfra.businessAccountRequest.log.get('5155165527080960');
   
     console.log(log);
+})();
+```
+
+## AI
+
+### Create an AiKnowledgeBase
+
+An AiKnowledgeBase turns a website into material an agent can read. Stark Infra crawls the root URL, follows its
+links, converts every page to Markdown and indexes it. The call returns at once with the base in 'processing' status.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let knowledgeBase = await starkinfra.aiKnowledgeBase.create(
+        new starkinfra.AiKnowledgeBase({
+            name: 'Product Documentation',
+            rootUrl: 'https://docs.starkinfra.com',
+            isRecursive: false,
+            tags: ['support', 'public']
+        })
+    );
+
+    console.log(knowledgeBase);
+})();
+```
+
+### Get an AiKnowledgeBase
+
+Poll a knowledge base by its id until its status leaves 'processing'.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let knowledgeBase = await starkinfra.aiKnowledgeBase.get('5155165527080960');
+
+    console.log(knowledgeBase);
+})();
+```
+
+### Query AiKnowledgeBases
+
+You can list your knowledge bases, optionally filtered by ids, by a substring of the name or by status.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let knowledgeBases = await starkinfra.aiKnowledgeBase.query({name: 'documentation', status: 'success'});
+
+    for await (let knowledgeBase of knowledgeBases) {
+        console.log(knowledgeBase);
+    }
+})();
+```
+
+### Update an AiKnowledgeBase
+
+Rename a knowledge base, retag it or change whether its crawl is recursive. The root URL cannot be changed.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let knowledgeBase = await starkinfra.aiKnowledgeBase.update('5155165527080960', {name: 'Public Documentation', tags: ['support']});
+
+    console.log(knowledgeBase);
+})();
+```
+
+### List the pages of an AiKnowledgeBase
+
+Get every page the crawler has seen, grouped by host, with the status of each one.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let hosts = await starkinfra.aiKnowledgeBase.hosts('5155165527080960');
+
+    console.log(hosts);
+})();
+```
+
+### Delete AiKnowledgeBases
+
+Delete up to 100 knowledge bases at once. Agents that still reference a deleted base simply retrieve nothing from it.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let knowledgeBases = await starkinfra.aiKnowledgeBase.delete(['5155165527080960', '4545454545454545']);
+
+    for (let knowledgeBase of knowledgeBases) {
+        console.log(knowledgeBase);
+    }
+})();
+```
+
+### Create an AiVoice
+
+An AiVoice is a voice cloned from a recording you upload. Cloning is asynchronous: the voice is created in 'processing' status and moves to 'success' when it is ready to speak. Only the creatable fields are sent, so an object returned by the API can be reused.
+
+```javascript
+const fs = require('fs');
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let voice = await starkinfra.aiVoice.create(
+        new starkinfra.AiVoice({
+            audio: fs.readFileSync('recording.mp3').toString('base64'),
+            name: 'Helena',
+            description: 'Calm voice',
+            language: 'portuguese',
+            gender: 'female'
+        })
+    );
+
+    console.log(voice);
+})();
+```
+
+### Query AiVoices
+
+List your voices. The route takes no filters and is not paginated.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let voices = await starkinfra.aiVoice.query();
+
+    for await (let voice of voices) {
+        console.log(voice);
+    }
+})();
+```
+
+### Delete AiVoices
+
+Delete up to 100 voices at once.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let voices = await starkinfra.aiVoice.delete(['5155165527080960', '4545454545454545']);
+
+    for (let voice of voices) {
+        console.log(voice);
+    }
+})();
+```
+
+### Create an AiSpeech
+
+An AiSpeech is a text read out loud by an AiVoice. It is synthesized during the call and comes back with the audio as a base64 MP3.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let speech = await starkinfra.aiSpeech.create(
+        new starkinfra.AiSpeech({
+            voiceId: '5155165527080960',
+            text: 'Hello, how can I help you?'
+        })
+    );
+
+    console.log(speech);
+})();
+```
+
+### Get an AiSpeech
+
+Get a speech by its id. The audio comes back unless you give fields without it.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let speech = await starkinfra.aiSpeech.get('5155165527080960', {fields: ['id', 'status', 'voiceName'], expand: ['voiceName']});
+
+    console.log(speech);
+})();
+```
+
+### Query AiSpeeches
+
+List your speeches, without their audio. Only fields and expand are accepted.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let speeches = await starkinfra.aiSpeech.query({fields: ['id', 'status']});
+
+    for await (let speech of speeches) {
+        console.log(speech);
+    }
+})();
+```
+
+### Create an AiTranscript
+
+An AiTranscript is the text of an audio file you upload. It is transcribed during the call.
+
+```javascript
+const fs = require('fs');
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let transcript = await starkinfra.aiTranscript.create(
+        new starkinfra.AiTranscript({
+            audio: fs.readFileSync('recording.mp3').toString('base64')
+        })
+    );
+
+    console.log(transcript);
+})();
+```
+
+### Query AiTranscripts
+
+List your transcripts. The route takes no filters and is not paginated.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let transcripts = await starkinfra.aiTranscript.query();
+
+    for await (let transcript of transcripts) {
+        console.log(transcript);
+    }
+})();
+```
+
+### Create an AiAgent
+
+An AiAgent is the configuration of an assistant: model, instructions, knowledge bases and voice. The keys of metadataSchema are yours and are sent exactly as written.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let agent = await starkinfra.aiAgent.create(
+        new starkinfra.AiAgent({
+            name: 'Support assistant',
+            model: 'bender-1.0',
+            systemPrompt: 'Answer in one short sentence.',
+            knowledgeBaseIds: ['5155165527080960'],
+            metadataSchema: {order_id: {type: 'string', description: 'Order the customer mentions'}}
+        })
+    );
+
+    console.log(agent);
+})();
+```
+
+### Get an AiAgent
+
+Get an agent by its id. Expand knowledgeBases to receive the AiKnowledgeBase objects themselves.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let agent = await starkinfra.aiAgent.get('5155165527080960', {expand: ['knowledgeBases']});
+
+    console.log(agent);
+})();
+```
+
+### Query AiAgents
+
+List your agents. Only fields and expand are accepted.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let agents = await starkinfra.aiAgent.query({fields: ['id', 'name']});
+
+    for await (let agent of agents) {
+        console.log(agent);
+    }
+})();
+```
+
+### Update an AiAgent
+
+Change only the parameters you give. The API clears the knowledge bases of a request that carries none, so when knowledgeBaseIds is not given the SDK reads the agent first and sends its current list back. Pass an empty list to clear them on purpose.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let agent = await starkinfra.aiAgent.update('5155165527080960', {name: 'Billing assistant'});
+
+    console.log(agent);
+})();
+```
+
+### Delete AiAgents
+
+Delete up to 100 agents at once.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let agents = await starkinfra.aiAgent.delete(['5155165527080960', '4545454545454545']);
+
+    for (let agent of agents) {
+        console.log(agent);
+    }
+})();
+```
+
+### Create an AiChat
+
+An AiChat is one conversation with an AiAgent. When the title is omitted, the first message generates one.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let chat = await starkinfra.aiChat.create(
+        new starkinfra.AiChat({
+            agentId: '5155165527080960',
+            title: 'Support chat'
+        })
+    );
+
+    console.log(chat);
+})();
+```
+
+### Get an AiChat
+
+Get a chat by its id. Expand agentName to receive the name of its agent.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let chat = await starkinfra.aiChat.get('5155165527080960', {expand: ['agentName']});
+
+    console.log(chat);
+})();
+```
+
+### Query AiChats
+
+List your chats. Only fields and expand are accepted.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let chats = await starkinfra.aiChat.query({fields: ['id', 'title']});
+
+    for await (let chat of chats) {
+        console.log(chat);
+    }
+})();
+```
+
+### Update an AiChat
+
+Rename a chat or hand it to another agent.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let chat = await starkinfra.aiChat.update('5155165527080960', {title: 'Billing chat'});
+
+    console.log(chat);
+})();
+```
+
+### Delete AiChats
+
+Delete up to 100 chats at once, with their messages.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let chats = await starkinfra.aiChat.delete(['5155165527080960', '4545454545454545']);
+
+    for (let chat of chats) {
+        console.log(chat);
+    }
+})();
+```
+
+### Create an AiMessage
+
+Post what the user said to a chat. The call waits for the agent, which takes a few seconds, and returns the user's message and the agent's answer. Expand chatName to receive the chat title on every message.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let messages = await starkinfra.aiMessage.create(
+        new starkinfra.AiMessage({
+            chatId: '5155165527080960',
+            text: 'What is the status of my order?'
+        }),
+        {expand: ['chatName']}
+    );
+
+    for (let message of messages) {
+        console.log(message);
+    }
+})();
+```
+
+### Query AiMessages
+
+Get the whole history of a chat. The cursor is followed until the history ends.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let messages = await starkinfra.aiMessage.query('5155165527080960', {limit: 10});
+
+    for await (let message of messages) {
+        console.log(message);
+    }
+})();
+```
+
+### Get paged AiMessages
+
+You can get lists of up to 100 messages per request and the cursor to the next page, if you want to page the requests yourself.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let cursor = null;
+    let messages;
+
+    while (true) {
+        [messages, cursor] = await starkinfra.aiMessage.page('5155165527080960', {limit: 10, cursor: cursor});
+
+        for (let message of messages) {
+            console.log(message);
+        }
+
+        if (!cursor) {
+            break;
+        }
+    }
 })();
 ```
 
