@@ -72,8 +72,6 @@ exports.create = async function (message, { expand, user } = {}) {
      * @returns list with the user's AiMessage and the agent's AiMessage
      *
      */
-    // the API answers a list here, which starkcore would not unpack; expand travels in the query string,
-    // in the body the API rejects it as an unknown parameter
     const payload = aiApi.dropNulls({ chatId: message.chatId, text: message.text, model: message.model });
     const response = await rest.postRaw(path, payload, null, true, user, { expand: expand });
     const content = response.json();
@@ -125,7 +123,6 @@ exports.page = async function (chatId, { cursor, limit, user } = {}) {
      * @returns list of AiMessage objects with updated attributes and cursor to retrieve the next page of AiMessage objects
      *
      */
-    // the API answers 200 without a chatId and returns nothing useful, so it is required here
     if (!chatId) {
         throw new Error('chatId is required to retrieve AiMessages');
     }
@@ -135,7 +132,6 @@ exports.page = async function (chatId, { cursor, limit, user } = {}) {
 };
 
 async function* stream(chatId, limit, user) {
-    // the URL encoder drops falsy values, so a limit of 0 would silently mean no limit
     if (limit !== undefined && limit !== null && limit < 1) {
         throw new Error('limit must be an integer between 1 and 100 per page, or omitted for the whole history');
     }

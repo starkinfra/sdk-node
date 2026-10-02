@@ -3,9 +3,6 @@ const axios = require('axios').default;
 const starkinfra = require('../../index.js');
 
 
-// Agents, chats and knowledge bases can be deleted, so one of each is created on first use, shared by every
-// test in the process and removed when the run ends. Voices, speeches and transcripts cannot be deleted, so
-// they are only read live and their creation is checked at the HTTP boundary.
 const created = { knowledgeBase: null, agent: null, chat: null };
 
 function name(prefix) {
@@ -50,7 +47,6 @@ exports.generateExampleAiAgent = function ({ knowledgeBaseIds = null } = {}) {
     });
 };
 
-// starkcore throws its own error classes, which are not the ones exported by starkinfra.error
 exports.isStarkError = function (className) {
     return (e) => e.constructor.name === className;
 };
@@ -63,7 +59,6 @@ exports.collect = async function (generator) {
     return entities;
 };
 
-// Replaces only the HTTP call: each request is recorded and answered with the next body in line.
 exports.httpBoundary = function () {
     const originalAdapter = axios.defaults.adapter;
     const boundary = { requests: [], answers: [] };
@@ -90,7 +85,6 @@ exports.httpBoundary = function () {
     return boundary;
 };
 
-// Mocha runs this once, after every test file: root-level hooks belong to the root suite.
 after(async function () {
     this.timeout(30000);
     const pending = [['chat', starkinfra.aiChat], ['agent', starkinfra.aiAgent], ['knowledgeBase', starkinfra.aiKnowledgeBase]];

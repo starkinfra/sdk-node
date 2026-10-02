@@ -6,7 +6,6 @@ const { generateExampleAiKnowledgeBase } = require('./utils/aiKnowledgeBase');
 starkinfra.user = require('./utils/user').exampleProject;
 
 
-// starkcore throws its own error classes, which are not the ones exported by starkinfra.error
 function isStarkError(className) {
     return (e) => e.constructor.name === className;
 }
@@ -59,7 +58,6 @@ describe('TestAiKnowledgeBase', function() {
     });
 
     it('test_query_filters_by_name_and_status', async () => {
-        // the crawl moves the status on its own, so filter by the status the server reports right now
         const current = await starkinfra.aiKnowledgeBase.get(knowledgeBase.id);
         const found = await collect(await starkinfra.aiKnowledgeBase.query({ name: current.name, status: current.status }));
         assert(found.map(entity => entity.id).includes(knowledgeBase.id));
@@ -95,8 +93,6 @@ describe('TestAiKnowledgeBaseErrors', function() {
     });
 });
 
-// The sandbox answers 500 to hosts and delete for a valid id, so these two are checked at the HTTP boundary
-// with the payloads documented for the API.
 describe('TestAiKnowledgeBaseAtTheHttpBoundary', function() {
     const originalAdapter = axios.defaults.adapter;
     let request;
