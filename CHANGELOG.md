@@ -14,8 +14,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ## [Unreleased]
 ### Added
-- AiKnowledgeBase resource
-- AiVoice, AiSpeech, AiTranscript, AiAgent, AiChat and AiMessage resources
+- AiKnowledgeBase, AiVoice, AiSpeech, AiTranscript, AiAgent, AiChat and AiMessage resources
 - IssuingBillingInvoice resource
 - IssuingBillingTransaction resource
 - Statistics sub-resource parsing to PixUser
