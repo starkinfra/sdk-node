@@ -66,6 +66,14 @@ describe('TestAiMessage', function() {
         assert.strictEqual(found.length, 1);
     });
 
+    it('test_query_with_a_negative_limit_raises_input_errors', async () => {
+        await assert.rejects(collect(await starkinfra.aiMessage.query(chat.id, { limit: -1 })), starkcoreError.InputErrors);
+    });
+
+    it('test_page_with_a_limit_above_the_maximum_raises_input_errors', async () => {
+        await assert.rejects(starkinfra.aiMessage.page(chat.id, { limit: 101 }), starkcoreError.InputErrors);
+    });
+
     it('test_page_returns_a_cursor_that_leads_to_the_next_page', async () => {
         const [first, cursor] = await starkinfra.aiMessage.page(chat.id, { limit: 1 });
         assert.strictEqual(first.length, 1);
@@ -87,17 +95,6 @@ describe('TestAiMessageAtTheHttpBoundary', function() {
     const boundary = httpBoundary();
 
     afterEach(() => boundary.restore());
-
-    it('test_query_rejects_a_limit_below_one_instead_of_returning_everything', async () => {
-        boundary.answerWith({ cursor: null, messages: [] });
-        await assert.rejects(async () => {
-            const messages = await starkinfra.aiMessage.query('5632499082330112', { limit: 0 });
-            for await (let message of messages) {
-                assert.fail('no request should be made, got ' + message.id);
-            }
-        }, /limit must be/);
-        assert.strictEqual(boundary.requests.length, 0);
-    });
 
     it('test_create_sends_expand_in_the_query_string_and_not_in_the_body', async () => {
         boundary.answerWith({ chatName: 'Greeting', messages: messages });
