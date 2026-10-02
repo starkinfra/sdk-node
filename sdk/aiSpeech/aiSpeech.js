@@ -47,7 +47,6 @@ class AiSpeech extends Resource {
 
 exports.AiSpeech = AiSpeech;
 
-// starkcore would read the list under 'speechs'; the API answers under 'speeches'
 const parse = aiApi.parserOf(AiSpeech);
 const path = 'ai-speech';
 const key = 'speech';
@@ -111,6 +110,5 @@ exports.query = async function ({ fields, expand, user } = {}) {
      * @returns generator of AiSpeech objects with updated attributes
      *
      */
-    // this route is not paginated and rejects limit, cursor and every filter (invalidQueryString)
     return aiApi.listAll(parse, path, 'speeches', user, { fields: fields, expand: expand });
 };

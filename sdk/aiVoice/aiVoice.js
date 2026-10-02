@@ -75,7 +75,6 @@ exports.create = async function (voice, { user } = {}) {
      * @returns AiVoice object with updated attributes.
      *
      */
-    // the API answers 400 to any parameter it does not know, so only the creatable fields are sent
     const payload = aiApi.dropNulls({
         audio: voice.audio,
         name: voice.name,
@@ -100,7 +99,6 @@ exports.query = async function ({ user } = {}) {
      * @returns generator of AiVoice objects with updated attributes
      *
      */
-    // this route is not paginated and takes no filters
     return aiApi.listAll(parse, path, 'voices', user);
 };
 

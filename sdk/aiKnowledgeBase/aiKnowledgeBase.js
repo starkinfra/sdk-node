@@ -48,8 +48,6 @@ class AiKnowledgeBase extends Resource {
 
 exports.AiKnowledgeBase = AiKnowledgeBase;
 
-// starkcore reads the response key from the last word of the resource name ('base'), but this API
-// answers under 'knowledgeBase'/'knowledgeBases', so these functions parse the response themselves.
 const path = 'ai-knowledge-base';
 
 function parse(json) {
@@ -86,7 +84,6 @@ exports.create = async function (knowledgeBase, { user } = {}) {
      * @returns AiKnowledgeBase object with updated attributes.
      *
      */
-    // the API answers 400 to id, status, created and updated, which an object returned by get/query/create carries
     const payload = payloadOf({
         name: knowledgeBase.name,
         rootUrl: knowledgeBase.rootUrl,
@@ -136,7 +133,6 @@ exports.query = async function ({ ids, name, status, user } = {}) {
      * @returns generator of AiKnowledgeBase objects with updated attributes
      *
      */
-    // this route is not paginated: it answers with every base and rejects limit and cursor (invalidQueryString)
     const response = await rest.getRaw(path, { ids: ids, name: name, status: status }, null, true, user);
     return stream(response.json().knowledgeBases);
 };

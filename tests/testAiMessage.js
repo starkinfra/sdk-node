@@ -52,7 +52,6 @@ describe('TestAiMessage', function() {
     });
 
     it('test_the_answer_carries_a_metadata_object', () => {
-        // whether the model fills a field is up to the model; the key spelling is checked at the HTTP boundary
         assert.strictEqual(typeof posted[1].metadata, 'object');
     });
 

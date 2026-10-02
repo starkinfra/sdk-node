@@ -58,7 +58,6 @@ exports.create = async function (chat, { user } = {}) {
      * @returns AiChat object with updated attributes.
      *
      */
-    // the API answers 400 to id, agentName and updated, which an object returned by get/query/create carries
     const payload = aiApi.dropNulls({ agentId: chat.agentId, title: chat.title });
     return aiApi.createOne(parse, path, key, payload, user);
 };
@@ -101,7 +100,6 @@ exports.query = async function ({ fields, expand, user } = {}) {
      * @returns generator of AiChat objects with updated attributes
      *
      */
-    // this route is not paginated and rejects limit, cursor and every filter (invalidQueryString)
     return aiApi.listAll(parse, path, 'chats', user, { fields: fields, expand: expand });
 };
 

@@ -67,7 +67,6 @@ describe('TestAiSpeechGet', function() {
     });
 });
 
-// A speech cannot be deleted and every creation leaves one behind, so creating is checked at the HTTP boundary.
 describe('TestAiSpeechAtTheHttpBoundary', function() {
     const boundary = httpBoundary();
 

@@ -25,7 +25,6 @@ describe('TestAiTranscriptQuery', function() {
     });
 });
 
-// A transcript cannot be deleted and every creation leaves one behind, so creating is checked at the HTTP boundary.
 describe('TestAiTranscriptAtTheHttpBoundary', function() {
     const boundary = httpBoundary();
 

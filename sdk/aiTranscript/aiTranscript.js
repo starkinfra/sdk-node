@@ -80,6 +80,5 @@ exports.query = async function ({ user } = {}) {
      * @returns generator of AiTranscript objects with updated attributes
      *
      */
-    // this route is not paginated and takes no filters
     return aiApi.listAll(parse, path, 'transcripts', user);
 };

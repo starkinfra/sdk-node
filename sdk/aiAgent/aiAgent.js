@@ -22,7 +22,7 @@ class AiAgent extends Resource {
      *
      * Parameters (optional):
      * @param systemPrompt [string, default null]: instructions that define the agent's persona, tone and domain behavior. Up to 100000 characters. The API falls back to its default assistant prompt when omitted.
-     * @param voiceId [string, default null]: id of the AiVoice the agent speaks with. When set, every reply also carries a speech string ready to be sent to AiSpeech. The API does not check that the voice exists.
+     * @param voiceId [string, default null]: id of the AiVoice the agent speaks with. When set, every reply also carries a speech string ready to be sent to AiSpeech. The API does not check that the voice exists. An empty string is treated as not given.
      * @param knowledgeBaseIds [list of strings, default null]: ids of up to 100 AiKnowledgeBases the agent retrieves from before answering. The API does not check that they exist.
      * @param metadataSchema [object, default null]: flat object whose keys are the fields the agent must extract on every reply. Each field takes a 'type' (string, integer, number, boolean or array), an optional 'description' of up to 2000 characters, an optional 'enum' of up to 20 strings for string fields. The keys are yours and are sent exactly as written. ex: {order_id: {type: 'string', description: 'Order the customer mentions'}}
      *
@@ -69,14 +69,11 @@ const parseRaw = aiApi.parserOf(AiAgent);
 
 function parse(json) {
     const agent = parseRaw(json);
-    // the raw copy overwrites the knowledge bases the constructor parsed
     agent.knowledgeBases = parseKnowledgeBases(json.knowledgeBases);
     return agent;
 }
 
 function payloadOf({ name, model, systemPrompt, voiceId, knowledgeBaseIds, metadataSchema }) {
-    // written out field by field: the keys inside metadataSchema belong to the caller and must not be touched
-    // an agent without a voice comes back with voiceId '', which the API rejects, so '' is treated as not given
     return aiApi.dropNulls({
         name: name,
         model: model,
@@ -104,7 +101,6 @@ exports.create = async function (agent, { user } = {}) {
      * @returns AiAgent object with updated attributes.
      *
      */
-    // the API answers 400 to id, knowledgeBases, created and updated, which an object returned by get/query/create carries
     return aiApi.createOne(parse, path, key, payloadOf(agent), user);
 };
 
@@ -146,7 +142,6 @@ exports.query = async function ({ fields, expand, user } = {}) {
      * @returns generator of AiAgent objects with updated attributes
      *
      */
-    // this route is not paginated and rejects limit, cursor and every filter (invalidQueryString)
     return aiApi.listAll(parse, path, 'agents', user, { fields: fields, expand: expand });
 };
 

@@ -29,8 +29,6 @@ describe('TestAiVoiceQuery', function() {
     });
 });
 
-// A voice cannot be deleted (the API answers 500) and every creation leaves one behind, so create and delete
-// are checked at the HTTP boundary.
 describe('TestAiVoiceAtTheHttpBoundary', function() {
     const boundary = httpBoundary();
 
