@@ -128,7 +128,14 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
     it('test_an_agent_fetched_without_a_voice_can_be_created_again', async () => {
         boundary.answerWith({ agent: agent });
         await starkinfra.aiAgent.create(new starkinfra.AiAgent({ name: 'a', model: 'bender-1.0', voiceId: '' }));
-        assert.deepStrictEqual(boundary.bodyOf(), { name: 'a', model: 'bender-1.0' });
+        assert.deepStrictEqual(boundary.bodyOf(), {
+            name: 'a',
+            model: 'bender-1.0',
+            systemPrompt: null,
+            voiceId: null,
+            knowledgeBaseIds: null,
+            metadataSchema: null
+        });
     });
 
     it('test_create_keeps_empty_lists_and_does_not_rewrite_the_callers_schema', async () => {

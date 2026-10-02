@@ -1,4 +1,4 @@
-const aiApi = require('../utils/aiApi.js');
+const rest = require('../utils/rest.js');
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
@@ -47,9 +47,18 @@ class AiSpeech extends Resource {
 
 exports.AiSpeech = AiSpeech;
 
-const parse = aiApi.parserOf(AiSpeech);
+const resource = {'class': AiSpeech, 'name': 'AiSpeech'};
 const path = 'ai-speech';
-const key = 'speech';
+
+function parse(json) {
+    return Object.assign(new AiSpeech(json), json);
+}
+
+async function* stream(entities) {
+    for (let entity of entities) {
+        yield parse(entity);
+    }
+}
 
 exports.create = async function (speech, { user } = {}) {
     /**
@@ -69,7 +78,8 @@ exports.create = async function (speech, { user } = {}) {
      *
      */
     const payload = { voiceId: speech.voiceId, text: speech.text };
-    return aiApi.createOne(parse, path, key, payload, user);
+    const response = await rest.postRaw(path, payload, null, true, user);
+    return parse(response.json().speech);
 };
 
 exports.get = async function (id, { fields, expand, user } = {}) {
@@ -91,7 +101,7 @@ exports.get = async function (id, { fields, expand, user } = {}) {
      * @returns AiSpeech object with updated attributes.
      *
      */
-    return aiApi.getOne(parse, path, key, id, user, { fields: fields, expand: expand });
+    return rest.getId(resource, id, user, { fields: fields, expand: expand });
 };
 
 exports.query = async function ({ fields, expand, user } = {}) {
@@ -110,5 +120,6 @@ exports.query = async function ({ fields, expand, user } = {}) {
      * @returns generator of AiSpeech objects with updated attributes
      *
      */
-    return aiApi.listAll(parse, path, 'speeches', user, { fields: fields, expand: expand });
+    const response = await rest.getRaw(path, { fields: fields, expand: expand }, null, true, user);
+    return stream(response.json().speeches);
 };

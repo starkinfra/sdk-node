@@ -1,4 +1,4 @@
-const aiApi = require('../utils/aiApi.js');
+const rest = require('../utils/rest.js');
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
@@ -53,9 +53,12 @@ class AiVoice extends Resource {
 
 exports.AiVoice = AiVoice;
 
-const parse = aiApi.parserOf(AiVoice);
+const resource = {'class': AiVoice, 'name': 'AiVoice'};
 const path = 'ai-voice';
-const key = 'voice';
+
+function parse(json) {
+    return Object.assign(new AiVoice(json), json);
+}
 
 exports.create = async function (voice, { user } = {}) {
     /**
@@ -75,14 +78,15 @@ exports.create = async function (voice, { user } = {}) {
      * @returns AiVoice object with updated attributes.
      *
      */
-    const payload = aiApi.dropNulls({
+    const payload = {
         audio: voice.audio,
         name: voice.name,
         description: voice.description,
         language: voice.language,
         gender: voice.gender
-    });
-    return aiApi.createOne(parse, path, key, payload, user);
+    };
+    const response = await rest.postRaw(path, payload, null, true, user);
+    return parse(response.json().voice);
 };
 
 exports.query = async function ({ user } = {}) {
@@ -99,7 +103,7 @@ exports.query = async function ({ user } = {}) {
      * @returns generator of AiVoice objects with updated attributes
      *
      */
-    return aiApi.listAll(parse, path, 'voices', user);
+    return rest.getList(resource, {}, user);
 };
 
 exports.delete = async function (ids, { user } = {}) {
@@ -119,5 +123,6 @@ exports.delete = async function (ids, { user } = {}) {
      * @returns list of deleted AiVoice objects
      *
      */
-    return aiApi.deleteMany(parse, path, 'voices', ids, user);
+    const response = await rest.deleteRaw(path, null, null, true, user, { ids: ids });
+    return response.json().voices.map(parse);
 };
