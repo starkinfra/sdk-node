@@ -47,10 +47,6 @@ exports.generateExampleAiAgent = function ({ knowledgeBaseIds = null } = {}) {
     });
 };
 
-exports.isStarkError = function (className) {
-    return (e) => e.constructor.name === className;
-};
-
 exports.collect = async function (generator) {
     const entities = [];
     for await (let entity of generator) {
@@ -92,13 +88,6 @@ after(async function () {
         if (created[key] === null) {
             continue;
         }
-        try {
-            await resource.delete([created[key].id]);
-        } catch (e) {
-            if (e.constructor.name !== 'InternalServerError') {
-                throw e;
-            }
-            process.stderr.write(key + ' ' + created[key].id + ' was not deleted: the API answered 500\n');
-        }
+        await resource.delete([created[key].id]);
     }
 });

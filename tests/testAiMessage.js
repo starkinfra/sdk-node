@@ -1,7 +1,8 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
 const fixtures = require('./utils/aiFixtures');
-const { httpBoundary, collect, isStarkError } = fixtures;
+const starkcoreError = require('starkcore/starkcore/error.js');
+const { httpBoundary, collect } = fixtures;
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -77,7 +78,7 @@ describe('TestAiMessage', function() {
     it('test_create_in_an_unknown_chat_raises_input_errors', async () => {
         await assert.rejects(
             starkinfra.aiMessage.create(new starkinfra.AiMessage({ chatId: '0000000000000000', text: 'hi' })),
-            isStarkError('InputErrors')
+            starkcoreError.InputErrors
         );
     });
 });

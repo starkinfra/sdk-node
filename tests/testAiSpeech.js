@@ -1,6 +1,7 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const { httpBoundary, collect, isStarkError } = require('./utils/aiFixtures');
+const { httpBoundary, collect } = require('./utils/aiFixtures');
+const starkcoreError = require('starkcore/starkcore/error.js');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -63,7 +64,7 @@ describe('TestAiSpeechGet', function() {
     });
 
     it('test_get_unknown_id_raises_input_errors', async () => {
-        await assert.rejects(starkinfra.aiSpeech.get('0000000000000000'), isStarkError('InputErrors'));
+        await assert.rejects(starkinfra.aiSpeech.get('0000000000000000'), starkcoreError.InputErrors);
     });
 });
 

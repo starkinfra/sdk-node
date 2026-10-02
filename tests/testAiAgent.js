@@ -1,7 +1,8 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
 const fixtures = require('./utils/aiFixtures');
-const { httpBoundary, collect, isStarkError } = fixtures;
+const starkcoreError = require('starkcore/starkcore/error.js');
+const { httpBoundary, collect } = fixtures;
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -83,12 +84,12 @@ describe('TestAiAgent', function() {
     it('test_create_with_invalid_model_raises_input_errors', async () => {
         await assert.rejects(
             starkinfra.aiAgent.create(new starkinfra.AiAgent({ name: 'invalid', model: 'gpt' })),
-            isStarkError('InputErrors')
+            starkcoreError.InputErrors
         );
     });
 
     it('test_get_unknown_id_raises_input_errors', async () => {
-        await assert.rejects(starkinfra.aiAgent.get('0000000000000000'), isStarkError('InputErrors'));
+        await assert.rejects(starkinfra.aiAgent.get('0000000000000000'), starkcoreError.InputErrors);
     });
 });
 
