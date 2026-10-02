@@ -14,6 +14,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ## [Unreleased]
 ### Added
+- pixSubscriptionBacenId utility to generate Pix subscription bacenIds
 - IssuingBillingInvoice resource
 - IssuingBillingTransaction resource
 - Statistics sub-resource parsing to PixUser
