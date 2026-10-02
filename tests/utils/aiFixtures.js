@@ -55,6 +55,15 @@ exports.collect = async function (generator) {
     return entities;
 };
 
+exports.speechAudio = async function () {
+    const speeches = await exports.collect(await starkinfra.aiSpeech.query());
+    const finished = speeches.find(entity => entity.status === 'success');
+    if (!finished) {
+        return null;
+    }
+    return (await starkinfra.aiSpeech.get(finished.id)).audio;
+};
+
 exports.httpBoundary = function () {
     const originalAdapter = axios.defaults.adapter;
     const boundary = { requests: [], answers: [] };

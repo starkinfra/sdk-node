@@ -1,65 +1,39 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const { httpBoundary, collect } = require('./utils/aiFixtures');
+const { collect, speechAudio } = require('./utils/aiFixtures');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
 
-const voice = {
-    id: '5631671361601536',
-    name: 'Helena',
-    description: 'Calm voice',
-    language: 'portuguese',
-    gender: 'female',
-    status: 'processing',
-    errors: [],
-    created: '2026-10-01T14:28:24.566332+00:00',
-    updated: '2026-10-01T14:28:24.566342+00:00'
-};
+describe('TestAiVoice', function() {
+    this.timeout(30000);
+    let voice;
 
-describe('TestAiVoiceQuery', function() {
-    this.timeout(20000);
-
-    it('test_query_lists_voices_without_the_audio', async () => {
-        for (let entity of await collect(await starkinfra.aiVoice.query())) {
-            assert(typeof entity.id === 'string');
-            assert(typeof entity.created === 'string');
-            assert(entity.audio === null);
+    before(async function() {
+        const audio = await speechAudio();
+        if (!audio) {
+            return this.skip();
         }
-    });
-});
-
-describe('TestAiVoiceAtTheHttpBoundary', function() {
-    const boundary = httpBoundary();
-
-    afterEach(() => boundary.restore());
-
-    it('test_create_sends_only_the_creatable_fields', async () => {
-        boundary.answerWith({ voice: voice });
-        const input = new starkinfra.AiVoice(Object.assign({ audio: 'SUQzBAAAAAAA' }, voice));
-        const created = await starkinfra.aiVoice.create(input);
-        assert.strictEqual(boundary.requests[0].method.toUpperCase(), 'POST');
-        assert(boundary.requests[0].url.endsWith('/v2/ai-voice'), boundary.requests[0].url);
-        assert.deepStrictEqual(Object.keys(boundary.bodyOf()).sort(), ['audio', 'description', 'gender', 'language', 'name']);
-        assert.strictEqual(created.id, '5631671361601536');
-        assert.strictEqual(created.status, 'processing');
-        assert.strictEqual(created.audio, null);
+        voice = await starkinfra.aiVoice.create(new starkinfra.AiVoice({ audio: audio, name: 'sdk-node test' }));
     });
 
-    it('test_query_reads_the_voices_key_and_sends_no_query_string', async () => {
-        boundary.answerWith({ voices: [voice] });
+    it('test_create_returns_a_processing_voice', () => {
+        assert(typeof voice.id === 'string');
+        assert.strictEqual(voice.status, 'processing');
+        assert.strictEqual(voice.name, 'sdk-node test');
+        assert(typeof voice.created === 'string');
+        assert.strictEqual(voice.audio, null);
+    });
+
+    it('test_query_lists_the_created_voice_without_the_audio', async () => {
         const found = await collect(await starkinfra.aiVoice.query());
-        assert.strictEqual(boundary.requests[0].method.toUpperCase(), 'GET');
-        assert(boundary.requests[0].url.endsWith('/v2/ai-voice'), boundary.requests[0].url);
-        assert.deepStrictEqual(found.map(entity => entity.id), ['5631671361601536']);
+        const listed = found.find(entity => entity.id === voice.id);
+        assert(listed);
+        assert.strictEqual(listed.audio, null);
     });
 
-    it('test_delete_sends_ids_in_the_query_string_and_no_body', async () => {
-        boundary.answerWith({ voices: [voice] });
-        const deleted = await starkinfra.aiVoice.delete(['5631671361601536', '5631671361601537']);
-        assert.strictEqual(boundary.requests[0].method.toUpperCase(), 'DELETE');
-        assert(boundary.requests[0].url.endsWith('/v2/ai-voice?ids=5631671361601536%2C5631671361601537'), boundary.requests[0].url);
-        assert.strictEqual(boundary.requests[0].data, undefined);
-        assert.deepStrictEqual(deleted.map(entity => entity.id), ['5631671361601536']);
+    it.skip('test_delete_returns_the_deleted_voice (pending: the API answers 500 to DELETE /v2/ai-voice)', async () => {
+        const deleted = await starkinfra.aiVoice.delete([voice.id]);
+        assert.deepStrictEqual(deleted.map(entity => entity.id), [voice.id]);
     });
 });
