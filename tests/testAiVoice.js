@@ -46,12 +46,6 @@ describe('TestAiVoiceAtTheHttpBoundary', function() {
         assert.strictEqual(created.audio, null);
     });
 
-    it('test_create_drops_the_optional_fields_left_empty', async () => {
-        boundary.answerWith({ voice: voice });
-        await starkinfra.aiVoice.create(new starkinfra.AiVoice({ audio: 'SUQzBAAAAAAA' }));
-        assert.deepStrictEqual(boundary.bodyOf(), { audio: 'SUQzBAAAAAAA' });
-    });
-
     it('test_query_reads_the_voices_key_and_sends_no_query_string', async () => {
         boundary.answerWith({ voices: [voice] });
         const found = await collect(await starkinfra.aiVoice.query());

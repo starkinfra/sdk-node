@@ -1,5 +1,4 @@
 const rest = require('../utils/rest.js');
-const aiApi = require('../utils/aiApi.js');
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
@@ -50,8 +49,11 @@ class AiMessage extends Resource {
 
 exports.AiMessage = AiMessage;
 
-const parse = aiApi.parserOf(AiMessage);
 const path = 'ai-message';
+
+function parse(json) {
+    return Object.assign(new AiMessage(json), json);
+}
 
 exports.create = async function (message, { expand, user } = {}) {
     /**
@@ -72,7 +74,7 @@ exports.create = async function (message, { expand, user } = {}) {
      * @returns list with the user's AiMessage and the agent's AiMessage
      *
      */
-    const payload = aiApi.dropNulls({ chatId: message.chatId, text: message.text, model: message.model });
+    const payload = { chatId: message.chatId, text: message.text, model: message.model };
     const response = await rest.postRaw(path, payload, null, true, user, { expand: expand });
     const content = response.json();
     return content.messages.map(entity => {

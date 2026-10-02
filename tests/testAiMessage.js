@@ -113,7 +113,7 @@ describe('TestAiMessageAtTheHttpBoundary', function() {
         boundary.answerWith({ messages: messages });
         const created = await starkinfra.aiMessage.create(new starkinfra.AiMessage({ chatId: '5632499082330112', text: 'Say hello.' }));
         assert(boundary.requests[0].url.endsWith('/v2/ai-message'), boundary.requests[0].url);
-        assert.deepStrictEqual(boundary.bodyOf(), { chatId: '5632499082330112', text: 'Say hello.' });
+        assert.deepStrictEqual(boundary.bodyOf(), { chatId: '5632499082330112', text: 'Say hello.', model: null });
         assert.strictEqual(created[0].chatName, null);
         assert.deepStrictEqual(created[1].metadata, { order_id: '123' });
     });

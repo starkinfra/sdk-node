@@ -1,4 +1,4 @@
-const aiApi = require('../utils/aiApi.js');
+const rest = require('../utils/rest.js');
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
@@ -37,9 +37,12 @@ class AiChat extends Resource {
 
 exports.AiChat = AiChat;
 
-const parse = aiApi.parserOf(AiChat);
+const resource = {'class': AiChat, 'name': 'AiChat'};
 const path = 'ai-chat';
-const key = 'chat';
+
+function parse(json) {
+    return Object.assign(new AiChat(json), json);
+}
 
 exports.create = async function (chat, { user } = {}) {
     /**
@@ -58,8 +61,8 @@ exports.create = async function (chat, { user } = {}) {
      * @returns AiChat object with updated attributes.
      *
      */
-    const payload = aiApi.dropNulls({ agentId: chat.agentId, title: chat.title });
-    return aiApi.createOne(parse, path, key, payload, user);
+    const response = await rest.postRaw(path, { agentId: chat.agentId, title: chat.title }, null, true, user);
+    return parse(response.json().chat);
 };
 
 exports.get = async function (id, { fields, expand, user } = {}) {
@@ -81,7 +84,7 @@ exports.get = async function (id, { fields, expand, user } = {}) {
      * @returns AiChat object with updated attributes.
      *
      */
-    return aiApi.getOne(parse, path, key, id, user, { fields: fields, expand: expand });
+    return rest.getId(resource, id, user, { fields: fields, expand: expand });
 };
 
 exports.query = async function ({ fields, expand, user } = {}) {
@@ -100,7 +103,7 @@ exports.query = async function ({ fields, expand, user } = {}) {
      * @returns generator of AiChat objects with updated attributes
      *
      */
-    return aiApi.listAll(parse, path, 'chats', user, { fields: fields, expand: expand });
+    return rest.getList(resource, { fields: fields, expand: expand }, user);
 };
 
 exports.update = async function (id, { title, agentId, user } = {}) {
@@ -122,8 +125,7 @@ exports.update = async function (id, { title, agentId, user } = {}) {
      * @returns AiChat with updated attributes
      *
      */
-    const payload = aiApi.dropNulls({ title: title, agentId: agentId });
-    return aiApi.patchOne(parse, path, key, id, payload, user);
+    return rest.patchId(resource, id, { title: title, agentId: agentId }, user);
 };
 
 exports.delete = async function (ids, { user } = {}) {
@@ -143,5 +145,6 @@ exports.delete = async function (ids, { user } = {}) {
      * @returns list of deleted AiChat objects
      *
      */
-    return aiApi.deleteMany(parse, path, 'chats', ids, user);
+    const response = await rest.deleteRaw(path, null, null, true, user, { ids: ids });
+    return response.json().chats.map(parse);
 };
