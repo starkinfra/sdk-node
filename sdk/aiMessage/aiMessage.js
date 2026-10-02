@@ -132,9 +132,6 @@ exports.page = async function (chatId, { cursor, limit, user } = {}) {
 };
 
 async function* stream(chatId, limit, user) {
-    if (limit !== undefined && limit !== null && limit < 1) {
-        throw new Error('limit must be an integer between 1 and 100 per page, or omitted for the whole history');
-    }
     let cursor = null;
     let remaining = limit;
     do {
