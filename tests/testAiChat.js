@@ -1,7 +1,8 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
 const fixtures = require('./utils/aiFixtures');
-const { httpBoundary, collect, isStarkError } = fixtures;
+const starkcoreError = require('starkcore/starkcore/error.js');
+const { httpBoundary, collect } = fixtures;
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -51,12 +52,12 @@ describe('TestAiChat', function() {
     it('test_create_with_unknown_agent_raises_input_errors', async () => {
         await assert.rejects(
             starkinfra.aiChat.create(new starkinfra.AiChat({ agentId: '0000000000000000' })),
-            isStarkError('InputErrors')
+            starkcoreError.InputErrors
         );
     });
 
     it('test_get_unknown_id_raises_input_errors', async () => {
-        await assert.rejects(starkinfra.aiChat.get('0000000000000000'), isStarkError('InputErrors'));
+        await assert.rejects(starkinfra.aiChat.get('0000000000000000'), starkcoreError.InputErrors);
     });
 });
 

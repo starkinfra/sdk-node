@@ -2,13 +2,10 @@ const assert = require('assert');
 const axios = require('axios').default;
 const starkinfra = require('../index.js');
 const { generateExampleAiKnowledgeBase } = require('./utils/aiKnowledgeBase');
+const starkcoreError = require('starkcore/starkcore/error.js');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
-
-function isStarkError(className) {
-    return (e) => e.constructor.name === className;
-}
 
 async function collect(generator) {
     const entities = [];
@@ -27,14 +24,7 @@ describe('TestAiKnowledgeBase', function() {
     });
 
     after(async () => {
-        try {
-            await starkinfra.aiKnowledgeBase.delete([knowledgeBase.id]);
-        } catch (e) {
-            if (e.constructor.name !== 'InternalServerError') {
-                throw e;
-            }
-            process.stderr.write('AiKnowledgeBase ' + knowledgeBase.id + ' was not deleted: the API answered 500\n');
-        }
+        await starkinfra.aiKnowledgeBase.delete([knowledgeBase.id]);
     });
 
     it('test_create_returns_processing_knowledge_base', () => {
@@ -85,11 +75,11 @@ describe('TestAiKnowledgeBaseErrors', function() {
 
     it('test_create_with_invalid_root_url_raises_input_errors', async () => {
         const invalid = new starkinfra.AiKnowledgeBase({ name: 'invalid', rootUrl: 'not-a-url' });
-        await assert.rejects(starkinfra.aiKnowledgeBase.create(invalid), isStarkError('InputErrors'));
+        await assert.rejects(starkinfra.aiKnowledgeBase.create(invalid), starkcoreError.InputErrors);
     });
 
     it('test_get_unknown_id_raises_input_errors', async () => {
-        await assert.rejects(starkinfra.aiKnowledgeBase.get('0000000000000000'), isStarkError('InputErrors'));
+        await assert.rejects(starkinfra.aiKnowledgeBase.get('0000000000000000'), starkcoreError.InputErrors);
     });
 });
 
