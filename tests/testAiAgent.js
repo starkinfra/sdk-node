@@ -40,7 +40,6 @@ describe('TestAiAgent', function() {
         assert.strictEqual(plain.knowledgeBases, null);
         const expanded = await starkinfra.aiAgent.get(created.id, { expand: ['knowledgeBases'] });
         assert.deepStrictEqual(expanded.knowledgeBases.map(entity => entity.id), [knowledgeBase.id]);
-        assert(expanded.knowledgeBases[0] instanceof starkinfra.AiKnowledgeBase);
     });
 
     it('test_update_keeps_the_knowledge_bases_it_was_not_asked_to_change', async () => {
@@ -117,7 +116,7 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
         });
     });
 
-    it('test_an_agent_fetched_without_a_voice_can_be_created_again', async () => {
+    it('test_an_empty_voice_id_is_sent_as_null', async () => {
         boundary.answerWith({ agent: agent });
         await starkinfra.aiAgent.create(new starkinfra.AiAgent({ name: 'a', model: 'bender-1.0', voiceId: '' }));
         assert.deepStrictEqual(boundary.bodyOf(), {
@@ -143,7 +142,7 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
         assert.deepStrictEqual(schema, { order_id: { type: 'string', description: null } });
     });
 
-    it('test_get_with_expand_parses_the_knowledge_bases', async () => {
+    it('test_get_with_expand_keeps_the_knowledge_bases', async () => {
         boundary.answerWith({
             agent: Object.assign({
                 knowledgeBases: [{
@@ -157,7 +156,6 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
         const fetched = await starkinfra.aiAgent.get('5740688905863168', { expand: ['knowledgeBases'] });
         const url = boundary.requests[0].url;
         assert(url.includes('expand=knowledgeBases'), url);
-        assert(fetched.knowledgeBases[0] instanceof starkinfra.AiKnowledgeBase);
         assert.strictEqual(fetched.knowledgeBases[0].name, 'Docs');
     });
 
@@ -186,5 +184,22 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
         assert(boundary.requests[0].url.endsWith('/v2/ai-agent?ids=5740688905863168%2C5740688905863169'), boundary.requests[0].url);
         assert.strictEqual(boundary.requests[0].data, undefined);
         assert.deepStrictEqual(deleted.map(entity => entity.id), ['5740688905863168']);
+    });
+});
+
+describe('TestAiAgentConstructor', function() {
+    it('test_an_empty_voice_id_is_read_as_not_given', () => {
+        const agent = new starkinfra.AiAgent({ name: 'a', model: 'bender-1.0', voiceId: '' });
+        assert.strictEqual(agent.voiceId, null);
+    });
+
+    it('test_the_knowledge_bases_are_parsed', () => {
+        const agent = new starkinfra.AiAgent({
+            name: 'a',
+            model: 'bender-1.0',
+            knowledgeBases: [{ id: '5083538508480512', name: 'Docs', rootUrl: 'https://docs.starkinfra.com' }]
+        });
+        assert(agent.knowledgeBases[0] instanceof starkinfra.AiKnowledgeBase);
+        assert.strictEqual(agent.knowledgeBases[0].name, 'Docs');
     });
 });

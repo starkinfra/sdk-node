@@ -48,6 +48,8 @@ class AiKnowledgeBase extends Resource {
 
 exports.AiKnowledgeBase = AiKnowledgeBase;
 
+exports.resource = {'class': AiKnowledgeBase, 'name': 'AiKnowledgeBase'};
+
 const path = 'ai-knowledge-base';
 
 function parse(json) {

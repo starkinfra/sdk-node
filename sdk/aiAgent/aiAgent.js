@@ -1,6 +1,8 @@
 const rest = require('../utils/rest.js');
 const api = require('starkcore').api;
 const AiKnowledgeBase = require('../aiKnowledgeBase/aiKnowledgeBase.js').AiKnowledgeBase;
+const knowledgeBaseResource = require('../aiKnowledgeBase/aiKnowledgeBase.js').resource;
+const {parseObjects} = require('../utils/parse.js');
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
@@ -43,10 +45,10 @@ class AiAgent extends Resource {
         this.name = name;
         this.model = model;
         this.systemPrompt = systemPrompt;
-        this.voiceId = voiceId;
+        this.voiceId = voiceId === '' ? null : voiceId;
         this.knowledgeBaseIds = knowledgeBaseIds;
         this.metadataSchema = metadataSchema;
-        this.knowledgeBases = parseKnowledgeBases(knowledgeBases);
+        this.knowledgeBases = parseObjects(knowledgeBases, knowledgeBaseResource, AiKnowledgeBase);
         this.created = check.datetime(created);
         this.updated = check.datetime(updated);
     }
@@ -56,37 +58,12 @@ exports.AiAgent = AiAgent;
 
 let resource = {'class': exports.AiAgent, 'name': 'AiAgent'};
 
-const path = 'ai-agent';
-
-function parseKnowledgeBase(json) {
-    return Object.assign(new AiKnowledgeBase(json), json);
-}
-
-function parseKnowledgeBases(knowledgeBases) {
-    if (knowledgeBases === null || knowledgeBases === undefined) {
-        return null;
-    }
-    return knowledgeBases.map(knowledgeBase => parseKnowledgeBase(knowledgeBase));
-}
-
-function parse(json) {
-    const agent = Object.assign(new AiAgent(json), json);
-    agent.knowledgeBases = parseKnowledgeBases(json.knowledgeBases);
-    return agent;
-}
-
-async function* stream(entities) {
-    for (let entity of entities) {
-        yield parse(entity);
-    }
-}
-
 function payloadOf({ name, model, systemPrompt, voiceId, knowledgeBaseIds, metadataSchema }) {
     return {
         name: name,
         model: model,
         systemPrompt: systemPrompt,
-        voiceId: voiceId === '' ? null : voiceId,
+        voiceId: voiceId,
         knowledgeBaseIds: knowledgeBaseIds,
         metadataSchema: metadataSchema
     };
@@ -109,8 +86,10 @@ exports.create = async function (agent, { user } = {}) {
      * @returns AiAgent object with updated attributes.
      *
      */
-    const response = await rest.postRaw(path, payloadOf(agent), null, true, user);
-    return parse(response.json().agent);
+    let response = await rest.postRaw(api.endpoint(resource.name), payloadOf(agent), null, true, user);
+    let json = response.json();
+    let entity = json[api.lastName(resource.name)];
+    return Object.assign(new exports.AiAgent(entity), entity);
 };
 
 exports.get = async function (id, { expand, user } = {}) {
@@ -131,8 +110,7 @@ exports.get = async function (id, { expand, user } = {}) {
      * @returns AiAgent object with updated attributes.
      *
      */
-    const response = await rest.getRaw(path + '/' + id, { expand: expand }, null, true, user);
-    return parse(response.json().agent);
+    return rest.getId(resource, id, user, { expand: expand });
 };
 
 exports.query = async function ({ expand, user } = {}) {
@@ -150,8 +128,7 @@ exports.query = async function ({ expand, user } = {}) {
      * @returns generator of AiAgent objects with updated attributes
      *
      */
-    const response = await rest.getRaw(path, { expand: expand }, null, true, user);
-    return stream(response.json().agents);
+    return rest.getList(resource, { expand: expand }, user);
 };
 
 exports.update = async function (id, { name, model, systemPrompt, voiceId, knowledgeBaseIds, metadataSchema, user } = {}) {
