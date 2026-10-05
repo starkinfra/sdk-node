@@ -1,4 +1,5 @@
 const rest = require('../utils/rest.js');
+const api = require('starkcore').api;
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
@@ -52,13 +53,7 @@ class AiVoice extends Resource {
 }
 
 exports.AiVoice = AiVoice;
-
 const resource = {'class': AiVoice, 'name': 'AiVoice'};
-const path = 'ai-voice';
-
-function parse(json) {
-    return Object.assign(new AiVoice(json), json);
-}
 
 exports.create = async function (voice, { user } = {}) {
     /**
@@ -85,8 +80,10 @@ exports.create = async function (voice, { user } = {}) {
         language: voice.language,
         gender: voice.gender
     };
-    const response = await rest.postRaw(path, payload, null, true, user);
-    return parse(response.json().voice);
+    let response = await rest.postRaw(api.endpoint(resource.name), payload, null, true, user);
+    let json = response.json();
+    let entity = json[api.lastName(resource.name)];
+    return Object.assign(new exports.AiVoice(entity), entity);
 };
 
 exports.query = async function ({ user } = {}) {
@@ -123,6 +120,8 @@ exports.delete = async function (ids, { user } = {}) {
      * @returns list of deleted AiVoice objects
      *
      */
-    const response = await rest.deleteRaw(path, null, null, true, user, { ids: ids });
-    return response.json().voices.map(parse);
+    let response = await rest.deleteRaw(api.endpoint(resource.name), null, null, true, user, { ids: ids });
+    let json = response.json();
+    let entities = json[api.lastNamePlural(resource.name)];
+    return entities.map(entity => Object.assign(new exports.AiVoice(entity), entity));
 };

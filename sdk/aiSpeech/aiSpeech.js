@@ -46,7 +46,6 @@ class AiSpeech extends Resource {
 }
 
 exports.AiSpeech = AiSpeech;
-
 const resource = {'class': AiSpeech, 'name': 'AiSpeech'};
 const path = 'ai-speech';
 

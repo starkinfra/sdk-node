@@ -37,7 +37,6 @@ class AiChat extends Resource {
 }
 
 exports.AiChat = AiChat;
-
 const resource = {'class': AiChat, 'name': 'AiChat'};
 
 exports.create = async function (chat, { user } = {}) {
@@ -143,5 +142,6 @@ exports.delete = async function (ids, { user } = {}) {
      */
     let response = await rest.deleteRaw(api.endpoint(resource.name), null, null, true, user, { ids: ids });
     let json = response.json();
-    return json[api.lastNamePlural(resource.name)].map(entity => Object.assign(new exports.AiChat(entity), entity));
+    let entities = json[api.lastNamePlural(resource.name)];
+    return entities.map(entity => Object.assign(new exports.AiChat(entity), entity));
 };

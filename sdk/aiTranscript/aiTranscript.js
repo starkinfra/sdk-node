@@ -1,4 +1,5 @@
 const rest = require('../utils/rest.js');
+const api = require('starkcore').api;
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
@@ -41,13 +42,7 @@ class AiTranscript extends Resource {
 }
 
 exports.AiTranscript = AiTranscript;
-
 const resource = {'class': AiTranscript, 'name': 'AiTranscript'};
-const path = 'ai-transcript';
-
-function parse(json) {
-    return Object.assign(new AiTranscript(json), json);
-}
 
 exports.create = async function (transcript, { user } = {}) {
     /**
@@ -66,8 +61,10 @@ exports.create = async function (transcript, { user } = {}) {
      * @returns AiTranscript object with updated attributes.
      *
      */
-    const response = await rest.postRaw(path, { audio: transcript.audio }, null, true, user);
-    return parse(response.json().transcript);
+    let response = await rest.postRaw(api.endpoint(resource.name), { audio: transcript.audio }, null, true, user);
+    let json = response.json();
+    let entity = json[api.lastName(resource.name)];
+    return Object.assign(new exports.AiTranscript(entity), entity);
 };
 
 exports.query = async function ({ user } = {}) {

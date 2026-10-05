@@ -55,7 +55,6 @@ class AiAgent extends Resource {
 }
 
 exports.AiAgent = AiAgent;
-
 let resource = {'class': exports.AiAgent, 'name': 'AiAgent'};
 
 function payloadOf({ name, model, systemPrompt, voiceId, knowledgeBaseIds, metadataSchema }) {
@@ -191,5 +190,6 @@ exports.delete = async function (ids, { user } = {}) {
      */
     let response = await rest.deleteRaw(api.endpoint(resource.name), null, null, true, user, { ids: ids });
     let json = response.json();
-    return json[api.lastNamePlural(resource.name)].map(entity => Object.assign(new exports.AiAgent(entity), entity));
+    let entities = json[api.lastNamePlural(resource.name)];
+    return entities.map(entity => Object.assign(new exports.AiAgent(entity), entity));
 };

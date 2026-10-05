@@ -48,6 +48,7 @@ class AiMessage extends Resource {
 }
 
 exports.AiMessage = AiMessage;
+let resource = {'class': exports.AiMessage, 'name': 'AiMessage'};
 
 const path = 'ai-message';
 
@@ -102,7 +103,10 @@ exports.query = async function (chatId, { limit, user } = {}) {
      * @returns generator of AiMessage objects with updated attributes
      *
      */
-    return stream(chatId, limit, user);
+    if (!chatId) {
+        throw new Error('chatId is required to retrieve AiMessages');
+    }
+    return rest.getList(resource, { chatId: chatId, limit: limit }, user);
 };
 
 exports.page = async function (chatId, { cursor, limit, user } = {}) {
@@ -132,19 +136,3 @@ exports.page = async function (chatId, { cursor, limit, user } = {}) {
     const content = response.json();
     return [content.messages.map(parse), content.cursor];
 };
-
-async function* stream(chatId, limit, user) {
-    let cursor = null;
-    let remaining = limit;
-    do {
-        const pageSize = remaining === undefined || remaining === null ? 100 : Math.min(100, remaining);
-        const [messages, nextCursor] = await exports.page(chatId, { cursor: cursor, limit: pageSize, user: user });
-        for (let message of messages) {
-            yield message;
-        }
-        cursor = nextCursor;
-        if (remaining) {
-            remaining -= messages.length;
-        }
-    } while (cursor && !(limit && remaining <= 0));
-}
