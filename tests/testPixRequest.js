@@ -1,5 +1,6 @@
 const assert = require("assert");
 const starkinfra = require("../index.js");
+const starkcoreError = require("starkcore/starkcore/error.js");
 const uniqueId = require("./utils/uniqueId.js")
 const endToEndId = require("../sdk/utils/endToEndId.js");
 
@@ -145,7 +146,7 @@ describe("TestAuthorizationParse", function(){
             );
             throw new Error("Oops, signature was accepted!");
         } catch (e) {
-            if (!(e instanceof starkinfra.error.InvalidSignatureError))
+            if (!(e instanceof starkcoreError.InvalidSignatureError))
                 throw e;
         }
     });
@@ -161,7 +162,7 @@ describe("TestAuthorizationParse", function(){
             );
             throw new Error("Oops, signature was accepted!");
         } catch (e) {
-            if (!(e instanceof starkinfra.error.InvalidSignatureError))
+            if (!(e instanceof starkcoreError.InvalidSignatureError))
                 throw e;
         }
     });

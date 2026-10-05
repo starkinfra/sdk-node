@@ -70,6 +70,7 @@ exports.event = require('./sdk/event');
 exports.webhook = require('./sdk/webhook');
 exports.bacenId = require('./sdk/utils/bacenId.js');
 exports.returnId = require('./sdk/utils/returnId.js');
+exports.pixSubscriptionBacenId = require('./sdk/utils/pixSubscriptionBacenId.js');
 exports.endToEndId = require('./sdk/utils/endToEndId.js');
 exports.key = require('./sdk/key.js');
 exports.error = require('./sdk/error.js');
