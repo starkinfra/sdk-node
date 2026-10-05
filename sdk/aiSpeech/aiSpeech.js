@@ -21,7 +21,7 @@ class AiSpeech extends Resource {
      * Attributes (return-only):
      * @param id [string]: unique id returned when the AiSpeech is created. ex: '5656565656565656'
      * @param status [string]: current status of the speech. Options: 'processing', 'success', 'failed'
-     * @param audio [string]: base64-encoded MP3 of the speech. Left out of query results; get returns it unless fields is given without it.
+     * @param audio [string]: base64-encoded MP3 of the speech. Left out of query results; get returns it.
      * @param voiceName [string]: name of the voice. Only present when requested with expand: ['voiceName'].
      * @param errors [list of strings]: reasons the synthesis failed. Empty when it worked.
      * @param created [string]: creation datetime for the AiSpeech. ex: '2020-03-10 10:30:00.000'
@@ -82,7 +82,7 @@ exports.create = async function (speech, { user } = {}) {
     return parse(response.json().speech);
 };
 
-exports.get = async function (id, { fields, expand, user } = {}) {
+exports.get = async function (id, { expand, user } = {}) {
     /**
      *
      * Retrieve a specific AiSpeech
@@ -93,18 +93,17 @@ exports.get = async function (id, { fields, expand, user } = {}) {
      * @param id [string]: object unique id. ex: '5656565656565656'
      *
      * Parameters (optional):
-     * @param fields [list of strings, default null]: attributes to keep in the response. The audio is only attached when fields is omitted or lists 'audio'. ex: ['id', 'status', 'audio']
-     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'voiceName'. When fields is also given, the expanded attribute must be listed there too.
+     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'voiceName'.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns AiSpeech object with updated attributes.
      *
      */
-    return rest.getId(resource, id, user, { fields: fields, expand: expand });
+    return rest.getId(resource, id, user, { expand: expand });
 };
 
-exports.query = async function ({ fields, expand, user } = {}) {
+exports.query = async function ({ expand, user } = {}) {
     /**
      *
      * Retrieve AiSpeeches
@@ -112,14 +111,13 @@ exports.query = async function ({ fields, expand, user } = {}) {
      * @description Receive a generator of AiSpeech objects previously created in the Stark Infra API. The audio is left out of the results.
      *
      * Parameters (optional):
-     * @param fields [list of strings, default null]: attributes to keep in the response. ex: ['id', 'status']
-     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'voiceName'. When fields is also given, the expanded attribute must be listed there too.
+     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'voiceName'.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of AiSpeech objects with updated attributes
      *
      */
-    const response = await rest.getRaw(path, { fields: fields, expand: expand }, null, true, user);
+    const response = await rest.getRaw(path, { expand: expand }, null, true, user);
     return stream(response.json().speeches);
 };

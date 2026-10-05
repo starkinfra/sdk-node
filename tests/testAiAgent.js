@@ -43,14 +43,6 @@ describe('TestAiAgent', function() {
         assert(expanded.knowledgeBases[0] instanceof starkinfra.AiKnowledgeBase);
     });
 
-    it('test_query_with_fields', async () => {
-        const created = await fixtures.agent();
-        const found = await collect(await starkinfra.aiAgent.query({ fields: ['id', 'name'] }));
-        const own = found.find(entity => entity.id === created.id);
-        assert.strictEqual(own.name, created.name);
-        assert.strictEqual(own.model, undefined);
-    });
-
     it('test_update_keeps_the_knowledge_bases_it_was_not_asked_to_change', async () => {
         const knowledgeBase = await fixtures.knowledgeBase();
         const created = await fixtures.agent();
@@ -162,9 +154,8 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
                 }]
             }, agent)
         });
-        const fetched = await starkinfra.aiAgent.get('5740688905863168', { fields: ['id', 'knowledgeBases'], expand: ['knowledgeBases'] });
+        const fetched = await starkinfra.aiAgent.get('5740688905863168', { expand: ['knowledgeBases'] });
         const url = boundary.requests[0].url;
-        assert(url.includes('fields=id%2CknowledgeBases'), url);
         assert(url.includes('expand=knowledgeBases'), url);
         assert(fetched.knowledgeBases[0] instanceof starkinfra.AiKnowledgeBase);
         assert.strictEqual(fetched.knowledgeBases[0].name, 'Docs');
@@ -174,7 +165,7 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
         boundary.answerWith({ agent: { id: '5740688905863168', knowledgeBaseIds: ['5083538508480512'] } }, { agent: agent });
         await starkinfra.aiAgent.update('5740688905863168', { name: 'Renamed' });
         assert.strictEqual(boundary.requests[0].method.toUpperCase(), 'GET');
-        assert(boundary.requests[0].url.includes('fields=knowledgeBaseIds'), boundary.requests[0].url);
+        assert(boundary.requests[0].url.endsWith('/v2/ai-agent/5740688905863168'), boundary.requests[0].url);
         assert.strictEqual(boundary.requests[1].method.toUpperCase(), 'PATCH');
         assert(boundary.requests[1].url.endsWith('/v2/ai-agent/5740688905863168'), boundary.requests[1].url);
         assert.deepStrictEqual(boundary.bodyOf(1), { name: 'Renamed', knowledgeBaseIds: ['5083538508480512'] });

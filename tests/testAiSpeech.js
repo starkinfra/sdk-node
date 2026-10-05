@@ -33,7 +33,7 @@ describe('TestAiSpeechCreate', function() {
     });
 
     it('test_expand_voice_name', async () => {
-        const fetched = await starkinfra.aiSpeech.get(speech.id, { fields: ['id', 'voiceName'], expand: ['voiceName'] });
+        const fetched = await starkinfra.aiSpeech.get(speech.id, { expand: ['voiceName'] });
         assert(fetched.voiceName);
     });
 });
@@ -46,13 +46,6 @@ describe('TestAiSpeechQuery', function() {
             assert(typeof entity.id === 'string');
             assert(typeof entity.created === 'string');
             assert(entity.audio === null);
-        }
-    });
-
-    it('test_fields_keep_only_what_was_asked', async () => {
-        for (let entity of await collect(await starkinfra.aiSpeech.query({ fields: ['id', 'status'] }))) {
-            assert(typeof entity.id === 'string');
-            assert(entity.text === undefined);
         }
     });
 });

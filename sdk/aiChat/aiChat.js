@@ -1,4 +1,5 @@
 const rest = require('../utils/rest.js');
+const api = require('starkcore').api;
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
 
@@ -38,11 +39,6 @@ class AiChat extends Resource {
 exports.AiChat = AiChat;
 
 const resource = {'class': AiChat, 'name': 'AiChat'};
-const path = 'ai-chat';
-
-function parse(json) {
-    return Object.assign(new AiChat(json), json);
-}
 
 exports.create = async function (chat, { user } = {}) {
     /**
@@ -61,11 +57,13 @@ exports.create = async function (chat, { user } = {}) {
      * @returns AiChat object with updated attributes.
      *
      */
-    const response = await rest.postRaw(path, { agentId: chat.agentId, title: chat.title }, null, true, user);
-    return parse(response.json().chat);
+    let response = await rest.postRaw(api.endpoint(resource.name), { agentId: chat.agentId, title: chat.title }, null, true, user);
+    let json = response.json();
+    let entity = json[api.lastName(resource.name)];
+    return Object.assign(new exports.AiChat(entity), entity);
 };
 
-exports.get = async function (id, { fields, expand, user } = {}) {
+exports.get = async function (id, { expand, user } = {}) {
     /**
      *
      * Retrieve a specific AiChat
@@ -76,18 +74,17 @@ exports.get = async function (id, { fields, expand, user } = {}) {
      * @param id [string]: object unique id. ex: '5656565656565656'
      *
      * Parameters (optional):
-     * @param fields [list of strings, default null]: attributes to keep in the response. ex: ['id', 'title']
-     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'agentName'. When fields is also given, the expanded attribute must be listed there too.
+     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'agentName'.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns AiChat object with updated attributes.
      *
      */
-    return rest.getId(resource, id, user, { fields: fields, expand: expand });
+    return rest.getId(resource, id, user, { expand: expand });
 };
 
-exports.query = async function ({ fields, expand, user } = {}) {
+exports.query = async function ({ expand, user } = {}) {
     /**
      *
      * Retrieve AiChats
@@ -95,15 +92,14 @@ exports.query = async function ({ fields, expand, user } = {}) {
      * @description Receive a generator of AiChat objects previously created in the Stark Infra API
      *
      * Parameters (optional):
-     * @param fields [list of strings, default null]: attributes to keep in the response. ex: ['id', 'title']
-     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'agentName'. When fields is also given, the expanded attribute must be listed there too.
+     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'agentName'.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of AiChat objects with updated attributes
      *
      */
-    return rest.getList(resource, { fields: fields, expand: expand }, user);
+    return rest.getList(resource, { expand: expand }, user);
 };
 
 exports.update = async function (id, { title, agentId, user } = {}) {
@@ -145,6 +141,7 @@ exports.delete = async function (ids, { user } = {}) {
      * @returns list of deleted AiChat objects
      *
      */
-    const response = await rest.deleteRaw(path, null, null, true, user, { ids: ids });
-    return response.json().chats.map(parse);
+    let response = await rest.deleteRaw(api.endpoint(resource.name), null, null, true, user, { ids: ids });
+    let json = response.json();
+    return json[api.lastNamePlural(resource.name)].map(entity => Object.assign(new exports.AiChat(entity), entity));
 };

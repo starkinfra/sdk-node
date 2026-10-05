@@ -1,4 +1,5 @@
 const rest = require('../utils/rest.js');
+const api = require('starkcore').api;
 const AiKnowledgeBase = require('../aiKnowledgeBase/aiKnowledgeBase.js').AiKnowledgeBase;
 const check = require('starkcore').check;
 const Resource = require('starkcore').Resource;
@@ -52,6 +53,8 @@ class AiAgent extends Resource {
 }
 
 exports.AiAgent = AiAgent;
+
+let resource = {'class': exports.AiAgent, 'name': 'AiAgent'};
 
 const path = 'ai-agent';
 
@@ -110,7 +113,7 @@ exports.create = async function (agent, { user } = {}) {
     return parse(response.json().agent);
 };
 
-exports.get = async function (id, { fields, expand, user } = {}) {
+exports.get = async function (id, { expand, user } = {}) {
     /**
      *
      * Retrieve a specific AiAgent
@@ -121,19 +124,18 @@ exports.get = async function (id, { fields, expand, user } = {}) {
      * @param id [string]: object unique id. ex: '5656565656565656'
      *
      * Parameters (optional):
-     * @param fields [list of strings, default null]: attributes to keep in the response. ex: ['id', 'name']
-     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'knowledgeBases'. When fields is also given, the expanded attribute must be listed there too.
+     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'knowledgeBases'.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns AiAgent object with updated attributes.
      *
      */
-    const response = await rest.getRaw(path + '/' + id, { fields: fields, expand: expand }, null, true, user);
+    const response = await rest.getRaw(path + '/' + id, { expand: expand }, null, true, user);
     return parse(response.json().agent);
 };
 
-exports.query = async function ({ fields, expand, user } = {}) {
+exports.query = async function ({ expand, user } = {}) {
     /**
      *
      * Retrieve AiAgents
@@ -141,15 +143,14 @@ exports.query = async function ({ fields, expand, user } = {}) {
      * @description Receive a generator of AiAgent objects previously created in the Stark Infra API
      *
      * Parameters (optional):
-     * @param fields [list of strings, default null]: attributes to keep in the response. ex: ['id', 'name']
-     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'knowledgeBases'. When fields is also given, the expanded attribute must be listed there too.
+     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'knowledgeBases'.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of AiAgent objects with updated attributes
      *
      */
-    const response = await rest.getRaw(path, { fields: fields, expand: expand }, null, true, user);
+    const response = await rest.getRaw(path, { expand: expand }, null, true, user);
     return stream(response.json().agents);
 };
 
@@ -181,7 +182,7 @@ exports.update = async function (id, { name, model, systemPrompt, voiceId, knowl
      *
      */
     if (knowledgeBaseIds === undefined || knowledgeBaseIds === null) {
-        knowledgeBaseIds = (await exports.get(id, { fields: ['knowledgeBaseIds'], user: user })).knowledgeBaseIds;
+        knowledgeBaseIds = (await exports.get(id, { user: user })).knowledgeBaseIds;
     }
     const payload = payloadOf({
         name: name,
@@ -191,8 +192,7 @@ exports.update = async function (id, { name, model, systemPrompt, voiceId, knowl
         knowledgeBaseIds: knowledgeBaseIds,
         metadataSchema: metadataSchema
     });
-    const response = await rest.patchRaw(path + '/' + id, payload, null, true, user);
-    return parse(response.json().agent);
+    return rest.patchId(resource, id, payload, user);
 };
 
 exports.delete = async function (ids, { user } = {}) {
@@ -212,6 +212,7 @@ exports.delete = async function (ids, { user } = {}) {
      * @returns list of deleted AiAgent objects
      *
      */
-    const response = await rest.deleteRaw(path, null, null, true, user, { ids: ids });
-    return response.json().agents.map(parse);
+    let response = await rest.deleteRaw(api.endpoint(resource.name), null, null, true, user, { ids: ids });
+    let json = response.json();
+    return json[api.lastNamePlural(resource.name)].map(entity => Object.assign(new exports.AiAgent(entity), entity));
 };
