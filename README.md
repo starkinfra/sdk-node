@@ -4746,13 +4746,13 @@ const starkinfra = require('starkinfra');
 
 ### Get an AiSpeech
 
-Get a speech by its id. The audio comes back unless you give fields without it.
+Get a speech by its id, with its audio.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let speech = await starkinfra.aiSpeech.get('5155165527080960', {fields: ['id', 'status', 'voiceName'], expand: ['voiceName']});
+    let speech = await starkinfra.aiSpeech.get('5155165527080960', {expand: ['voiceName']});
 
     console.log(speech);
 })();
@@ -4760,13 +4760,13 @@ const starkinfra = require('starkinfra');
 
 ### Query AiSpeeches
 
-List your speeches, without their audio. Only fields and expand are accepted.
+List your speeches, without their audio. Only expand is accepted.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let speeches = await starkinfra.aiSpeech.query({fields: ['id', 'status']});
+    let speeches = await starkinfra.aiSpeech.query({expand: ['voiceName']});
 
     for await (let speech of speeches) {
         console.log(speech);
@@ -4847,13 +4847,13 @@ const starkinfra = require('starkinfra');
 
 ### Query AiAgents
 
-List your agents. Only fields and expand are accepted.
+List your agents. Only expand is accepted.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let agents = await starkinfra.aiAgent.query({fields: ['id', 'name']});
+    let agents = await starkinfra.aiAgent.query({expand: ['knowledgeBases']});
 
     for await (let agent of agents) {
         console.log(agent);
@@ -4863,13 +4863,13 @@ const starkinfra = require('starkinfra');
 
 ### Update an AiAgent
 
-Change only the parameters you give. The API clears the knowledge bases of a request that carries none, so when knowledgeBaseIds is not given the SDK reads the agent first and sends its current list back. Pass an empty list to clear them on purpose.
+Change only the parameters you give, except knowledgeBaseIds: the API replaces the list with what the request carries and clears it when the request carries none, so always send the full list the agent should keep. Pass an empty list to clear them on purpose.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let agent = await starkinfra.aiAgent.update('5155165527080960', {name: 'Billing assistant'});
+    let agent = await starkinfra.aiAgent.update('5155165527080960', {name: 'Billing assistant', knowledgeBaseIds: ['5656565656565656']});
 
     console.log(agent);
 })();
@@ -4926,13 +4926,13 @@ const starkinfra = require('starkinfra');
 
 ### Query AiChats
 
-List your chats. Only fields and expand are accepted.
+List your chats. Only expand is accepted.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let chats = await starkinfra.aiChat.query({fields: ['id', 'title']});
+    let chats = await starkinfra.aiChat.query({expand: ['agentName']});
 
     for await (let chat of chats) {
         console.log(chat);

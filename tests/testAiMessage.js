@@ -145,9 +145,4 @@ describe('TestAiMessageAtTheHttpBoundary', function() {
         assert.strictEqual(cursor, 'next-page');
     });
 
-    it('test_page_without_chat_id_is_refused_before_any_request', async () => {
-        boundary.answerWith({ cursor: null, messages: [] });
-        await assert.rejects(starkinfra.aiMessage.page(undefined));
-        assert.strictEqual(boundary.requests.length, 0);
-    });
 });

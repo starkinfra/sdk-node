@@ -42,16 +42,16 @@ describe('TestAiAgent', function() {
         assert.deepStrictEqual(expanded.knowledgeBases.map(entity => entity.id), [knowledgeBase.id]);
     });
 
-    it('test_update_keeps_the_knowledge_bases_it_was_not_asked_to_change', async () => {
+    it('test_update_keeps_the_knowledge_bases_it_is_given_and_the_other_attributes', async () => {
         const knowledgeBase = await fixtures.knowledgeBase();
         const created = await fixtures.agent();
         try {
-            const renamed = await starkinfra.aiAgent.update(created.id, { name: 'renamed-by-sdk' });
+            const renamed = await starkinfra.aiAgent.update(created.id, { name: 'renamed-by-sdk', knowledgeBaseIds: [knowledgeBase.id] });
             assert.strictEqual(renamed.name, 'renamed-by-sdk');
             assert.deepStrictEqual(renamed.knowledgeBaseIds, [knowledgeBase.id]);
             assert.deepStrictEqual(Object.keys(renamed.metadataSchema), ['order_id']);
         } finally {
-            await starkinfra.aiAgent.update(created.id, { name: created.name });
+            await starkinfra.aiAgent.update(created.id, { name: created.name, knowledgeBaseIds: [knowledgeBase.id] });
         }
     });
 
@@ -159,17 +159,16 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
         assert.strictEqual(fetched.knowledgeBases[0].name, 'Docs');
     });
 
-    it('test_update_without_knowledge_base_ids_reads_them_first_and_sends_them_back', async () => {
-        boundary.answerWith({ agent: { id: '5740688905863168', knowledgeBaseIds: ['5083538508480512'] } }, { agent: agent });
+    it('test_update_sends_only_the_parameters_it_is_given', async () => {
+        boundary.answerWith({ agent: agent });
         await starkinfra.aiAgent.update('5740688905863168', { name: 'Renamed' });
-        assert.strictEqual(boundary.requests[0].method.toUpperCase(), 'GET');
+        assert.strictEqual(boundary.requests.length, 1);
+        assert.strictEqual(boundary.requests[0].method.toUpperCase(), 'PATCH');
         assert(boundary.requests[0].url.endsWith('/v2/ai-agent/5740688905863168'), boundary.requests[0].url);
-        assert.strictEqual(boundary.requests[1].method.toUpperCase(), 'PATCH');
-        assert(boundary.requests[1].url.endsWith('/v2/ai-agent/5740688905863168'), boundary.requests[1].url);
-        assert.deepStrictEqual(boundary.bodyOf(1), { name: 'Renamed', knowledgeBaseIds: ['5083538508480512'] });
+        assert.deepStrictEqual(boundary.bodyOf(), { name: 'Renamed' });
     });
 
-    it('test_update_with_knowledge_base_ids_does_not_read_the_agent', async () => {
+    it('test_update_sends_an_empty_list_of_knowledge_bases', async () => {
         boundary.answerWith({ agent: agent });
         await starkinfra.aiAgent.update('5740688905863168', { knowledgeBaseIds: [] });
         assert.strictEqual(boundary.requests.length, 1);

@@ -135,11 +135,9 @@ exports.update = async function (id, { name, model, systemPrompt, voiceId, knowl
      *
      * Update AiAgent entity
      *
-     * @description Update an AiAgent's parameters by passing its id. Only the parameters you give are changed.
-     * The API replaces the knowledge base list with whatever the request carries and clears it when the request
-     * carries none, so when knowledgeBaseIds is not given this function reads the agent first and sends its
-     * current list back. Pass an empty list to clear the knowledge bases on purpose.
-     * The read and the update are two requests, so a knowledge base change made by someone else between them is overwritten.
+     * @description Update an AiAgent's parameters by passing its id. Only the parameters you give are changed, except knowledgeBaseIds:
+     * the API replaces the knowledge base list with whatever the request carries and clears it when the request carries none,
+     * so always pass the full list the agent should keep. Pass an empty list to clear the knowledge bases on purpose.
      *
      * Parameters (required):
      * @param id [string]: AiAgent unique id. ex: '5656565656565656'
@@ -149,7 +147,7 @@ exports.update = async function (id, { name, model, systemPrompt, voiceId, knowl
      * @param model [string, default null]: new AI model. Options: 'bender-1.0', 'prime-1.0'
      * @param systemPrompt [string, default null]: new instructions for the agent. Up to 100000 characters.
      * @param voiceId [string, default null]: new AiVoice id.
-     * @param knowledgeBaseIds [list of strings, default null]: the AiKnowledgeBase ids the agent should end up with. Replaces the current list.
+     * @param knowledgeBaseIds [list of strings, default null]: the AiKnowledgeBase ids the agent should end up with. Replaces the current list, and leaving it out clears the list.
      * @param metadataSchema [object, default null]: new schema of the structured data the agent must extract.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
@@ -157,9 +155,6 @@ exports.update = async function (id, { name, model, systemPrompt, voiceId, knowl
      * @returns AiAgent with updated attributes
      *
      */
-    if (knowledgeBaseIds === undefined || knowledgeBaseIds === null) {
-        knowledgeBaseIds = (await exports.get(id, { user: user })).knowledgeBaseIds;
-    }
     const payload = payloadOf({
         name: name,
         model: model,

@@ -103,9 +103,6 @@ exports.query = async function (chatId, { limit, user } = {}) {
      * @returns generator of AiMessage objects with updated attributes
      *
      */
-    if (!chatId) {
-        throw new Error('chatId is required to retrieve AiMessages');
-    }
     return rest.getList(resource, { chatId: chatId, limit: limit }, user);
 };
 
@@ -129,9 +126,6 @@ exports.page = async function (chatId, { cursor, limit, user } = {}) {
      * @returns list of AiMessage objects with updated attributes and cursor to retrieve the next page of AiMessage objects
      *
      */
-    if (!chatId) {
-        throw new Error('chatId is required to retrieve AiMessages');
-    }
     const response = await rest.getRaw(path, { chatId: chatId, limit: limit, cursor: cursor }, null, true, user);
     const content = response.json();
     return [content.messages.map(parse), content.cursor];
