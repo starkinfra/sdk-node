@@ -57,28 +57,40 @@ describe('TestAiMessage', function() {
     });
 
     it('test_query_returns_the_whole_history', async () => {
-        const found = await collect(await starkinfra.aiMessage.query(chat.id));
+        const found = await collect(await starkinfra.aiMessage.query({ chatId: chat.id }));
         assert.deepStrictEqual(found.map(message => message.id).sort(), posted.map(message => message.id).sort());
     });
 
     it('test_query_with_limit_stops_at_the_limit', async () => {
-        const found = await collect(await starkinfra.aiMessage.query(chat.id, { limit: 1 }));
+        const found = await collect(await starkinfra.aiMessage.query({ chatId: chat.id, limit: 1 }));
         assert.strictEqual(found.length, 1);
     });
 
     it('test_query_with_a_negative_limit_raises_input_errors', async () => {
-        await assert.rejects(collect(await starkinfra.aiMessage.query(chat.id, { limit: -1 })), starkcoreError.InputErrors);
+        await assert.rejects(collect(await starkinfra.aiMessage.query({ chatId: chat.id, limit: -1 })), starkcoreError.InputErrors);
     });
 
     it('test_page_with_a_limit_above_the_maximum_raises_input_errors', async () => {
-        await assert.rejects(starkinfra.aiMessage.page(chat.id, { limit: 101 }), starkcoreError.InputErrors);
+        await assert.rejects(starkinfra.aiMessage.page({ chatId: chat.id, limit: 101 }), starkcoreError.InputErrors);
+    });
+
+    it('test_query_without_chat_id_lists_the_messages_of_every_chat', async () => {
+        const found = await collect(await starkinfra.aiMessage.query({ limit: 100 }));
+        const ids = found.map(message => message.id);
+        for (let message of posted) {
+            assert(ids.includes(message.id));
+        }
+    });
+
+    it('test_query_with_an_unknown_chat_id_raises_input_errors', async () => {
+        await assert.rejects(collect(await starkinfra.aiMessage.query({ chatId: '0000000000000000' })), starkcoreError.InputErrors);
     });
 
     it('test_page_returns_a_cursor_that_leads_to_the_next_page', async () => {
-        const [first, cursor] = await starkinfra.aiMessage.page(chat.id, { limit: 1 });
+        const [first, cursor] = await starkinfra.aiMessage.page({ chatId: chat.id, limit: 1 });
         assert.strictEqual(first.length, 1);
         assert(cursor);
-        const [second] = await starkinfra.aiMessage.page(chat.id, { cursor: cursor, limit: 1 });
+        const [second] = await starkinfra.aiMessage.page({ chatId: chat.id, cursor: cursor, limit: 1 });
         assert.strictEqual(second.length, 1);
         assert.notStrictEqual(first[0].id, second[0].id);
     });
@@ -123,7 +135,7 @@ describe('TestAiMessageAtTheHttpBoundary', function() {
             { cursor: 'next-page', messages: [messages[0]] },
             { cursor: null, messages: [messages[1]] }
         );
-        const found = await collect(await starkinfra.aiMessage.query('5632499082330112'));
+        const found = await collect(await starkinfra.aiMessage.query({ chatId: '5632499082330112' }));
         assert.deepStrictEqual(found.map(message => message.id), ['5642368648740864', '5079418695319552']);
         assert(boundary.requests[0].url.includes('chatId=5632499082330112'), boundary.requests[0].url);
         assert(!boundary.requests[0].url.includes('cursor'), boundary.requests[0].url);
@@ -132,15 +144,21 @@ describe('TestAiMessageAtTheHttpBoundary', function() {
 
     it('test_query_with_limit_stops_without_asking_for_another_page', async () => {
         boundary.answerWith({ cursor: 'next-page', messages: [messages[0]] });
-        const found = await collect(await starkinfra.aiMessage.query('5632499082330112', { limit: 1 }));
+        const found = await collect(await starkinfra.aiMessage.query({ chatId: '5632499082330112', limit: 1 }));
         assert.strictEqual(found.length, 1);
         assert.strictEqual(boundary.requests.length, 1);
         assert(boundary.requests[0].url.includes('limit=1'), boundary.requests[0].url);
     });
 
+    it('test_query_without_chat_id_sends_no_chat_id', async () => {
+        boundary.answerWith({ cursor: null, messages: [] });
+        await collect(await starkinfra.aiMessage.query());
+        assert(!boundary.requests[0].url.includes('chatId'), boundary.requests[0].url);
+    });
+
     it('test_page_returns_the_items_and_the_cursor', async () => {
         boundary.answerWith({ cursor: 'next-page', messages: messages });
-        const [items, cursor] = await starkinfra.aiMessage.page('5632499082330112', { limit: 2 });
+        const [items, cursor] = await starkinfra.aiMessage.page({ chatId: '5632499082330112', limit: 2 });
         assert.strictEqual(items.length, 2);
         assert.strictEqual(cursor, 'next-page');
     });

@@ -53,10 +53,21 @@ function parse(json) {
     return Object.assign(new AiSpeech(json), json);
 }
 
-async function* stream(entities) {
-    for (let entity of entities) {
-        yield parse(entity);
-    }
+async function* stream(query, limit, user) {
+    let cursor = null;
+    let remaining = limit;
+    do {
+        const pageSize = remaining ? Math.min(100, remaining) : undefined;
+        const response = await rest.getRaw(path, Object.assign({}, query, { limit: pageSize, cursor: cursor }), null, true, user);
+        const content = response.json();
+        for (let entity of content.speeches) {
+            yield parse(entity);
+        }
+        cursor = content.cursor;
+        if (remaining) {
+            remaining -= content.speeches.length;
+        }
+    } while (cursor && !(limit && remaining <= 0));
 }
 
 exports.create = async function (speech, { user } = {}) {
@@ -102,7 +113,7 @@ exports.get = async function (id, { expand, user } = {}) {
     return rest.getId(resource, id, user, { expand: expand });
 };
 
-exports.query = async function ({ expand, user } = {}) {
+exports.query = async function ({ expand, limit, user } = {}) {
     /**
      *
      * Retrieve AiSpeeches
@@ -111,12 +122,12 @@ exports.query = async function ({ expand, user } = {}) {
      *
      * Parameters (optional):
      * @param expand [list of strings, default null]: extra attributes to compute. Options: 'voiceName'.
+     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of AiSpeech objects with updated attributes
      *
      */
-    const response = await rest.getRaw(path, { expand: expand }, null, true, user);
-    return stream(response.json().speeches);
+    return stream({ expand: expand }, limit, user);
 };

@@ -25,7 +25,7 @@ class AiAgent extends Resource {
      *
      * Parameters (optional):
      * @param systemPrompt [string, default null]: instructions that define the agent's persona, tone and domain behavior. Up to 100000 characters. The API falls back to its default assistant prompt when omitted.
-     * @param voiceId [string, default null]: id of the AiVoice the agent speaks with. When set, every reply also carries a speech string ready to be sent to AiSpeech. The API does not check that the voice exists. An empty string is treated as not given.
+     * @param voiceId [string, default null]: id of the AiVoice the agent speaks with. When set, every reply also carries a speech string ready to be sent to AiSpeech. The API does not check that the voice exists. Leave it out, or send an empty string, for a text-only agent.
      * @param knowledgeBaseIds [list of strings, default null]: ids of up to 100 AiKnowledgeBases the agent retrieves from before answering. The API does not check that they exist.
      * @param metadataSchema [object, default null]: flat object whose keys are the fields the agent must extract on every reply. Each field takes a 'type' (string, integer, number, boolean or array), an optional 'description' of up to 2000 characters, an optional 'enum' of up to 20 strings for string fields. The keys are yours and are sent exactly as written. ex: {order_id: {type: 'string', description: 'Order the customer mentions'}}
      *
@@ -45,7 +45,7 @@ class AiAgent extends Resource {
         this.name = name;
         this.model = model;
         this.systemPrompt = systemPrompt;
-        this.voiceId = voiceId === '' ? null : voiceId;
+        this.voiceId = voiceId;
         this.knowledgeBaseIds = knowledgeBaseIds;
         this.metadataSchema = metadataSchema;
         this.knowledgeBases = parseObjects(knowledgeBases, knowledgeBaseResource, AiKnowledgeBase);
@@ -112,7 +112,7 @@ exports.get = async function (id, { expand, user } = {}) {
     return rest.getId(resource, id, user, { expand: expand });
 };
 
-exports.query = async function ({ expand, user } = {}) {
+exports.query = async function ({ expand, limit, user } = {}) {
     /**
      *
      * Retrieve AiAgents
@@ -121,13 +121,14 @@ exports.query = async function ({ expand, user } = {}) {
      *
      * Parameters (optional):
      * @param expand [list of strings, default null]: extra attributes to compute. Options: 'knowledgeBases'.
+     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of AiAgent objects with updated attributes
      *
      */
-    return rest.getList(resource, { expand: expand }, user);
+    return rest.getList(resource, { expand: expand, limit: limit }, user);
 };
 
 exports.update = async function (id, { name, model, systemPrompt, voiceId, knowledgeBaseIds, metadataSchema, user } = {}) {
@@ -135,9 +136,8 @@ exports.update = async function (id, { name, model, systemPrompt, voiceId, knowl
      *
      * Update AiAgent entity
      *
-     * @description Update an AiAgent's parameters by passing its id. Only the parameters you give are changed, except knowledgeBaseIds:
-     * the API replaces the knowledge base list with whatever the request carries and clears it when the request carries none,
-     * so always pass the full list the agent should keep. Pass an empty list to clear the knowledge bases on purpose.
+     * @description Update an AiAgent's parameters by passing its id. Only the parameters you give are changed.
+     * knowledgeBaseIds replaces the current list: leave it out to keep the list, or pass an empty list to detach every knowledge base.
      *
      * Parameters (required):
      * @param id [string]: AiAgent unique id. ex: '5656565656565656'
@@ -145,9 +145,9 @@ exports.update = async function (id, { name, model, systemPrompt, voiceId, knowl
      * Parameters (optional):
      * @param name [string, default null]: new name for the agent. Between 1 and 100 characters.
      * @param model [string, default null]: new AI model. Options: 'bender-1.0', 'prime-1.0'
-     * @param systemPrompt [string, default null]: new instructions for the agent. Up to 100000 characters.
-     * @param voiceId [string, default null]: new AiVoice id.
-     * @param knowledgeBaseIds [list of strings, default null]: the AiKnowledgeBase ids the agent should end up with. Replaces the current list, and leaving it out clears the list.
+     * @param systemPrompt [string, default null]: new instructions for the agent. Up to 100000 characters. Send an empty string to remove them.
+     * @param voiceId [string, default null]: new AiVoice id. Send an empty string to make the agent text-only.
+     * @param knowledgeBaseIds [list of strings, default null]: the AiKnowledgeBase ids the agent should end up with. Replaces the current list. Leave it out to keep the list, or pass an empty list to detach every knowledge base.
      * @param metadataSchema [object, default null]: new schema of the structured data the agent must extract.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *

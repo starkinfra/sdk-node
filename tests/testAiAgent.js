@@ -42,17 +42,23 @@ describe('TestAiAgent', function() {
         assert.deepStrictEqual(expanded.knowledgeBases.map(entity => entity.id), [knowledgeBase.id]);
     });
 
-    it('test_update_keeps_the_knowledge_bases_it_is_given_and_the_other_attributes', async () => {
+    it('test_update_keeps_the_knowledge_bases_when_none_are_given', async () => {
         const knowledgeBase = await fixtures.knowledgeBase();
         const created = await fixtures.agent();
         try {
-            const renamed = await starkinfra.aiAgent.update(created.id, { name: 'renamed-by-sdk', knowledgeBaseIds: [knowledgeBase.id] });
+            const renamed = await starkinfra.aiAgent.update(created.id, { name: 'renamed-by-sdk' });
             assert.strictEqual(renamed.name, 'renamed-by-sdk');
             assert.deepStrictEqual(renamed.knowledgeBaseIds, [knowledgeBase.id]);
             assert.deepStrictEqual(Object.keys(renamed.metadataSchema), ['order_id']);
         } finally {
-            await starkinfra.aiAgent.update(created.id, { name: created.name, knowledgeBaseIds: [knowledgeBase.id] });
+            await starkinfra.aiAgent.update(created.id, { name: created.name });
         }
+    });
+
+    it('test_update_accepts_an_empty_voice_id', async () => {
+        const created = await fixtures.agent();
+        const updated = await starkinfra.aiAgent.update(created.id, { voiceId: '' });
+        assert.strictEqual(updated.voiceId, '');
     });
 
     it('test_update_with_an_empty_list_clears_the_knowledge_bases', async () => {
@@ -116,14 +122,14 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
         });
     });
 
-    it('test_an_empty_voice_id_is_sent_as_null', async () => {
+    it('test_an_empty_voice_id_is_sent_as_given', async () => {
         boundary.answerWith({ agent: agent });
         await starkinfra.aiAgent.create(new starkinfra.AiAgent({ name: 'a', model: 'bender-1.0', voiceId: '' }));
         assert.deepStrictEqual(boundary.bodyOf(), {
             name: 'a',
             model: 'bender-1.0',
             systemPrompt: null,
-            voiceId: null,
+            voiceId: '',
             knowledgeBaseIds: null,
             metadataSchema: null
         });
@@ -187,11 +193,6 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
 });
 
 describe('TestAiAgentConstructor', function() {
-    it('test_an_empty_voice_id_is_read_as_not_given', () => {
-        const agent = new starkinfra.AiAgent({ name: 'a', model: 'bender-1.0', voiceId: '' });
-        assert.strictEqual(agent.voiceId, null);
-    });
-
     it('test_the_knowledge_bases_are_parsed', () => {
         const agent = new starkinfra.AiAgent({
             name: 'a',
@@ -200,5 +201,15 @@ describe('TestAiAgentConstructor', function() {
         });
         assert(agent.knowledgeBases[0] instanceof starkinfra.AiKnowledgeBase);
         assert.strictEqual(agent.knowledgeBases[0].name, 'Docs');
+    });
+});
+
+describe('TestAiAgentQueryLimit', function() {
+    this.timeout(30000);
+
+    it('test_query_with_limit_stops_at_the_limit', async () => {
+        await fixtures.agent();
+        const found = await collect(await starkinfra.aiAgent.query({ limit: 1 }));
+        assert.strictEqual(found.length, 1);
     });
 });

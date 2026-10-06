@@ -4612,7 +4612,7 @@ const starkinfra = require('starkinfra');
 
 ### Query AiKnowledgeBases
 
-You can list your knowledge bases, optionally filtered by ids, by a substring of the name or by status.
+You can list your knowledge bases, optionally filtered by ids, by a substring of the name or by status. The cursor is followed until the list ends; give limit to stop earlier. The name filter is applied to each page, so a page may come back short or empty while the cursor is followed.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -4695,7 +4695,7 @@ const starkinfra = require('starkinfra');
 
 ### Query AiVoices
 
-List your voices. The route takes no filters and is not paginated.
+List your voices, newest first. The cursor is followed until the list ends; give limit to stop earlier.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -4760,7 +4760,7 @@ const starkinfra = require('starkinfra');
 
 ### Query AiSpeeches
 
-List your speeches, without their audio. Only expand is accepted.
+List your speeches, newest first, without their audio. The cursor is followed until the list ends; give limit to stop earlier.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -4795,7 +4795,7 @@ const starkinfra = require('starkinfra');
 
 ### Query AiTranscripts
 
-List your transcripts. The route takes no filters and is not paginated.
+List your transcripts, newest first. The cursor is followed until the list ends; give limit to stop earlier.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -4847,7 +4847,7 @@ const starkinfra = require('starkinfra');
 
 ### Query AiAgents
 
-List your agents. Only expand is accepted.
+List your agents, newest first. The cursor is followed until the list ends; give limit to stop earlier.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -4863,13 +4863,13 @@ const starkinfra = require('starkinfra');
 
 ### Update an AiAgent
 
-Change only the parameters you give, except knowledgeBaseIds: the API replaces the list with what the request carries and clears it when the request carries none, so always send the full list the agent should keep. Pass an empty list to clear them on purpose.
+Change only the parameters you give. knowledgeBaseIds replaces the current list: leave it out to keep the list, or give an empty list to detach every knowledge base.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let agent = await starkinfra.aiAgent.update('5155165527080960', {name: 'Billing assistant', knowledgeBaseIds: ['5656565656565656']});
+    let agent = await starkinfra.aiAgent.update('5155165527080960', {name: 'Billing assistant'});
 
     console.log(agent);
 })();
@@ -4926,7 +4926,7 @@ const starkinfra = require('starkinfra');
 
 ### Query AiChats
 
-List your chats. Only expand is accepted.
+List your chats, newest first. The cursor is followed until the list ends; give limit to stop earlier.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -4994,13 +4994,13 @@ const starkinfra = require('starkinfra');
 
 ### Query AiMessages
 
-Get the whole history of a chat. The cursor is followed until the history ends.
+Get the history of a chat, newest first. The cursor is followed until the history ends. Without chatId, the messages of every chat in the workspace are returned.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let messages = await starkinfra.aiMessage.query('5155165527080960', {limit: 10});
+    let messages = await starkinfra.aiMessage.query({chatId: '5155165527080960', limit: 10});
 
     for await (let message of messages) {
         console.log(message);
@@ -5020,7 +5020,7 @@ const starkinfra = require('starkinfra');
     let messages;
 
     while (true) {
-        [messages, cursor] = await starkinfra.aiMessage.page('5155165527080960', {limit: 10, cursor: cursor});
+        [messages, cursor] = await starkinfra.aiMessage.page({chatId: '5155165527080960', limit: 10, cursor: cursor});
 
         for (let message of messages) {
             console.log(message);

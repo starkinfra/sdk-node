@@ -2,6 +2,7 @@ const assert = require('assert');
 const axios = require('axios').default;
 const starkinfra = require('../index.js');
 const { generateExampleAiKnowledgeBase } = require('./utils/aiKnowledgeBase');
+const { httpBoundary } = require('./utils/aiFixtures');
 const starkcoreError = require('starkcore/starkcore/error.js');
 
 starkinfra.user = require('./utils/user').exampleProject;
@@ -51,6 +52,11 @@ describe('TestAiKnowledgeBase', function() {
         const current = await starkinfra.aiKnowledgeBase.get(knowledgeBase.id);
         const found = await collect(await starkinfra.aiKnowledgeBase.query({ name: current.name, status: current.status }));
         assert(found.map(entity => entity.id).includes(knowledgeBase.id));
+    });
+
+    it('test_query_with_limit_stops_at_the_limit', async () => {
+        const found = await collect(await starkinfra.aiKnowledgeBase.query({ limit: 1 }));
+        assert.strictEqual(found.length, 1);
     });
 
     it('test_query_without_match_is_empty', async () => {
@@ -150,5 +156,44 @@ describe('TestAiKnowledgeBaseAtTheHttpBoundary', function() {
         assert.strictEqual(request.data, undefined);
         assert.deepStrictEqual(deleted.map(entity => entity.id), ['6767676767676767']);
         assert.strictEqual(deleted[0].name, 'Public Documentation');
+    });
+});
+
+describe('TestAiKnowledgeBaseQueryAtTheHttpBoundary', function() {
+    const boundary = httpBoundary();
+    const first = { id: '6767676767676767', name: 'Public Documentation' };
+    const second = { id: '6767676767676768', name: 'Product Documentation' };
+
+    afterEach(() => boundary.restore());
+
+    it('test_query_follows_the_cursor_until_it_runs_out', async () => {
+        boundary.answerWith(
+            { cursor: 'next-page', knowledgeBases: [first] },
+            { cursor: null, knowledgeBases: [second] }
+        );
+        const found = await collect(await starkinfra.aiKnowledgeBase.query({ name: 'docs' }));
+        assert.deepStrictEqual(found.map(entity => entity.id), ['6767676767676767', '6767676767676768']);
+        assert(boundary.requests[0].url.includes('name=docs'), boundary.requests[0].url);
+        assert(!boundary.requests[0].url.includes('cursor'), boundary.requests[0].url);
+        assert(boundary.requests[1].url.includes('cursor=next-page'), boundary.requests[1].url);
+        assert(boundary.requests[1].url.includes('name=docs'), boundary.requests[1].url);
+    });
+
+    it('test_query_keeps_following_the_cursor_over_an_empty_page', async () => {
+        boundary.answerWith(
+            { cursor: 'next-page', knowledgeBases: [] },
+            { cursor: null, knowledgeBases: [second] }
+        );
+        const found = await collect(await starkinfra.aiKnowledgeBase.query({ name: 'product' }));
+        assert.deepStrictEqual(found.map(entity => entity.id), ['6767676767676768']);
+        assert.strictEqual(boundary.requests.length, 2);
+    });
+
+    it('test_query_with_limit_stops_without_asking_for_another_page', async () => {
+        boundary.answerWith({ cursor: 'next-page', knowledgeBases: [first] });
+        const found = await collect(await starkinfra.aiKnowledgeBase.query({ limit: 1 }));
+        assert.strictEqual(found.length, 1);
+        assert.strictEqual(boundary.requests.length, 1);
+        assert(boundary.requests[0].url.includes('limit=1'), boundary.requests[0].url);
     });
 });

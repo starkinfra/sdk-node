@@ -62,10 +62,21 @@ function payloadOf(attributes) {
     return payload;
 }
 
-async function* stream(entities) {
-    for (let entity of entities) {
-        yield parse(entity);
-    }
+async function* stream(query, limit, user) {
+    let cursor = null;
+    let remaining = limit;
+    do {
+        const pageSize = remaining ? Math.min(100, remaining) : undefined;
+        const response = await rest.getRaw(path, Object.assign({}, query, { limit: pageSize, cursor: cursor }), null, true, user);
+        const content = response.json();
+        for (let entity of content.knowledgeBases) {
+            yield parse(entity);
+        }
+        cursor = content.cursor;
+        if (remaining) {
+            remaining -= content.knowledgeBases.length;
+        }
+    } while (cursor && !(limit && remaining <= 0));
 }
 
 exports.create = async function (knowledgeBase, { user } = {}) {
@@ -118,7 +129,7 @@ exports.get = async function (id, { user } = {}) {
     return parse(response.json().knowledgeBase);
 };
 
-exports.query = async function ({ ids, name, status, user } = {}) {
+exports.query = async function ({ ids, name, status, limit, user } = {}) {
     /**
      *
      * Retrieve AiKnowledgeBases
@@ -127,16 +138,16 @@ exports.query = async function ({ ids, name, status, user } = {}) {
      *
      * Parameters (optional):
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
-     * @param name [string, default null]: case-insensitive substring of the name to filter retrieved objects. ex: 'docs'
+     * @param name [string, default null]: case-insensitive substring of the name to filter retrieved objects. The filter is applied to each page, so a page may come back short or empty while the cursor is followed. ex: 'docs'
      * @param status [string, default null]: filter for status of retrieved objects. Options: 'processing', 'success', 'failed'
+     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of AiKnowledgeBase objects with updated attributes
      *
      */
-    const response = await rest.getRaw(path, { ids: ids, name: name, status: status }, null, true, user);
-    return stream(response.json().knowledgeBases);
+    return stream({ ids: ids, name: name, status: status }, limit, user);
 };
 
 exports.update = async function (id, { name, isRecursive, tags, user } = {}) {

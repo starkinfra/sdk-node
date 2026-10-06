@@ -28,6 +28,11 @@ describe('TestAiTranscriptCreate', function() {
 describe('TestAiTranscriptQuery', function() {
     this.timeout(20000);
 
+    it('test_query_with_limit_stops_at_the_limit', async () => {
+        const found = await collect(await starkinfra.aiTranscript.query({ limit: 1 }));
+        assert(found.length <= 1);
+    });
+
     it('test_query_lists_transcripts', async () => {
         for (let entity of await collect(await starkinfra.aiTranscript.query())) {
             assert(typeof entity.id === 'string');

@@ -93,3 +93,13 @@ describe('TestAiChatAtTheHttpBoundary', function() {
         assert.deepStrictEqual(deleted.map(entity => entity.id), ['5761660895625216']);
     });
 });
+
+describe('TestAiChatQueryLimit', function() {
+    this.timeout(30000);
+
+    it('test_query_with_limit_stops_at_the_limit', async () => {
+        await fixtures.chat();
+        const found = await collect(await starkinfra.aiChat.query({ limit: 1 }));
+        assert.strictEqual(found.length, 1);
+    });
+});

@@ -67,7 +67,7 @@ exports.create = async function (transcript, { user } = {}) {
     return Object.assign(new exports.AiTranscript(entity), entity);
 };
 
-exports.query = async function ({ user } = {}) {
+exports.query = async function ({ limit, user } = {}) {
     /**
      *
      * Retrieve AiTranscripts
@@ -75,11 +75,12 @@ exports.query = async function ({ user } = {}) {
      * @description Receive a generator of AiTranscript objects previously created in the Stark Infra API
      *
      * Parameters (optional):
+     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of AiTranscript objects with updated attributes
      *
      */
-    return rest.getList(resource, {}, user);
+    return rest.getList(resource, { limit: limit }, user);
 };

@@ -85,17 +85,16 @@ exports.create = async function (message, { expand, user } = {}) {
     });
 };
 
-exports.query = async function (chatId, { limit, user } = {}) {
+exports.query = async function ({ chatId, limit, user } = {}) {
     /**
      *
      * Retrieve AiMessages
      *
-     * @description Receive a generator of the AiMessage objects of an AiChat, following the cursor until the history ends.
-     *
-     * Parameters (required):
-     * @param chatId [string]: id of the AiChat whose messages you want. ex: '5656565656565656'
+     * @description Receive a generator of AiMessage objects, newest first, following the cursor until the history ends.
+     * Without chatId, the messages of every chat in the workspace are returned.
      *
      * Parameters (optional):
+     * @param chatId [string, default null]: id of the AiChat whose messages you want. An unknown or deleted chat is refused by the API. ex: '5656565656565656'
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
@@ -106,18 +105,17 @@ exports.query = async function (chatId, { limit, user } = {}) {
     return rest.getList(resource, { chatId: chatId, limit: limit }, user);
 };
 
-exports.page = async function (chatId, { cursor, limit, user } = {}) {
+exports.page = async function ({ chatId, cursor, limit, user } = {}) {
     /**
      *
      * Retrieve paged AiMessages
      *
-     * @description Receive a list of up to 100 AiMessage objects of an AiChat and the cursor to the next page.
+     * @description Receive a list of up to 100 AiMessage objects and the cursor to the next page.
      * Use this function instead of query if you want to manually page your requests.
-     *
-     * Parameters (required):
-     * @param chatId [string]: id of the AiChat whose messages you want. ex: '5656565656565656'
+     * Without chatId, the messages of every chat in the workspace are returned.
      *
      * Parameters (optional):
+     * @param chatId [string, default null]: id of the AiChat whose messages you want. ex: '5656565656565656'
      * @param cursor [string, default null]: cursor returned on the previous page function call
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max = 100. ex: 35
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call

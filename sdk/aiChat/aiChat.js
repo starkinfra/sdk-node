@@ -83,7 +83,7 @@ exports.get = async function (id, { expand, user } = {}) {
     return rest.getId(resource, id, user, { expand: expand });
 };
 
-exports.query = async function ({ expand, user } = {}) {
+exports.query = async function ({ expand, limit, user } = {}) {
     /**
      *
      * Retrieve AiChats
@@ -92,13 +92,14 @@ exports.query = async function ({ expand, user } = {}) {
      *
      * Parameters (optional):
      * @param expand [list of strings, default null]: extra attributes to compute. Options: 'agentName'.
+     * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns generator of AiChat objects with updated attributes
      *
      */
-    return rest.getList(resource, { expand: expand }, user);
+    return rest.getList(resource, { expand: expand, limit: limit }, user);
 };
 
 exports.update = async function (id, { title, agentId, user } = {}) {
