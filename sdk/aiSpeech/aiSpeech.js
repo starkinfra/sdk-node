@@ -47,28 +47,6 @@ class AiSpeech extends Resource {
 
 exports.AiSpeech = AiSpeech;
 const resource = {'class': AiSpeech, 'name': 'AiSpeech'};
-const path = 'ai-speech';
-
-function parse(json) {
-    return Object.assign(new AiSpeech(json), json);
-}
-
-async function* stream(query, limit, user) {
-    let cursor = null;
-    let remaining = limit;
-    do {
-        const pageSize = remaining ? Math.min(100, remaining) : undefined;
-        const response = await rest.getRaw(path, Object.assign({}, query, { limit: pageSize, cursor: cursor }), null, true, user);
-        const content = response.json();
-        for (let entity of content.speeches) {
-            yield parse(entity);
-        }
-        cursor = content.cursor;
-        if (remaining) {
-            remaining -= content.speeches.length;
-        }
-    } while (cursor && !(limit && remaining <= 0));
-}
 
 exports.create = async function (speech, { user } = {}) {
     /**
@@ -127,5 +105,5 @@ exports.query = async function ({ expand, limit, user } = {}) {
      * @returns generator of AiSpeech objects with updated attributes
      *
      */
-    return stream({ expand: expand }, limit, user);
+    return rest.getList(resource, { expand: expand, limit: limit }, user);
 };
