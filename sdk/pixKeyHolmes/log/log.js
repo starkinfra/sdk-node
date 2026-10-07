@@ -1,9 +1,6 @@
 const rest = require('../../utils/rest.js');
 const check = require('starkcore').check;
 const Resource = require('../../utils/resource.js').Resource
-const {parseObjects} = require('../../utils/parse.js');
-const {PixKeyHolmes} = require('../pixKeyHolmes.js');
-const pixKeyHolmesResource = require('../pixKeyHolmes.js').resource;
 
 
 class Log extends Resource {
@@ -28,7 +25,7 @@ class Log extends Resource {
                 }) {
         super(id);
 
-        this.holmes = holmes === null ? null : parseObjects([holmes], pixKeyHolmesResource, PixKeyHolmes)[0];
+        this.holmes = holmes;
         this.type = type;
         this.errors = errors;
         this.created = check.datetime(created);
