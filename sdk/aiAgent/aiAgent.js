@@ -27,7 +27,7 @@ class AiAgent extends Resource {
      * @param systemPrompt [string, default null]: instructions that define the agent's persona, tone and domain behavior. Up to 100000 characters. The API falls back to its default assistant prompt when omitted.
      * @param voiceId [string, default null]: id of the AiVoice the agent speaks with. When set, every reply also carries a speech string ready to be sent to AiSpeech. The API does not check that the voice exists. Leave it out, or send an empty string, for a text-only agent.
      * @param knowledgeBaseIds [list of strings, default null]: ids of up to 100 AiKnowledgeBases the agent retrieves from before answering. The API does not check that they exist.
-     * @param metadataSchema [object, default null]: flat object whose keys are the fields the agent must extract on every reply. Each field takes a 'type' (string, integer, number, boolean or array), an optional 'description' of up to 2000 characters, an optional 'enum' of up to 20 strings for string fields. The keys are yours and are sent exactly as written. ex: {order_id: {type: 'string', description: 'Order the customer mentions'}}
+     * @param metadataSchema [object, default null]: flat object whose keys are the fields the agent must extract on every reply. Each field takes a 'type' (string, integer, number, boolean or array), an optional 'description' of up to 2000 characters, an optional 'enum' of up to 20 strings for string fields. The keys are yours and are sent exactly as written; keys whose value is null are left out. ex: {order_id: {type: 'string', description: 'Order the customer mentions'}}
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the AiAgent is created. ex: '5656565656565656'
@@ -57,23 +57,12 @@ class AiAgent extends Resource {
 exports.AiAgent = AiAgent;
 let resource = {'class': exports.AiAgent, 'name': 'AiAgent'};
 
-function payloadOf({ name, model, systemPrompt, voiceId, knowledgeBaseIds, metadataSchema }) {
-    return {
-        name: name,
-        model: model,
-        systemPrompt: systemPrompt,
-        voiceId: voiceId,
-        knowledgeBaseIds: knowledgeBaseIds,
-        metadataSchema: metadataSchema
-    };
-}
-
 exports.create = async function (agent, { user } = {}) {
     /**
      *
      * Create an AiAgent
      *
-     * @description Send an AiAgent object for creation at the Stark Infra API
+     * @description Send an AiAgent object for creation at the Stark Infra API. Attributes that are null are not sent.
      *
      * Parameters (required):
      * @param agent [AiAgent object]: AiAgent object to be created in the API.
@@ -85,7 +74,9 @@ exports.create = async function (agent, { user } = {}) {
      * @returns AiAgent object with updated attributes.
      *
      */
-    let response = await rest.postRaw(api.endpoint(resource.name), payloadOf(agent), null, true, user);
+    let payload = Object.assign({}, agent);
+    api.removeNullKeys(payload);
+    let response = await rest.postRaw(api.endpoint(resource.name), payload, null, true, user);
     let json = response.json();
     let entity = json[api.lastName(resource.name)];
     return Object.assign(new exports.AiAgent(entity), entity);
@@ -155,7 +146,7 @@ exports.update = async function (id, { name, model, systemPrompt, voiceId, knowl
      * @returns AiAgent with updated attributes
      *
      */
-    const payload = payloadOf({
+    const agent = new exports.AiAgent({
         name: name,
         model: model,
         systemPrompt: systemPrompt,
@@ -163,7 +154,7 @@ exports.update = async function (id, { name, model, systemPrompt, voiceId, knowl
         knowledgeBaseIds: knowledgeBaseIds,
         metadataSchema: metadataSchema
     });
-    return rest.patchId(resource, id, payload, user);
+    return rest.patchId(resource, id, agent, user);
 };
 
 exports.delete = async function (ids, { user } = {}) {

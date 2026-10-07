@@ -95,7 +95,7 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
 
     afterEach(() => boundary.restore());
 
-    it('test_create_sends_only_the_creatable_fields_and_does_not_touch_the_schema_keys', async () => {
+    it('test_create_sends_the_attributes_that_were_set_and_keeps_the_schema_keys', async () => {
         boundary.answerWith({ agent: agent });
         const schema = { order_id: { type: 'string' }, isUrgent: { type: 'boolean' } };
         const input = new starkinfra.AiAgent({
@@ -104,10 +104,7 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
             systemPrompt: 'Be brief.',
             voiceId: '5632499082330112',
             knowledgeBaseIds: ['5083538508480512'],
-            metadataSchema: schema,
-            id: '5740688905863168',
-            created: '2026-09-30T15:42:56+00:00',
-            updated: '2026-09-30T15:42:56+00:00'
+            metadataSchema: schema
         });
         await starkinfra.aiAgent.create(input);
         assert.strictEqual(boundary.requests[0].method.toUpperCase(), 'POST');
@@ -125,19 +122,12 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
     it('test_an_empty_voice_id_is_sent_as_given', async () => {
         boundary.answerWith({ agent: agent });
         await starkinfra.aiAgent.create(new starkinfra.AiAgent({ name: 'a', model: 'bender-1.0', voiceId: '' }));
-        assert.deepStrictEqual(boundary.bodyOf(), {
-            name: 'a',
-            model: 'bender-1.0',
-            systemPrompt: null,
-            voiceId: '',
-            knowledgeBaseIds: null,
-            metadataSchema: null
-        });
+        assert.deepStrictEqual(boundary.bodyOf(), { name: 'a', model: 'bender-1.0', voiceId: '' });
     });
 
-    it('test_create_keeps_empty_lists_and_does_not_rewrite_the_callers_schema', async () => {
+    it('test_create_keeps_empty_lists_and_the_schema_keys_as_written', async () => {
         boundary.answerWith({ agent: agent });
-        const schema = { order_id: { type: 'string', description: null } };
+        const schema = { order_id: { type: 'string' }, isUrgent: { type: 'boolean' } };
         await starkinfra.aiAgent.create(new starkinfra.AiAgent({
             name: 'a',
             model: 'prime-1.0',
@@ -145,7 +135,17 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
             metadataSchema: schema
         }));
         assert.deepStrictEqual(boundary.bodyOf().knowledgeBaseIds, []);
-        assert.deepStrictEqual(schema, { order_id: { type: 'string', description: null } });
+        assert.deepStrictEqual(Object.keys(boundary.bodyOf().metadataSchema), ['order_id', 'isUrgent']);
+    });
+
+    it('test_create_leaves_out_the_null_values_inside_the_schema', async () => {
+        boundary.answerWith({ agent: agent });
+        await starkinfra.aiAgent.create(new starkinfra.AiAgent({
+            name: 'a',
+            model: 'prime-1.0',
+            metadataSchema: { order_id: { type: 'string', description: null } }
+        }));
+        assert.deepStrictEqual(boundary.bodyOf().metadataSchema, { order_id: { type: 'string' } });
     });
 
     it('test_get_with_expand_keeps_the_knowledge_bases', async () => {
