@@ -3181,6 +3181,51 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
+### Get a PixKeyHolmes
+
+After its creation, information on a PixKeyHolmes may be retrieved by its id.
+
+```javascript
+await (async() => {
+    let sherlock = await starkinfra.pixKeyHolmes.get('5656565656565656');
+
+    console.log(sherlock);
+})();
+```
+
+### Query PixKeyHolmes logs
+
+You can query PixKeyHolmes logs to better understand PixKeyHolmes life cycles.
+
+```javascript
+await (async() => {
+    let logs = await starkinfra.pixKeyHolmes.log.query({
+        limit: 50,
+        ids: ['5729405850615808'],
+        after: '2022-01-01',
+        before: '2022-01-20',
+        types: ['solved'],
+        holmesIds: ['5719405850615809']
+    });
+
+    for await (let log of logs) {
+        console.log(log);
+    }
+})();
+```
+
+### Get a PixKeyHolmes log
+
+You can also get a specific log by its id.
+
+```javascript
+await (async() => {
+    let log = await starkinfra.pixKeyHolmes.log.get('5155165527080960');
+
+    console.log(log);
+})();
+```
+
 ### Create PixInternalTransactionReports
 
 Transactions that happen internally, outside of the SPI, must be reported to the Central Bank so they are reflected in the participant's statements.
