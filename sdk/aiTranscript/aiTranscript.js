@@ -61,7 +61,9 @@ exports.create = async function (transcript, { user } = {}) {
      * @returns AiTranscript object with updated attributes.
      *
      */
-    let response = await rest.postRaw(api.endpoint(resource.name), { audio: transcript.audio }, null, true, user);
+    let payload = Object.assign({}, transcript);
+    api.removeNullKeys(payload);
+    let response = await rest.postRaw(api.endpoint(resource.name), payload, null, true, user);
     let json = response.json();
     let entity = json[api.lastName(resource.name)];
     return Object.assign(new exports.AiTranscript(entity), entity);

@@ -56,12 +56,6 @@ function parse(json) {
     return Object.assign(new AiKnowledgeBase(json), json);
 }
 
-function payloadOf(attributes) {
-    const payload = Object.assign({}, attributes);
-    api.removeNullKeys(payload);
-    return payload;
-}
-
 async function* stream(query, limit, user) {
     let cursor = null;
     let remaining = limit;
@@ -97,12 +91,8 @@ exports.create = async function (knowledgeBase, { user } = {}) {
      * @returns AiKnowledgeBase object with updated attributes.
      *
      */
-    const payload = payloadOf({
-        name: knowledgeBase.name,
-        rootUrl: knowledgeBase.rootUrl,
-        isRecursive: knowledgeBase.isRecursive,
-        tags: knowledgeBase.tags
-    });
+    const payload = Object.assign({}, knowledgeBase);
+    api.removeNullKeys(payload);
     const response = await rest.postRaw(path, payload, null, true, user);
     return parse(response.json().knowledgeBase);
 };
@@ -170,7 +160,8 @@ exports.update = async function (id, { name, isRecursive, tags, user } = {}) {
      * @returns AiKnowledgeBase with updated attributes
      *
      */
-    const payload = payloadOf({ name: name, isRecursive: isRecursive, tags: tags });
+    const payload = Object.assign({}, new exports.AiKnowledgeBase({ name, isRecursive, tags }));
+    api.removeNullKeys(payload);
     const response = await rest.patchRaw(path + '/' + id, payload, null, true, user);
     return parse(response.json().knowledgeBase);
 };

@@ -105,21 +105,18 @@ describe('TestAiKnowledgeBaseAtTheHttpBoundary', function() {
         request = null;
     });
 
-    it('test_create_sends_only_the_creatable_fields', async () => {
-        const returned = {
-            id: '6767676767676767',
-            name: 'Public Documentation',
-            rootUrl: 'https://docs.starkinfra.com',
-            isRecursive: false,
-            status: 'success',
-            tags: ['support'],
-            created: '2022-01-01T00:00:00.000000+00:00',
-            updated: '2022-01-02T00:00:00.000000+00:00'
-        };
-        answerWith({ knowledgeBase: returned });
-        await starkinfra.aiKnowledgeBase.create(new starkinfra.AiKnowledgeBase(returned));
+    it('test_create_sends_the_attributes_that_were_set_and_leaves_out_the_null_ones', async () => {
+        answerWith({ knowledgeBase: { id: '6767676767676767', name: 'Docs', rootUrl: 'https://docs.starkinfra.com' } });
+        await starkinfra.aiKnowledgeBase.create(new starkinfra.AiKnowledgeBase({ name: 'Docs', rootUrl: 'https://docs.starkinfra.com', tags: ['support'] }));
         assert.strictEqual(request.method.toUpperCase(), 'POST');
-        assert.deepStrictEqual(Object.keys(JSON.parse(request.data)).sort(), ['isRecursive', 'name', 'rootUrl', 'tags']);
+        assert.deepStrictEqual(JSON.parse(request.data), { name: 'Docs', rootUrl: 'https://docs.starkinfra.com', tags: ['support'] });
+    });
+
+    it('test_update_sends_only_the_given_fields', async () => {
+        answerWith({ knowledgeBase: { id: '6767676767676767', name: 'Docs', rootUrl: 'https://docs.starkinfra.com' } });
+        await starkinfra.aiKnowledgeBase.update('6767676767676767', { isRecursive: false });
+        assert.strictEqual(request.method.toUpperCase(), 'PATCH');
+        assert.deepStrictEqual(JSON.parse(request.data), { isRecursive: false });
     });
 
     it('test_hosts_groups_pages_by_host', async () => {

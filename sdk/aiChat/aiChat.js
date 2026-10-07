@@ -56,7 +56,9 @@ exports.create = async function (chat, { user } = {}) {
      * @returns AiChat object with updated attributes.
      *
      */
-    let response = await rest.postRaw(api.endpoint(resource.name), { agentId: chat.agentId, title: chat.title }, null, true, user);
+    let payload = Object.assign({}, chat);
+    api.removeNullKeys(payload);
+    let response = await rest.postRaw(api.endpoint(resource.name), payload, null, true, user);
     let json = response.json();
     let entity = json[api.lastName(resource.name)];
     return Object.assign(new exports.AiChat(entity), entity);
@@ -121,7 +123,7 @@ exports.update = async function (id, { title, agentId, user } = {}) {
      * @returns AiChat with updated attributes
      *
      */
-    return rest.patchId(resource, id, { title: title, agentId: agentId }, user);
+    return rest.patchId(resource, id, new exports.AiChat({ title, agentId }), user);
 };
 
 exports.delete = async function (ids, { user } = {}) {

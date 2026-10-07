@@ -66,9 +66,9 @@ describe('TestAiChatAtTheHttpBoundary', function() {
 
     afterEach(() => boundary.restore());
 
-    it('test_create_sends_only_the_creatable_fields', async () => {
+    it('test_create_sends_the_attributes_that_were_set_and_leaves_out_the_null_ones', async () => {
         boundary.answerWith({ chat: chat });
-        await starkinfra.aiChat.create(new starkinfra.AiChat(Object.assign({ agentName: 'Support assistant' }, chat)));
+        await starkinfra.aiChat.create(new starkinfra.AiChat({ agentId: '5740688905863168', title: 'Support chat' }));
         assert.strictEqual(boundary.requests[0].method.toUpperCase(), 'POST');
         assert(boundary.requests[0].url.endsWith('/v2/ai-chat'), boundary.requests[0].url);
         assert.deepStrictEqual(boundary.bodyOf(), { agentId: '5740688905863168', title: 'Support chat' });

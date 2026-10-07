@@ -1,5 +1,6 @@
 const rest = require('../utils/rest.js');
 const check = require('starkcore').check;
+const api = require('starkcore').api;
 const Resource = require('starkcore').Resource;
 
 
@@ -75,7 +76,8 @@ exports.create = async function (message, { expand, user } = {}) {
      * @returns list with the user's AiMessage and the agent's AiMessage
      *
      */
-    const payload = { chatId: message.chatId, text: message.text, model: message.model };
+    const payload = Object.assign({}, message);
+    api.removeNullKeys(payload);
     const response = await rest.postRaw(path, payload, null, true, user, { expand: expand });
     const content = response.json();
     return content.messages.map(entity => {

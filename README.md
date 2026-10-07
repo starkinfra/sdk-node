@@ -4672,7 +4672,7 @@ const starkinfra = require('starkinfra');
 
 ### Create an AiVoice
 
-An AiVoice is a voice cloned from a recording you upload. Cloning is asynchronous: the voice is created in 'processing' status and moves to 'success' when it is ready to speak. Only the creatable fields are sent, so an object returned by the API can be reused.
+An AiVoice is a voice cloned from a recording you upload. Cloning is asynchronous: the voice is created in 'processing' status and moves to 'success' when it is ready to speak.
 
 ```javascript
 const fs = require('fs');
