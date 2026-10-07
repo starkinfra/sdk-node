@@ -74,12 +74,7 @@ exports.create = async function (agent, { user } = {}) {
      * @returns AiAgent object with updated attributes.
      *
      */
-    let payload = Object.assign({}, agent);
-    api.removeNullKeys(payload);
-    let response = await rest.postRaw(api.endpoint(resource.name), payload, null, true, user);
-    let json = response.json();
-    let entity = json[api.lastName(resource.name)];
-    return Object.assign(new exports.AiAgent(entity), entity);
+    return rest.postSingle(resource, agent, user);
 };
 
 exports.get = async function (id, { expand, user } = {}) {

@@ -73,12 +73,7 @@ exports.create = async function (voice, { user } = {}) {
      * @returns AiVoice object with updated attributes.
      *
      */
-    let payload = Object.assign({}, voice);
-    api.removeNullKeys(payload);
-    let response = await rest.postRaw(api.endpoint(resource.name), payload, null, true, user);
-    let json = response.json();
-    let entity = json[api.lastName(resource.name)];
-    return Object.assign(new exports.AiVoice(entity), entity);
+    return rest.postSingle(resource, voice, user);
 };
 
 exports.query = async function ({ limit, user } = {}) {

@@ -19,6 +19,8 @@ class AiChat extends Resource {
      *
      * Parameters (optional):
      * @param title [string, default null]: title of the conversation. Up to 100 characters. When omitted, the first message posted to the chat generates one.
+     * @param tags [list of strings, default null]: list of up to 100 strings, each up to 100 characters and stored in lowercase, to find the chat later. ex: ['customer-123', 'whatsapp']
+     * @param context [object, default null]: data about the person on the other side of the chat that the agent reads before every reply. Up to 16384 bytes, treated as reference data and never as instructions. Keys whose value is null are left out. ex: {name: 'Ana', balance: 1520.33}
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the AiChat is created. ex: '5656565656565656'
@@ -26,11 +28,13 @@ class AiChat extends Resource {
      * @param updated [string]: latest update datetime for the AiChat. ex: '2020-03-10 10:30:00.000'
      *
      */
-    constructor({ agentId, title = null, id = null, agentName = null, updated = null }) {
+    constructor({ agentId, title = null, tags = null, context = null, id = null, agentName = null, updated = null }) {
         super(id);
 
         this.agentId = agentId;
         this.title = title;
+        this.tags = tags;
+        this.context = context;
         this.agentName = agentName;
         this.updated = check.datetime(updated);
     }
@@ -56,12 +60,7 @@ exports.create = async function (chat, { user } = {}) {
      * @returns AiChat object with updated attributes.
      *
      */
-    let payload = Object.assign({}, chat);
-    api.removeNullKeys(payload);
-    let response = await rest.postRaw(api.endpoint(resource.name), payload, null, true, user);
-    let json = response.json();
-    let entity = json[api.lastName(resource.name)];
-    return Object.assign(new exports.AiChat(entity), entity);
+    return rest.postSingle(resource, chat, user);
 };
 
 exports.get = async function (id, { expand, user } = {}) {
@@ -85,7 +84,7 @@ exports.get = async function (id, { expand, user } = {}) {
     return rest.getId(resource, id, user, { expand: expand });
 };
 
-exports.query = async function ({ expand, limit, user } = {}) {
+exports.query = async function ({ expand, tags, limit, user } = {}) {
     /**
      *
      * Retrieve AiChats
@@ -94,6 +93,7 @@ exports.query = async function ({ expand, limit, user } = {}) {
      *
      * Parameters (optional):
      * @param expand [list of strings, default null]: extra attributes to compute. Options: 'agentName'.
+     * @param tags [list of strings, default null]: up to 30 tags. Retrieves the chats that have any of them. ex: ['customer-123']
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
@@ -101,10 +101,10 @@ exports.query = async function ({ expand, limit, user } = {}) {
      * @returns generator of AiChat objects with updated attributes
      *
      */
-    return rest.getList(resource, { expand: expand, limit: limit }, user);
+    return rest.getList(resource, { expand: expand, tags: tags, limit: limit }, user);
 };
 
-exports.update = async function (id, { title, agentId, user } = {}) {
+exports.update = async function (id, { title, agentId, tags, context, user } = {}) {
     /**
      *
      * Update AiChat entity
@@ -117,13 +117,15 @@ exports.update = async function (id, { title, agentId, user } = {}) {
      * Parameters (optional):
      * @param title [string, default null]: new title for the conversation. Up to 100 characters.
      * @param agentId [string, default null]: id of the AiAgent that should answer from now on.
+     * @param tags [list of strings, default null]: new list of up to 100 strings. Replaces the current list as a whole; an empty list removes them.
+     * @param context [object, default null]: new data about the person on the other side of the chat. Replaces the current object as a whole and is used from the next message on; an empty object removes it. Keys whose value is null are left out.
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
      *
      * Return:
      * @returns AiChat with updated attributes
      *
      */
-    return rest.patchId(resource, id, new exports.AiChat({ title, agentId }), user);
+    return rest.patchId(resource, id, new exports.AiChat({ title, agentId, tags, context }), user);
 };
 
 exports.delete = async function (ids, { user } = {}) {

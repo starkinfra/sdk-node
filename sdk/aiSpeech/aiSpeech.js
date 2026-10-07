@@ -1,6 +1,5 @@
 const rest = require('../utils/rest.js');
 const check = require('starkcore').check;
-const api = require('starkcore').api;
 const Resource = require('starkcore').Resource;
 
 
@@ -88,10 +87,7 @@ exports.create = async function (speech, { user } = {}) {
      * @returns AiSpeech object with updated attributes.
      *
      */
-    const payload = Object.assign({}, speech);
-    api.removeNullKeys(payload);
-    const response = await rest.postRaw(path, payload, null, true, user);
-    return parse(response.json().speech);
+    return rest.postSingle(resource, speech, user);
 };
 
 exports.get = async function (id, { expand, user } = {}) {

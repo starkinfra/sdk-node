@@ -4893,7 +4893,7 @@ const starkinfra = require('starkinfra');
 
 ### Create an AiChat
 
-An AiChat is one conversation with an AiAgent. When the title is omitted, the first message generates one.
+An AiChat is one conversation with an AiAgent. When the title is omitted, the first message generates one. Give tags, such as the id of your end user, to find the chat later, and context with what the agent should know about that person before every reply.
 
 ```javascript
 const starkinfra = require('starkinfra');
@@ -4902,7 +4902,9 @@ const starkinfra = require('starkinfra');
     let chat = await starkinfra.aiChat.create(
         new starkinfra.AiChat({
             agentId: '5155165527080960',
-            title: 'Support chat'
+            title: 'Support chat',
+            tags: ['customer-123', 'whatsapp'],
+            context: {name: 'Ana', balance: 1520.33}
         })
     );
 
@@ -4926,13 +4928,13 @@ const starkinfra = require('starkinfra');
 
 ### Query AiChats
 
-List your chats, newest first. The cursor is followed until the list ends; give limit to stop earlier.
+List your chats, newest first. The cursor is followed until the list ends; give limit to stop earlier. Give tags to receive only the chats that have any of them.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let chats = await starkinfra.aiChat.query({expand: ['agentName']});
+    let chats = await starkinfra.aiChat.query({expand: ['agentName'], tags: ['customer-123']});
 
     for await (let chat of chats) {
         console.log(chat);
@@ -4942,13 +4944,13 @@ const starkinfra = require('starkinfra');
 
 ### Update an AiChat
 
-Rename a chat or hand it to another agent.
+Rename a chat, hand it to another agent or change its tags and context. Tags and context replace the stored ones as a whole: omit them to keep the current values, or send an empty list or object to remove them.
 
 ```javascript
 const starkinfra = require('starkinfra');
 
 (async() => {
-    let chat = await starkinfra.aiChat.update('5155165527080960', {title: 'Billing chat'});
+    let chat = await starkinfra.aiChat.update('5155165527080960', {title: 'Billing chat', context: {name: 'Ana', balance: 10}});
 
     console.log(chat);
 })();
