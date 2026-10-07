@@ -22,7 +22,7 @@ class PixKeyHolmes extends Resource {
      * Attributes (return-only):
      * @param id [string]: unique id returned when the PixKeyHolmes is created. ex: '5656565656565656'
      * @param result [string]: result of the investigation after the case is solved. Options: 'registered', 'unregistered'
-     * @param status [string]: current PixKeyHolmes status. Options: 'created', 'solving', 'solved', 'failed'
+     * @param status [string]: current PixKeyHolmes status. Options: 'solving', 'solved'
      * @param created [string]: creation datetime for the PixKeyHolmes. ex: '2020-03-10 10:30:00.000'
      * @param updated [string]: latest update datetime for the PixKeyHolmes. ex: '2020-03-10 10:30:00.000'
      *
@@ -96,7 +96,7 @@ exports.query = async function ({ limit, after, before, status, tags, ids, user 
      * @param limit [integer, default null]: maximum number of objects to be retrieved. Unlimited if null. ex: 35
      * @param after [string, default null]: date filter for objects created only after specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created only before specified date. ex: '2020-03-10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'solving', 'solved', 'failed'
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'solving', 'solved'
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
@@ -129,7 +129,7 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
      * @param limit [integer, default 100]: maximum number of objects to be retrieved. It must be an integer between 1 and 100. ex: 35
      * @param after [string, default null]: date filter for objects created only after specified date. ex: '2020-03-10'
      * @param before [string, default null]: date filter for objects created only before specified date. ex: '2020-03-10'
-     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'created', 'solving', 'solved', 'failed'
+     * @param status [list of strings, default null]: filter for status of retrieved objects. Options: 'solving', 'solved'
      * @param tags [list of strings, default null]: tags to filter retrieved objects. ex: ['tony', 'stark']
      * @param ids [list of strings, default null]: list of ids to filter retrieved objects. ex: ['5656565656565656', '4545454545454545']
      * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
