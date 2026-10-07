@@ -43,7 +43,7 @@ class PixKeyHolmes extends Resource {
 }
 
 exports.PixKeyHolmes = PixKeyHolmes;
-let resource = {'class': exports.PixKeyHolmes, 'name': 'PixKeyHolmes'};
+exports.resource = {'class': exports.PixKeyHolmes, 'name': 'PixKeyHolmes'};
 
 exports.create = async function (holmes, {user} = {}) {
     /**
@@ -62,7 +62,27 @@ exports.create = async function (holmes, {user} = {}) {
      * @returns list of PixKeyHolmes objects with updated attributes
      *
      */
-    return rest.post(resource, holmes, user);
+    return rest.post(exports.resource, holmes, user);
+};
+
+exports.get = async function (id, {user} = {}) {
+    /**
+     *
+     * Retrieve a specific PixKeyHolmes
+     *
+     * @description Receive a single PixKeyHolmes object previously created in the Stark Infra API by its id
+     *
+     * Parameters (required):
+     * @param id [string]: object unique id. ex: '5656565656565656'
+     *
+     * Parameters (optional):
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns PixKeyHolmes object with updated attributes
+     *
+     */
+    return rest.getId(exports.resource, id, user);
 };
 
 exports.query = async function ({ limit, after, before, status, tags, ids, user } = {}) {
@@ -93,7 +113,7 @@ exports.query = async function ({ limit, after, before, status, tags, ids, user 
         tags: tags,
         ids: ids,
     };
-    return rest.getList(resource, query, user);
+    return rest.getList(exports.resource, query, user);
 };
 
 exports.page = async function ({ cursor, limit, after, before, status, tags, ids, user } = {}) {
@@ -127,5 +147,5 @@ exports.page = async function ({ cursor, limit, after, before, status, tags, ids
         tags: tags,
         ids: ids,
     };
-    return rest.getPage(resource, query, user);
+    return rest.getPage(exports.resource, query, user);
 };
