@@ -104,6 +104,28 @@ exports.query = async function ({ expand, tags, limit, user } = {}) {
     return rest.getList(resource, { expand: expand, tags: tags, limit: limit }, user);
 };
 
+exports.page = async function ({ cursor, limit, expand, tags, user } = {}) {
+    /**
+     *
+     * Retrieve paged AiChats
+     *
+     * @description Receive a list of up to 100 AiChat objects previously created in the Stark Infra API and the cursor to the next page.
+     * Use this function instead of query if you want to manually page your requests.
+     *
+     * Parameters (optional):
+     * @param cursor [string, default null]: cursor returned on the previous page function call.
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max 100. ex: 35
+     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'agentName'.
+     * @param tags [list of strings, default null]: up to 30 tags. Retrieves the chats that have any of them. ex: ['customer-123']
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns list of AiChat objects with updated attributes and cursor to retrieve the next page of AiChat objects
+     *
+     */
+    return rest.getPage(resource, { cursor: cursor, limit: limit, expand: expand, tags: tags }, user);
+};
+
 exports.update = async function (id, { title, agentId, tags, context, user } = {}) {
     /**
      *
@@ -125,7 +147,13 @@ exports.update = async function (id, { title, agentId, tags, context, user } = {
      * @returns AiChat with updated attributes
      *
      */
-    return rest.patchId(resource, id, new exports.AiChat({ title, agentId, tags, context }), user);
+    let payload = {
+        title: title,
+        agentId: agentId,
+        tags: tags,
+        context: context
+    };
+    return rest.patchId(resource, id, payload, user);
 };
 
 exports.delete = async function (ids, { user } = {}) {

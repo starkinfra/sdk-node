@@ -107,3 +107,24 @@ exports.query = async function ({ expand, limit, user } = {}) {
      */
     return rest.getList(resource, { expand: expand, limit: limit }, user);
 };
+
+exports.page = async function ({ cursor, limit, expand, user } = {}) {
+    /**
+     *
+     * Retrieve paged AiSpeeches
+     *
+     * @description Receive a list of up to 100 AiSpeech objects previously created in the Stark Infra API and the cursor to the next page.
+     * Use this function instead of query if you want to manually page your requests.
+     *
+     * Parameters (optional):
+     * @param cursor [string, default null]: cursor returned on the previous page function call.
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max 100. ex: 35
+     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'voiceName'.
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns list of AiSpeech objects with updated attributes and cursor to retrieve the next page of AiSpeech objects
+     *
+     */
+    return rest.getPage(resource, { cursor: cursor, limit: limit, expand: expand }, user);
+};

@@ -1,6 +1,6 @@
 const assert = require('assert');
 const starkinfra = require('../index.js');
-const { collect, speechAudio } = require('./utils/aiFixtures');
+const { collect, speechAudio, httpBoundary } = require('./utils/aiFixtures');
 
 starkinfra.user = require('./utils/user').exampleProject;
 
@@ -47,5 +47,32 @@ describe('TestAiVoice', function() {
         const extra = await starkinfra.aiVoice.create(new starkinfra.AiVoice({ audio: await speechAudio(), name: 'sdk-node delete test' }));
         const deleted = await starkinfra.aiVoice.delete([extra.id]);
         assert.deepStrictEqual(deleted.map(entity => entity.id), [extra.id]);
+    });
+});
+
+
+describe('TestAiVoicePageAtTheHttpBoundary', function() {
+    const boundary = httpBoundary();
+    const item = { id: '5646488461901824', name: 'Helena', status: 'success' };
+
+    afterEach(() => boundary.restore());
+
+    it('test_page_returns_the_items_and_the_cursor', async () => {
+        boundary.answerWith({ cursor: 'next-page', voices: [item] });
+        const [items, cursor] = await starkinfra.aiVoice.page({ limit: 1, cursor: 'current-page' });
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(items[0].id, item.id);
+        assert.strictEqual(cursor, 'next-page');
+        assert.strictEqual(boundary.requests.length, 1);
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('limit'), '1');
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('cursor'), 'current-page');
+    });
+
+    it('test_page_returns_a_null_cursor_on_the_last_page', async () => {
+        boundary.answerWith({ cursor: null, voices: [item] });
+        const [items, cursor] = await starkinfra.aiVoice.page();
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(cursor, null);
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('cursor'), null);
     });
 });

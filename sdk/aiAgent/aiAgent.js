@@ -117,6 +117,27 @@ exports.query = async function ({ expand, limit, user } = {}) {
     return rest.getList(resource, { expand: expand, limit: limit }, user);
 };
 
+exports.page = async function ({ cursor, limit, expand, user } = {}) {
+    /**
+     *
+     * Retrieve paged AiAgents
+     *
+     * @description Receive a list of up to 100 AiAgent objects previously created in the Stark Infra API and the cursor to the next page.
+     * Use this function instead of query if you want to manually page your requests.
+     *
+     * Parameters (optional):
+     * @param cursor [string, default null]: cursor returned on the previous page function call.
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max 100. ex: 35
+     * @param expand [list of strings, default null]: extra attributes to compute. Options: 'knowledgeBases'.
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns list of AiAgent objects with updated attributes and cursor to retrieve the next page of AiAgent objects
+     *
+     */
+    return rest.getPage(resource, { cursor: cursor, limit: limit, expand: expand }, user);
+};
+
 exports.update = async function (id, { name, model, systemPrompt, voiceId, knowledgeBaseIds, metadataSchema, user } = {}) {
     /**
      *
@@ -141,15 +162,15 @@ exports.update = async function (id, { name, model, systemPrompt, voiceId, knowl
      * @returns AiAgent with updated attributes
      *
      */
-    const agent = new exports.AiAgent({
+    let payload = {
         name: name,
         model: model,
         systemPrompt: systemPrompt,
         voiceId: voiceId,
         knowledgeBaseIds: knowledgeBaseIds,
         metadataSchema: metadataSchema
-    });
-    return rest.patchId(resource, id, agent, user);
+    };
+    return rest.patchId(resource, id, payload, user);
 };
 
 exports.delete = async function (ids, { user } = {}) {

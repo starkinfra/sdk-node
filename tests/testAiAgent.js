@@ -182,6 +182,18 @@ describe('TestAiAgentAtTheHttpBoundary', function() {
         assert.deepStrictEqual(boundary.bodyOf(), { knowledgeBaseIds: [] });
     });
 
+    it('test_update_sends_the_empty_strings_that_remove_the_prompt_and_the_voice', async () => {
+        boundary.answerWith({ agent: agent });
+        await starkinfra.aiAgent.update('5740688905863168', { systemPrompt: '', voiceId: '' });
+        assert.deepStrictEqual(boundary.bodyOf(), { systemPrompt: '', voiceId: '' });
+    });
+
+    it('test_update_with_no_parameters_sends_an_empty_object', async () => {
+        boundary.answerWith({ agent: agent });
+        await starkinfra.aiAgent.update('5740688905863168');
+        assert.deepStrictEqual(boundary.bodyOf(), {});
+    });
+
     it('test_delete_sends_ids_in_the_query_string_and_no_body', async () => {
         boundary.answerWith({ agents: [agent] });
         const deleted = await starkinfra.aiAgent.delete(['5740688905863168', '5740688905863169']);
@@ -211,5 +223,33 @@ describe('TestAiAgentQueryLimit', function() {
         await fixtures.agent();
         const found = await collect(await starkinfra.aiAgent.query({ limit: 1 }));
         assert.strictEqual(found.length, 1);
+    });
+});
+
+
+describe('TestAiAgentPageAtTheHttpBoundary', function() {
+    const boundary = httpBoundary();
+    const item = { id: '5740688905863168', name: 'Support assistant', model: 'bender-1.0' };
+
+    afterEach(() => boundary.restore());
+
+    it('test_page_returns_the_items_and_the_cursor', async () => {
+        boundary.answerWith({ cursor: 'next-page', agents: [item] });
+        const [items, cursor] = await starkinfra.aiAgent.page({ limit: 1, cursor: 'current-page', expand: ['knowledgeBases'] });
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(items[0].id, item.id);
+        assert.strictEqual(cursor, 'next-page');
+        assert.strictEqual(boundary.requests.length, 1);
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('limit'), '1');
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('cursor'), 'current-page');
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('expand'), 'knowledgeBases');
+    });
+
+    it('test_page_returns_a_null_cursor_on_the_last_page', async () => {
+        boundary.answerWith({ cursor: null, agents: [item] });
+        const [items, cursor] = await starkinfra.aiAgent.page();
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(cursor, null);
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('cursor'), null);
     });
 });

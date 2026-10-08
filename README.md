@@ -4626,6 +4626,31 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
+### Get paged AiKnowledgeBases
+
+You can get lists of up to 100 knowledge bases per request and the cursor to the next page, if you want to page the requests yourself. The name filter is applied to each page, so a page may come back short or empty while the cursor is not null.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let cursor = null;
+    let knowledgeBases;
+
+    while (true) {
+        [knowledgeBases, cursor] = await starkinfra.aiKnowledgeBase.page({name: 'documentation', status: 'success', limit: 10, cursor: cursor});
+
+        for (let knowledgeBase of knowledgeBases) {
+            console.log(knowledgeBase);
+        }
+
+        if (!cursor) {
+            break;
+        }
+    }
+})();
+```
+
 ### Update an AiKnowledgeBase
 
 Rename a knowledge base, retag it or change whether its crawl is recursive. The root URL cannot be changed.
@@ -4709,6 +4734,31 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
+### Get paged AiVoices
+
+You can get lists of up to 100 voices per request and the cursor to the next page, if you want to page the requests yourself.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let cursor = null;
+    let voices;
+
+    while (true) {
+        [voices, cursor] = await starkinfra.aiVoice.page({limit: 10, cursor: cursor});
+
+        for (let voice of voices) {
+            console.log(voice);
+        }
+
+        if (!cursor) {
+            break;
+        }
+    }
+})();
+```
+
 ### Delete AiVoices
 
 Delete up to 100 voices at once.
@@ -4774,6 +4824,31 @@ const starkinfra = require('starkinfra');
 })();
 ```
 
+### Get paged AiSpeeches
+
+You can get lists of up to 100 speeches per request and the cursor to the next page, if you want to page the requests yourself.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let cursor = null;
+    let speeches;
+
+    while (true) {
+        [speeches, cursor] = await starkinfra.aiSpeech.page({expand: ['voiceName'], limit: 10, cursor: cursor});
+
+        for (let speech of speeches) {
+            console.log(speech);
+        }
+
+        if (!cursor) {
+            break;
+        }
+    }
+})();
+```
+
 ### Create an AiTranscript
 
 An AiTranscript is the text of an audio file you upload. It is transcribed during the call.
@@ -4805,6 +4880,31 @@ const starkinfra = require('starkinfra');
 
     for await (let transcript of transcripts) {
         console.log(transcript);
+    }
+})();
+```
+
+### Get paged AiTranscripts
+
+You can get lists of up to 100 transcripts per request and the cursor to the next page, if you want to page the requests yourself.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let cursor = null;
+    let transcripts;
+
+    while (true) {
+        [transcripts, cursor] = await starkinfra.aiTranscript.page({limit: 10, cursor: cursor});
+
+        for (let transcript of transcripts) {
+            console.log(transcript);
+        }
+
+        if (!cursor) {
+            break;
+        }
     }
 })();
 ```
@@ -4857,6 +4957,31 @@ const starkinfra = require('starkinfra');
 
     for await (let agent of agents) {
         console.log(agent);
+    }
+})();
+```
+
+### Get paged AiAgents
+
+You can get lists of up to 100 agents per request and the cursor to the next page, if you want to page the requests yourself.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let cursor = null;
+    let agents;
+
+    while (true) {
+        [agents, cursor] = await starkinfra.aiAgent.page({expand: ['knowledgeBases'], limit: 10, cursor: cursor});
+
+        for (let agent of agents) {
+            console.log(agent);
+        }
+
+        if (!cursor) {
+            break;
+        }
     }
 })();
 ```
@@ -4938,6 +5063,31 @@ const starkinfra = require('starkinfra');
 
     for await (let chat of chats) {
         console.log(chat);
+    }
+})();
+```
+
+### Get paged AiChats
+
+You can get lists of up to 100 chats per request and the cursor to the next page, if you want to page the requests yourself.
+
+```javascript
+const starkinfra = require('starkinfra');
+
+(async() => {
+    let cursor = null;
+    let chats;
+
+    while (true) {
+        [chats, cursor] = await starkinfra.aiChat.page({expand: ['agentName'], tags: ['customer-123'], limit: 10, cursor: cursor});
+
+        for (let chat of chats) {
+            console.log(chat);
+        }
+
+        if (!cursor) {
+            break;
+        }
     }
 })();
 ```

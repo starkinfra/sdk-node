@@ -88,3 +88,31 @@ describe('TestAiSpeechQueryAtTheHttpBoundary', function() {
         assert.strictEqual(boundary.requests.length, 1);
     });
 });
+
+
+describe('TestAiSpeechPageAtTheHttpBoundary', function() {
+    const boundary = httpBoundary();
+    const item = { id: '5646488461901824', voiceId: '5632499082330112', text: 'Short test.', status: 'success' };
+
+    afterEach(() => boundary.restore());
+
+    it('test_page_returns_the_items_and_the_cursor', async () => {
+        boundary.answerWith({ cursor: 'next-page', speeches: [item] });
+        const [items, cursor] = await starkinfra.aiSpeech.page({ limit: 1, cursor: 'current-page', expand: ['voiceName'] });
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(items[0].id, item.id);
+        assert.strictEqual(cursor, 'next-page');
+        assert.strictEqual(boundary.requests.length, 1);
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('limit'), '1');
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('cursor'), 'current-page');
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('expand'), 'voiceName');
+    });
+
+    it('test_page_returns_a_null_cursor_on_the_last_page', async () => {
+        boundary.answerWith({ cursor: null, speeches: [item] });
+        const [items, cursor] = await starkinfra.aiSpeech.page();
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(cursor, null);
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('cursor'), null);
+    });
+});

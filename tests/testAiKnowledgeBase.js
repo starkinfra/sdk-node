@@ -194,3 +194,32 @@ describe('TestAiKnowledgeBaseQueryAtTheHttpBoundary', function() {
         assert(boundary.requests[0].url.includes('limit=1'), boundary.requests[0].url);
     });
 });
+
+
+describe('TestAiKnowledgeBasePageAtTheHttpBoundary', function() {
+    const boundary = httpBoundary();
+    const item = { id: '6767676767676767', name: 'Public Documentation' };
+
+    afterEach(() => boundary.restore());
+
+    it('test_page_returns_the_items_and_the_cursor', async () => {
+        boundary.answerWith({ cursor: 'next-page', knowledgeBases: [item] });
+        const [items, cursor] = await starkinfra.aiKnowledgeBase.page({ limit: 1, cursor: 'current-page', name: 'docs', status: 'success' });
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(items[0].id, item.id);
+        assert.strictEqual(cursor, 'next-page');
+        assert.strictEqual(boundary.requests.length, 1);
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('limit'), '1');
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('cursor'), 'current-page');
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('name'), 'docs');
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('status'), 'success');
+    });
+
+    it('test_page_returns_a_null_cursor_on_the_last_page', async () => {
+        boundary.answerWith({ cursor: null, knowledgeBases: [item] });
+        const [items, cursor] = await starkinfra.aiKnowledgeBase.page();
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(cursor, null);
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('cursor'), null);
+    });
+});

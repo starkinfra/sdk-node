@@ -47,7 +47,6 @@ class AiKnowledgeBase extends Resource {
 }
 
 exports.AiKnowledgeBase = AiKnowledgeBase;
-
 exports.resource = {'class': AiKnowledgeBase, 'name': 'AiKnowledgeBase'};
 
 const path = 'ai-knowledge-base';
@@ -140,6 +139,31 @@ exports.query = async function ({ ids, name, status, limit, user } = {}) {
     return stream({ ids: ids, name: name, status: status }, limit, user);
 };
 
+exports.page = async function ({ cursor, limit, ids, name, status, user } = {}) {
+    /**
+     *
+     * Retrieve paged AiKnowledgeBases
+     *
+     * @description Receive a list of up to 100 AiKnowledgeBase objects previously created in the Stark Infra API and the cursor to the next page.
+     * Use this function instead of query if you want to manually page your requests.
+     *
+     * Parameters (optional):
+     * @param cursor [string, default null]: cursor returned on the previous page function call.
+     * @param limit [integer, default 100]: maximum number of objects to be retrieved. Max 100. ex: 35
+     * @param ids [list of strings, default null]: list of ids to filter retrieved objects. When sent, every matching object is returned at once and no cursor comes back. ex: ['5656565656565656', '4545454545454545']
+     * @param name [string, default null]: case-insensitive substring of the name to filter retrieved objects. The filter is applied to each page, so a page may hold fewer than limit objects, or none, while a cursor is still returned.
+     * @param status [string, default null]: filter for status of retrieved objects. ex: 'success'
+     * @param user [Organization/Project object, default null]: Organization or Project object. Not necessary if starkinfra.user was set before function call
+     *
+     * Return:
+     * @returns list of AiKnowledgeBase objects with updated attributes and cursor to retrieve the next page of AiKnowledgeBase objects
+     *
+     */
+    const response = await rest.getRaw(path, { ids: ids, name: name, status: status, limit: limit, cursor: cursor }, null, true, user);
+    const content = response.json();
+    return [content.knowledgeBases.map(parse), content.cursor];
+};
+
 exports.update = async function (id, { name, isRecursive, tags, user } = {}) {
     /**
      *
@@ -205,6 +229,15 @@ exports.delete = async function (ids, { user } = {}) {
      * @returns list of deleted AiKnowledgeBase objects
      *
      */
-    const response = await rest.deleteRaw(path, null, null, true, user, { ids: ids });
-    return response.json().knowledgeBases.map(parse);
+    let response = await rest.deleteRaw(
+        path,
+        null,
+        null,
+        true,
+        user,
+        { ids: ids }
+    );
+    let json = response.json();
+    let entities = json.knowledgeBases;
+    return entities.map(parse);
 };
