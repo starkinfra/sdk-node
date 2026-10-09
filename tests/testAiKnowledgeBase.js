@@ -222,4 +222,12 @@ describe('TestAiKnowledgeBasePageAtTheHttpBoundary', function() {
         assert.strictEqual(cursor, null);
         assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('cursor'), null);
     });
+
+    it('test_page_sends_the_ids_as_a_comma_separated_list_and_returns_a_null_cursor', async () => {
+        boundary.answerWith({ cursor: null, knowledgeBases: [item] });
+        const [items, cursor] = await starkinfra.aiKnowledgeBase.page({ ids: ['6767676767676767', '6767676767676768'] });
+        assert.strictEqual(new URL(boundary.requests[0].url).searchParams.get('ids'), '6767676767676767,6767676767676768');
+        assert.strictEqual(items.length, 1);
+        assert.strictEqual(cursor, null);
+    });
 });

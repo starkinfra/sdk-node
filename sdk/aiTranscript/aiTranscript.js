@@ -98,5 +98,9 @@ exports.page = async function ({ cursor, limit, user } = {}) {
      * @returns list of AiTranscript objects with updated attributes and cursor to retrieve the next page of AiTranscript objects
      *
      */
-    return rest.getPage(resource, { cursor: cursor, limit: limit }, user);
+    let query = {
+        cursor: cursor,
+        limit: limit
+    };
+    return rest.getPage(resource, query, user);
 };

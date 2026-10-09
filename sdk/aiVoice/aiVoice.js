@@ -111,7 +111,11 @@ exports.page = async function ({ cursor, limit, user } = {}) {
      * @returns list of AiVoice objects with updated attributes and cursor to retrieve the next page of AiVoice objects
      *
      */
-    return rest.getPage(resource, { cursor: cursor, limit: limit }, user);
+    let query = {
+        cursor: cursor,
+        limit: limit
+    };
+    return rest.getPage(resource, query, user);
 };
 
 exports.delete = async function (ids, { user } = {}) {

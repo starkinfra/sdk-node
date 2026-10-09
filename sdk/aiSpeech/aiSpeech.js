@@ -126,5 +126,10 @@ exports.page = async function ({ cursor, limit, expand, user } = {}) {
      * @returns list of AiSpeech objects with updated attributes and cursor to retrieve the next page of AiSpeech objects
      *
      */
-    return rest.getPage(resource, { cursor: cursor, limit: limit, expand: expand }, user);
+    let query = {
+        cursor: cursor,
+        limit: limit,
+        expand: expand
+    };
+    return rest.getPage(resource, query, user);
 };

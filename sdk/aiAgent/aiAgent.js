@@ -135,7 +135,12 @@ exports.page = async function ({ cursor, limit, expand, user } = {}) {
      * @returns list of AiAgent objects with updated attributes and cursor to retrieve the next page of AiAgent objects
      *
      */
-    return rest.getPage(resource, { cursor: cursor, limit: limit, expand: expand }, user);
+    let query = {
+        cursor: cursor,
+        limit: limit,
+        expand: expand
+    };
+    return rest.getPage(resource, query, user);
 };
 
 exports.update = async function (id, { name, model, systemPrompt, voiceId, knowledgeBaseIds, metadataSchema, user } = {}) {
@@ -163,12 +168,12 @@ exports.update = async function (id, { name, model, systemPrompt, voiceId, knowl
      *
      */
     let payload = {
-        name: name,
-        model: model,
-        systemPrompt: systemPrompt,
-        voiceId: voiceId,
-        knowledgeBaseIds: knowledgeBaseIds,
-        metadataSchema: metadataSchema
+        'name': name,
+        'model': model,
+        'systemPrompt': systemPrompt,
+        'voiceId': voiceId,
+        'knowledgeBaseIds': knowledgeBaseIds,
+        'metadataSchema': metadataSchema
     };
     return rest.patchId(resource, id, payload, user);
 };

@@ -123,7 +123,13 @@ exports.page = async function ({ cursor, limit, expand, tags, user } = {}) {
      * @returns list of AiChat objects with updated attributes and cursor to retrieve the next page of AiChat objects
      *
      */
-    return rest.getPage(resource, { cursor: cursor, limit: limit, expand: expand, tags: tags }, user);
+    let query = {
+        cursor: cursor,
+        limit: limit,
+        expand: expand,
+        tags: tags
+    };
+    return rest.getPage(resource, query, user);
 };
 
 exports.update = async function (id, { title, agentId, tags, context, user } = {}) {
@@ -148,10 +154,10 @@ exports.update = async function (id, { title, agentId, tags, context, user } = {
      *
      */
     let payload = {
-        title: title,
-        agentId: agentId,
-        tags: tags,
-        context: context
+        'title': title,
+        'agentId': agentId,
+        'tags': tags,
+        'context': context
     };
     return rest.patchId(resource, id, payload, user);
 };
