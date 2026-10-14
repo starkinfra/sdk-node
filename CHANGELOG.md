@@ -34,6 +34,8 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - type attribute to StaticBrcode resource
 - tags attribute to IndividualAccountAttachment resource
 
+### Changed
+- nominalAmount and amount parameters to conditionally required to CreditNotePreview sub-resource
 ### Fixed
 - user default in IssuingStock query and page, which ignored the user set with starkinfra.user
 - docstrings to reflect current business rules across Pix, Issuing and Credit resources
