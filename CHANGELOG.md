@@ -15,6 +15,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 ## [Unreleased]
 ### Added
 - pixSubscriptionBacenId utility to generate Pix subscription bacenIds
+- AiKnowledgeBase, AiVoice, AiSpeech, AiTranscript, AiAgent, AiChat and AiMessage resources
 - IssuingBillingInvoice resource
 - IssuingBillingTransaction resource
 - Statistics sub-resource parsing to PixUser
@@ -33,6 +34,9 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - chunkCount attribute to PixStatement resource
 - type attribute to StaticBrcode resource
 - tags attribute to IndividualAccountAttachment resource
+
+### Changed
+- starkcore to v0.5.0
 
 ### Fixed
 - user default in IssuingStock query and page, which ignored the user set with starkinfra.user
