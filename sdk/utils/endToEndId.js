@@ -12,11 +12,11 @@ exports.create = function (ispb) {
 
 dateTime = function(){
   var today = new Date();
-  var day = ('0' + today.getDate()).slice(-2);
-  var month = ('0' + (today.getMonth() + 1)).slice(-2);
-  var year = today.getFullYear();
-  var hours = ('0' + today.getHours()).slice(-2);
-  var minutes = ('0' + today.getMinutes()).slice(-2);
+  var day = ('0' + today.getUTCDate()).slice(-2);
+  var month = ('0' + (today.getUTCMonth() + 1)).slice(-2);
+  var year = today.getUTCFullYear();
+  var hours = ('0' + today.getUTCHours()).slice(-2);
+  var minutes = ('0' + today.getUTCMinutes()).slice(-2);
 
   return (year + month + day + hours + minutes);
 }
