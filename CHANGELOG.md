@@ -42,6 +42,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 - IssuingTokenDesign.pdf, which called a helper that does not exist
 - user default in Webhook create, query and page and in IssuingInvoice create, which ignored the user set with starkinfra.user
 - date component in bacenId.create, which used the weekday and a zero-indexed month instead of the day and month of the date, producing invalid ids
+- bacenId, endToEndId, returnId and pixSubscriptionBacenId date generated in UTC instead of the machine timezone
 
 ### Removed
 - IndividualDocument resource and its Log: no API route serves them
