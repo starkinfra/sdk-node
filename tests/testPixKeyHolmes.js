@@ -87,13 +87,26 @@ describe("TestPixKeyHolmesPageParams", function () {
 });
 
 
+describe("TestPixKeyHolmesInfoGet", function () {
+    this.timeout(10000);
+    it("test_success", async () => {
+        const holmes = await starkinfra.pixKeyHolmes.query({limit: 1});
+        for await (let sherlock of holmes) {
+            const holmesId = sherlock.id;
+            const fetched = await starkinfra.pixKeyHolmes.get(holmesId);
+            assert(fetched.id === holmesId);
+        }
+    });
+});
+
+
 describe("TestPixKeyHolmesSurface", function () {
     this.timeout(10000);
-    it("test_no_get_no_cancel", async () => {
+    it("test_no_cancel", async () => {
         assert(typeof starkinfra.pixKeyHolmes.create === "function");
         assert(typeof starkinfra.pixKeyHolmes.query === "function");
         assert(typeof starkinfra.pixKeyHolmes.page === "function");
-        assert(starkinfra.pixKeyHolmes.get === undefined);
+        assert(typeof starkinfra.pixKeyHolmes.get === "function");
         assert(starkinfra.pixKeyHolmes.cancel === undefined);
         assert(starkinfra.pixKeyHolmes.delete === undefined);
     });
