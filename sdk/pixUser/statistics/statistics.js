@@ -9,8 +9,8 @@ class Statistics extends SubResource {
      *
      * Attributes (return-only):
      * @param value [integer]: aggregated value of the statistic. ex: 3
-     * @param type [string]: type of the statistic. ex: "infractions"
-     * @param source [string]: source of the statistic. ex: "keyManagement"
+     * @param type [string]: type of the statistic; the valid values depend on the source. Options: "registered", "unique" (pix-key); "settled" (pix-request); "identity", "mule", "scam", "other", "unknown", "amount", "unique" (pix-fraud); "open", "denied", "unique" (pix-infraction). ex: "registered"
+     * @param source [string]: source of the statistic. Options: "pix-key", "pix-fraud", "pix-request", "pix-infraction". ex: "pix-key"
      * @param after [string]: start datetime considered for the statistic aggregation, in ISO format. ex: "2020-04-23T23:00:00.000000+00:00"
      * @param updated [string]: latest update datetime for the statistic, in ISO format. ex: "2020-04-23T23:00:00.000000+00:00"
      */
