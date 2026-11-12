@@ -41,7 +41,10 @@ class PixRequest extends Resource {
      * @param tags [list of strings, default null]: list of strings for reference when searching for PixRequests. ex: ['employees', 'monthly']
      * @param method [string, default null]: execution  method for the creation of the Pix. ex: 'manual', 'payerQrcode', 'dynamicQrcode'.
      * @param priority [string, default null]: Defines the channel through which the entities will be processed. Options: 'low', 'high'
-     * @param reason [string, default "customerRequest"]: underlying reason for the payment transaction. ex: 'customerRequest', 'fraud', 'subscriptionFlaw'
+     * @param reason [string, default "customerRequest"]: underlying reason for the payment transaction. Options: 'customerRequest', 'subscriptionFlaw', 'fraud'. When reason is 'fraud' (returning funds from a PixDispute), disputeId is required and senderTaxId must be your institution's organization tax ID (CNPJ).
+     *
+     * Parameters (conditionally-required):
+     * @param disputeId [string, default null]: Id of the Pix Dispute being refunded. Required when reason is 'fraud' and not allowed with any other reason. The dispute must be one you received and must be awaiting the refund, otherwise the request is refused with invalidDisputeId.
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the PixRequest is created. ex: '5656565656565656'
@@ -60,7 +63,7 @@ class PixRequest extends Resource {
                     receiverAccountType, endToEndId, receiverKeyId = null, description = null, 
                     reconciliationId = null, initiatorTaxId = null, cashAmount = null, 
                     cashierBankCode = null, cashierType = null, tags = null, 
-                    method = null, priority = null, reason = null, id = null, fee = null, status = null, 
+                    method = null, priority = null, reason = null, disputeId = null, id = null, fee = null, status = null, 
                     flow = null, senderBankCode = null, created = null, updated = null
                 }) {
         super(id);
@@ -90,6 +93,7 @@ class PixRequest extends Resource {
         this.method = method;
         this.priority = priority;
         this.reason = reason;
+        this.disputeId = disputeId;
         this.fee = fee;
         this.status = status;
         this.flow = flow;

@@ -20,6 +20,23 @@ describe("TestPixRequestPost", function(){
     });
 });
 
+describe("TestPixRequestPostWithDisputeId", function(){
+    it("test_success_with_dispute_id", async () => {
+        const request = new starkinfra.PixRequest({
+            ...examplePixRequest,
+            endToEndId: "E20018183202202161723Y4cqxlfLFcm",
+            reason: "fraud",
+            disputeId: "5656565656565656",
+        });
+        const payload = JSON.parse(JSON.stringify(request));
+
+        assert(request.reason === "fraud");
+        assert(request.disputeId === "5656565656565656");
+        assert(payload.reason === "fraud");
+        assert(payload.disputeId === "5656565656565656");
+    });
+});
+
 describe("TestPixRequestGet", function(){
     this.timeout(10000);
     it("test_success", async () => {
