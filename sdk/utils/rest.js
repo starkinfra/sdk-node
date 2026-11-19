@@ -114,6 +114,20 @@ exports.patchId = async function (resource, id, payload, user = starkInfra.user)
     );
 };
 
+exports.patchMulti = async function (resource, entities, user = starkInfra.user, { ...query } = {}) {
+    return rest.patchMulti(
+        sdkVersion,
+        host,
+        apiVersion,
+        user,
+        resource,
+        entities,
+        language = starkInfra.language,
+        timeout,
+        query
+    );
+};
+
 exports.getSubResource = async function (resource, id, subResource, user = starkInfra.user ) {
     return rest.getSubResource(
         sdkVersion,
