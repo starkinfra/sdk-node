@@ -14,6 +14,7 @@ Given a version number MAJOR.MINOR.PATCH, increment:
 
 ## [Unreleased]
 ### Added
+- templateReplacements parameter to CreditNote, as a free-keys creditNote.TemplateReplacements object (a plain object is still accepted)
 - updateMulti function to IssuingCard, to update several cards in one request (PATCH /v2/issuing-card)
 - holderName, holderTaxId and holderExternalId parameters to IssuingCard update, to assign a holder to a pending card
 ### Changed
