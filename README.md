@@ -499,6 +499,77 @@ await (async() => {
 })();
 ```
 
+### Create IssuingCards without a holder
+
+A physical card can be created without a holder and have one assigned later, while it is still "pending".
+Omit holderName, holderTaxId and holderExternalId (send all three or none of them). The API rejects
+virtual cards without a holder. The holder fields come back as empty strings.
+
+```javascript
+await (async() => {
+    let cards = await starkinfra.issuingCard.create([
+        new starkinfra.IssuingCard({
+            'productId': '52091969',
+            'type': 'physical',
+            'tags': ['department: tech']
+        })
+    ]);
+
+    for await (let card of cards) {
+        console.log(card);
+    }
+})();
+```
+
+To assign a holder to a card created without one, send holderName, holderTaxId and holderExternalId
+(all three or none) while the card is still "pending". The holder can be assigned and the card
+activated in the same call by also sending status 'active' and the pin.
+
+```javascript
+await (async() => {
+    let card = await starkinfra.issuingCard.update('5155165527080960', {
+        'holderName': 'Developers',
+        'holderTaxId': '012.345.678-90',
+        'holderExternalId': '1234',
+        'status': 'active',
+        'pin': '1234'
+    });
+
+    console.log(card);
+})();
+```
+
+### Update several IssuingCards at once
+
+Holders can be assigned to several pending cards in a single request. The API applies the whole list or none
+of it. Each item takes the card "id" and the fields the API accepts in this route: status, rules, tags and the
+three holder fields (pin and displayName are accepted only when updating a single card). Build the items as
+plain objects, as below, or as new starkinfra.IssuingCard({id: ..., ...}) objects: every attribute filled in an object is sent, so
+objects returned by get() or query() must not be reused.
+
+```javascript
+await (async() => {
+    let cards = await starkinfra.issuingCard.updateMulti([
+        {
+            'id': '5155165527080960',
+            'holderName': 'Developers',
+            'holderTaxId': '012.345.678-90',
+            'holderExternalId': '1234'
+        },
+        {
+            'id': '5656565656565656',
+            'holderName': 'Developers',
+            'holderTaxId': '012.345.678-90',
+            'holderExternalId': '1234'
+        }
+    ]);
+
+    for (let card of cards) {
+        console.log(card);
+    }
+})();
+```
+
 ### Query IssuingCards
 
 You can get a list of created cards given some filters.
