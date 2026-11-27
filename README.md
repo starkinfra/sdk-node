@@ -3625,7 +3625,12 @@ const starkinfra = require('starkinfra');
             district: 'Bela Vista',
             city: 'Sao Paulo',
             stateCode: 'SP',
-            zipCode: '01310-000'
+            zipCode: '01310-000',
+            templateReplacements: new starkinfra.creditNote.TemplateReplacements({
+                guarantorName: 'Jon Snow',
+                guarantorTaxId: '012.345.678-90',
+                guarantorAddress: 'Av. Paulista, 200 - Bela Vista - Sao Paulo, SP'
+            })
         }
     ])
 
@@ -3636,6 +3641,8 @@ const starkinfra = require('starkinfra');
 ```
 
 **Note**: Instead of using CreditNote objects, you can also pass each element in dictionary format
+
+**Note**: templateReplacements is optional and its keys depend on your contract template. They are sent exactly as written, so use the camelCase name of each placeholder. Keys with null or undefined values are not sent. A plain object is still accepted in place of starkinfra.creditNote.TemplateReplacements and generates the same request.
 
 ### Query CreditNotes
 

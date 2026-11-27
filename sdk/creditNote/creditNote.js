@@ -6,6 +6,7 @@ const {Transfer} = require('./transfer.js');
 const transferResource = require('./transfer.js').resource;
 const {Rule} = require('./rule.js');
 const ruleResource = require('./rule.js').subResource;
+const {TemplateReplacements} = require('./templateReplacements.js');
 const rest = require('../utils/rest.js');
 const {parseObjects} = require('../utils/parse.js');
 const Resource = require('starkcore').Resource;
@@ -47,6 +48,7 @@ class CreditNote extends Resource {
      * @param tags [list of strings, default null]: list of strings for reference when searching for CreditNotes. ex: ['employees', 'monthly']
      * @param expiration [integer, default 604800 (7 days)]: time interval in seconds between due date and expiration date. ex 123456789
      * @param rules [list of CreditNote.Rule objects or dictionaries, default []]: list of CreditNote.Rule objects for modifying transfer behavior. ex: [creditNote.Rule(key='invoiceCreationMode', value='scheduled')]
+     * @param templateReplacements [CreditNote.TemplateReplacements object or object, default null]: custom values used to fill the placeholders of the contract template. The keys depend on the template and are sent exactly as written, so use the camelCase name of the placeholder. ex: new creditNote.TemplateReplacements({guarantorName: 'Jon Snow', guarantorTaxId: '012.345.678-90'})
      *
      * Attributes (return-only):
      * @param id [string]: unique id returned when the CreditNote is created. ex: '5656565656565656'
@@ -65,7 +67,7 @@ class CreditNote extends Resource {
                     templateId, name, taxId, scheduled, invoices, payment, signers,
                     externalId, streetLine1, streetLine2, district, city, stateCode,
                     zipCode, paymentType=null, nominalAmount = null, amount=null,
-                    rebateAmount=null, tags=null, expiration=null, rules=null, id=null, documentId=null,
+                    rebateAmount=null, tags=null, expiration=null, rules=null, templateReplacements=null, id=null, documentId=null,
                     status=null, transactionIds=null, workspaceId=null, debtorWorkspaceId=null, taxAmount=null,
                     nominalInterest=null, interest=null, created=null, updated=null
                 }) {
@@ -90,6 +92,7 @@ class CreditNote extends Resource {
         this.rebateAmount = rebateAmount;
         this.tags = tags;
         this.expiration = expiration;
+        this.templateReplacements = parseTemplateReplacements(templateReplacements);
         this.documentId = documentId;
         this.status = status;
         this.transactionIds = transactionIds;
@@ -105,6 +108,23 @@ class CreditNote extends Resource {
         this.payment = parsePaymentObject['payment'];
         this.paymentType = parsePaymentObject['paymentType'];
     }
+}
+
+const parseTemplateReplacements = function (templateReplacements) {
+    if (templateReplacements === null || templateReplacements === undefined)
+        return null;
+
+    if (templateReplacements instanceof TemplateReplacements)
+        return templateReplacements;
+
+    if (typeof templateReplacements === 'object' && !Array.isArray(templateReplacements))
+        return new TemplateReplacements(templateReplacements);
+
+    throw new Error('templateReplacements must be either ' +
+        'a starkinfra.creditNote.TemplateReplacements' +
+        ', an object' +
+        ', or null, but not a ' + typeof (templateReplacements)
+    );
 }
 
 parsePayment = function (payment, paymentType) {
